@@ -16,7 +16,9 @@ const UserSchema = new Schema({
   peopleMet: Number,
   score: Number,
   streak: Number,
-  rooms: {}
+  rooms: {},
+  photos: [String],
+  facebookFriends: [String]
 })
 
 UserSchema.pre('save', function(next) {
