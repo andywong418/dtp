@@ -5,10 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const auth = require('./routes/auth');
 var index = require('./routes/index');
 var users = require('./routes/users');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const passport = require('passport');
 var app = express();
 
 
@@ -21,6 +23,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// passport configuration
+require('./config/passport')(passport);
+app.use(passport.initialize());
+app.use(passport.session());
 mongoose.connect(process.env.MONGODB_URI);
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -28,7 +34,7 @@ app.use(session({
   secret: 'dtp',
   store: new MongoStore({mongooseConnection: mongoose.connection})
 }))
-app.use('/', index);
+app.use('/api', auth(passport));
 app.use('/users', users);
 
 // catch 404 and forward to error handler
