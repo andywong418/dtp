@@ -1,13 +1,58 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font } from 'expo';
+import {
+  AsyncStorage,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View
+} from 'react-native';
+// import { StackNavigator } from 'react-navigation';
+import {
+  AppLoading,
+  Asset,
+  Font
+} from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
 
 export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoadingComplete: false,
+      isLoggedIn: false,
+    }
+  }
+
+  // async componentDidMount() {
+  //   try {
+  //     let userJson;
+  //     try {
+  //       userJson = await AsyncStorage.getItem('user')
+  //     }
+  //     catch (e) {
+  //       console.log("Error in App componentDidMount: \n", e);
+  //       this.setState({
+  //         isLoggedIn: false,
+  //       })
+  //       this.props.navigation.navigate('Login');
+  //     }
+  //     let user = JSON.parse(userJson);
+  //     if (user && user.name) {
+  //       // TODO: FB OAuth
+  //     }
+  //     else {
+  //       // not logged in
+  //       this.setState({
+  //         isLoggedIn: false,
+  //       })
+  //       this.props.navigation.navigate('Login');
+  //     }
+  //   }
+  //   catch (e) {
+  //     console.log('pls no: ', e);
+  //   }
+  // }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -18,7 +63,8 @@ export default class App extends React.Component {
           onFinish={this._handleFinishLoading}
         />
       );
-    } else {
+    }
+    else {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}

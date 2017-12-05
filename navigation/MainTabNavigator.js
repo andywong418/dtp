@@ -1,13 +1,18 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { TabNavigator, TabBarBottom } from 'react-navigation';
+import {
+  TabNavigator,
+  TabBarBottom,
+  TabBarTop,
+} from 'react-navigation';
 
 import Colors from '../constants/Colors';
 
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import LoginScreen from '../screens/LoginScreen';
 
 export default TabNavigator(
   {
@@ -19,6 +24,9 @@ export default TabNavigator(
     },
     Settings: {
       screen: SettingsScreen,
+    },
+    Login: {
+      screen: LoginScreen,
     },
   },
   {
@@ -57,7 +65,7 @@ export default TabNavigator(
     }),
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
-    animationEnabled: false,
-    swipeEnabled: false,
+    animationEnabled: true,
+    swipeEnabled: true,
   }
 );
