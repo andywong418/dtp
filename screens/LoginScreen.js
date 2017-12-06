@@ -1,21 +1,20 @@
 import React from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
+  AsyncStorage,
   Button,
   StyleSheet,
-  AsyncStorage,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import { Constants, Facebook } from 'expo';
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
-      password: '',
-      message: '',
+      name: undefined,
+      id: undefined,
     }
   }
 
@@ -23,52 +22,57 @@ export default class LoginScreen extends React.Component {
     title: 'Login'
   };
 
-  login(username, password) {
-    return fetch('https://hohoho-backend.herokuapp.com/login', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-    })
-    .then( response => response.json() )
-  }
-
-  callLogin(username, password) {
-    this.login(username, password)
-    .then( responseJson => {
-      responseJson.success ?
-        AsyncStorage.setItem('user', JSON.stringify({
-          username: this.state.username,
-          password: this.state.password,
-          id: responseJson.user._id,
-        }))
-        .then( () => {
-          this.props.navigation.navigate('Users')
-        })
-      :
+  _handleFacebookLogin = async () => {
+    try {
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync(
+        // <app id>, permissions: []
+        '323730871442301',
+        {
+          permissions: [
+            'email',
+            'public_profile',
+            'read_custom_friendlists',
+            'user_about_me',
+            'user_birthday',
+            'user_education_history',
+            'user_friends',
+            'user_hometown',
+            'user_location',
+            'user_relationship_details',
+            'user_relationships',
+            'user_religion_politics',
+            'user_work_history',
+          ]
+        }
+      );
+      if (type === 'success') {
+        // Get the user's name using Facebook's Graph API
+        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+        const profile = await response.json();
         this.setState({
-          message: responseJson.error,
-        });
-    })
-    .catch( error => {console.log('error in login: ', error)})
-  }
-
-  navToRegister() {
-    this.props.navigation.navigate('Register');
-  }
+          name: profile.name,
+          id: profile.id,
+        })
+        await AsyncStorage.setItem('user', JSON.stringify({
+          name: this.state.name,
+          id: this.state.id,
+        }))
+        console.log(this.state.name, this.state.id);
+        this.props.callLogin();
+      }
+    }
+    catch (e) {
+      console.log("error in login: ", e);
+    }
+  };
 
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity
-          onPress={ () => {this.callLogin()} }
-          style={[styles.button, styles.buttonGreen]}>
-          <Text style={styles.buttonLabel}>Connect to FB</Text>
-        </TouchableOpacity>
+        <Button
+          title="Login with Facebook"
+          onPress={() => this._handleFacebookLogin()}
+          />
       </View>
     )
   }

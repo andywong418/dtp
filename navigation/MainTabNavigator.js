@@ -25,9 +25,6 @@ export default TabNavigator(
     Settings: {
       screen: SettingsScreen,
     },
-    Login: {
-      screen: LoginScreen,
-    },
   },
   {
     navigationOptions: ({ navigation }) => ({

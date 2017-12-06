@@ -1,5 +1,7 @@
 import React from 'react';
 import {
+  AsyncStorage,
+  Button,
   Image,
   Platform,
   ScrollView,
@@ -31,6 +33,11 @@ export default class HomeScreen extends React.Component {
               style={styles.welcomeImage}
             />
           </View>
+
+          <Button
+            title="Logout"
+            onPress={() => this._handleLogout()}
+          />
 
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
@@ -86,6 +93,17 @@ export default class HomeScreen extends React.Component {
       );
     }
   }
+
+  _handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('user')
+      let user = await AsyncStorage.getItem('user')
+      console.log(user);
+    }
+    catch (e) {
+      console.log('logoutError: ', e);
+    }
+  };
 
   _handleLearnMorePress = () => {
     WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');

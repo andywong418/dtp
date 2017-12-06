@@ -14,6 +14,7 @@ import {
 } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
+import LoginScreen from './screens/LoginScreen.js'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -24,35 +25,48 @@ export default class App extends React.Component {
     }
   }
 
-  // async componentDidMount() {
-  //   try {
-  //     let userJson;
-  //     try {
-  //       userJson = await AsyncStorage.getItem('user')
-  //     }
-  //     catch (e) {
-  //       console.log("Error in App componentDidMount: \n", e);
-  //       this.setState({
-  //         isLoggedIn: false,
-  //       })
-  //       this.props.navigation.navigate('Login');
-  //     }
-  //     let user = JSON.parse(userJson);
-  //     if (user && user.name) {
-  //       // TODO: FB OAuth
-  //     }
-  //     else {
-  //       // not logged in
-  //       this.setState({
-  //         isLoggedIn: false,
-  //       })
-  //       this.props.navigation.navigate('Login');
-  //     }
-  //   }
-  //   catch (e) {
-  //     console.log('pls no: ', e);
-  //   }
-  // }
+  async componentDidMount() {
+    try {
+      let userJson;
+      try {
+        userJson = await AsyncStorage.getItem('user')
+      }
+      catch (e) {
+        console.log("Error in App componentDidMount: \n", e);
+        this.setState({
+          isLoggedIn: false,
+        })
+      }
+      console.log(userJson);
+      let user = JSON.parse(userJson);
+      console.log(user);
+      if (user && user.name) {
+        this.setState({
+          isLoggedIn: true,
+        })
+      }
+      else {
+        this.setState({
+          isLoggedIn: false,
+        })
+      }
+    }
+    catch (e) {
+      console.log('pls no: ', e);
+    }
+  }
+
+  login() {
+    this.setState({
+      isLoggedIn: true,
+    })
+  }
+
+  logout() {
+    this.setState({
+      isLoggedIn: false,
+    })
+  }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -67,9 +81,19 @@ export default class App extends React.Component {
     else {
       return (
         <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-          <RootNavigation />
+          {
+            this.state.isLoggedIn
+            ?
+            <View style={styles.container}>
+              {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+              {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+              <RootNavigation />
+            </View>
+            :
+            <LoginScreen
+              callLogin={() => this.login()}
+            />
+          }
         </View>
       );
     }
