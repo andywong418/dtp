@@ -19,7 +19,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // passport configuration
-require('./config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 mongoose.connect(process.env.MONGODB_URI);
@@ -29,7 +28,7 @@ app.use(session({
   secret: 'dtp',
   store: new MongoStore({mongooseConnection: mongoose.connection})
 }))
-app.use('/api', auth(passport));
+app.use('/api', index);
 app.use('/users', users);
 
 // catch 404 and forward to error handler

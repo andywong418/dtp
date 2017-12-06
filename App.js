@@ -14,7 +14,8 @@ import {
 } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
-import LoginScreen from './screens/LoginScreen.js'
+import LoginScreen from './screens/LoginScreen.js';
+import axios from 'axios';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -22,7 +23,9 @@ export default class App extends React.Component {
     this.state = {
       isLoadingComplete: false,
       isLoggedIn: false,
+      user: false
     }
+    this.retrieveUserInfo = this.retrieveUserInfo.bind(this);
   }
 
   async componentDidMount() {
@@ -68,6 +71,15 @@ export default class App extends React.Component {
     })
   }
 
+  retrieveUserInfo(name, id, token) {
+    var self = this;
+    console.log("GOT IN", name, id, token);
+    axios.post('http://10.2.106.85:3000/api/facebook/retrieveInfo', {name, id, token})
+      .then(user => {
+        console.log("USER", user);
+        self.setState({user});
+      });
+  }
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -87,11 +99,13 @@ export default class App extends React.Component {
             <View style={styles.container}>
               {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
               {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-              <RootNavigation />
+              <RootNavigation user= {this.state.user}/>
             </View>
             :
             <LoginScreen
               callLogin={() => this.login()}
+              fetchUser={this.retrieveUserInfo}
+
             />
           }
         </View>

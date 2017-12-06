@@ -59,6 +59,8 @@ export default class LoginScreen extends React.Component {
         }))
         console.log(this.state.name, this.state.id);
         this.props.callLogin();
+        this.props.fetchUser(profile.name, profile.id, token);
+
       }
     }
     catch (e) {
