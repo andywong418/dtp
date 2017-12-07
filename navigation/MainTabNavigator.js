@@ -14,17 +14,6 @@ import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import LoginScreen from '../screens/LoginScreen';
 
-// const mapNavigationStateParamsToProps = (SomeComponent) => {
-//   return class extends React.Component {
-//     static navigationOptions = SomeComponent.navigationOptions; // better use hoist-non-react-statics
-//     render() {
-//       console.log("this.props", this.props);
-//       const {navigation: {state: {params}}} = this.props
-//       return <SomeComponent {...params} {...this.props} />
-//     }
-//   }
-// }
-
 export default TabNavigator(
   {
     Home: {

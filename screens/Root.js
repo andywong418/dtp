@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import {
   callLogin,
   callLogout,
+  populateUser,
  } from '../actions/index';
 
 import RootNavigation from '../navigation/RootNavigation';
@@ -43,16 +44,6 @@ class Root extends React.Component {
     }
   }
 
-  async retrieveUserInfo(name, id, token) {
-    try {
-      let user = axios.post('http://10.2.106.85:3000/api/facebook/retrieveInfo', {name, id, token})
-      this.setState({user});
-    }
-    catch (e) {
-      console.log("Error in App retrieveUserInfo: \n", e)
-    }
-  }
-
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -75,9 +66,7 @@ class Root extends React.Component {
               <RootNavigation />
             </View>
             :
-            <LoginScreen
-              fetchUser={(name, id, token) => this.retrieveUserInfo(name, id, token)}
-            />
+            <LoginScreen/>
           }
         </View>
       );
@@ -123,11 +112,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  login: state.login
+  login: state.login,
+  user: state.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  callLogin: (user, id) => dispatch(callLogin(user, id)),
+  populateUser: (user) => dispatch(populateUser(user)),
+  callLogin: (name, id) => dispatch(callLogin(name, id)),
   callLogout: () => dispatch(callLogout()),
 });
 
