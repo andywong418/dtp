@@ -40,13 +40,10 @@ class HomeScreen extends React.Component {
 
   _handleLogout = async () => {
     try {
-      console.log('\n\nheading into logout\n\n');
       await AsyncStorage.removeItem('user')
       this.props.callLogout();
-      let user = AsyncStorage.getItem('user')
-      user = JSON.parse(user);
-      console.log('user in HomeScrren _handleLogout: ', user);
-      console.log('props in HomeScrren _handleLogout: ',this.props.login.name, this.props.login.id);
+      let userJson = await AsyncStorage.getItem('user')
+      user = JSON.parse(userJson);
     }
     catch (e) {
       console.log('logoutError: ', e);

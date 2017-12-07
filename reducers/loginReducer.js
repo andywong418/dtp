@@ -23,6 +23,8 @@ const loginReducer = (state = initialState, action) => {
       newState.isLoggedIn = true;
       return newState;
     case types.LOGOUT:
+      console.log('logout reached in reducer');
+      console.log(generateState());
       return generateState();
     default:
       return state;
