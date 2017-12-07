@@ -1,9 +1,12 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const facebookAPI = require('./facebook_api');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.send("WHAT");
+router.use('/facebook', facebookAPI);
+
+router.get('/', function (req, res, next) {
+  res.send("Received");
 });
 
 module.exports = router;
