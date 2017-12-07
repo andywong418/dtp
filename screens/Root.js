@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import {
   callLogin,
   callLogout,
+  populateUser,
  } from '../actions/index';
 
 import RootNavigation from '../navigation/RootNavigation';
@@ -35,19 +36,12 @@ class Root extends React.Component {
     try {
       let userJson = await AsyncStorage.getItem('user')
       user = JSON.parse(userJson);
-      console.log('user in Root componentDidMount: ', user);
       if (user && user.name && user.id) this.props.callLogin(user.name, user.id)
       else this.props.callLogout()
     }
-    catch (e) { console.log("Error in App componentDidMount: \n", e) }
-  }
-
-  retrieveUserInfo(name, id, token) {
-    var self = this;
-    axios.post('http://10.2.106.85:3000/api/facebook/retrieveInfo', {name, id, token})
-      .then(user => {
-        self.setState({user});
-      });
+    catch (e) {
+      console.log("Error in App componentDidMount: \n", e)
+    }
   }
 
   render() {
@@ -69,14 +63,10 @@ class Root extends React.Component {
             <View style={styles.container}>
               {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
               {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-              <RootNavigation
-                user={this.state.user}
-              />
+              <RootNavigation />
             </View>
             :
-            <LoginScreen
-              fetchUser={(name, id, token) => this.retrieveUserInfo(name, id, token)}
-            />
+            <LoginScreen/>
           }
         </View>
       );
@@ -122,11 +112,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  login: state.login
+  login: state.login,
+  user: state.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  callLogin: (user, id) => dispatch(callLogin(user, id)),
+  populateUser: (user) => dispatch(populateUser(user)),
+  callLogin: (name, id) => dispatch(callLogin(name, id)),
   callLogout: () => dispatch(callLogout()),
 });
 
