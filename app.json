@@ -8,9 +8,9 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "primaryColor": "#cccccc",
-    "icon": "./assets/images/icon.png",
+    "icon": "./frontend/assets/images/icon.png",
     "splash": {
-      "image": "./assets/images/whale.gif",
+      "image": "./frontend/assets/images/whale.gif",
       "resizeMode": "contain",
       "backgroundColor": "#1873d2"
     },
