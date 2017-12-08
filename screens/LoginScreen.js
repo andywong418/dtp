@@ -6,11 +6,12 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image
 } from 'react-native';
 import { connect } from 'react-redux';
 import { callLogin } from '../actions/index';
 import { Constants, Facebook } from 'expo';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -27,10 +28,19 @@ class LoginScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Button
-        title="Login with Facebook"
-        onPress={() => this._handleFacebookLogin()}
+      <Image
+          source={require('../assets/images/Seren_Logo.png')}
+          style={{width: 200, height: 200, marginTop: -80}}
         />
+        <Text style={styles.headlineText}>
+          Seren - the new way to social
+        </Text>
+        <TouchableOpacity style={styles.logInButton}>
+
+        <Icon.Button onPress= {() => this._handleFacebookLogin()} name="facebook" backgroundColor="#3b5998" style={{padding: 16, paddingLeft: 50, paddingRight: 50}}>
+          <Text style={styles.button}>Log in with Facebook</Text>
+        </Icon.Button>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -81,8 +91,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#B400FF',
   },
+  headlineText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 24,
+    marginBottom: 100
+  },
+  logInButton: {
+    borderRadius: 10,
+
+  },
+  button: {
+    color: 'white',
+    fontSize: 20,
+    fontFamily: 'Arial'
+  }
 });
 
 const mapStateToProps = (state) => ({

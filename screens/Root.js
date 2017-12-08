@@ -42,9 +42,9 @@ class Root extends React.Component {
     catch (e) { console.log("Error in App componentDidMount: \n", e) }
   }
 
-  retrieveUserInfo(name, id, token) {
+  retrieveUserInfo(name, facebookId, token) {
     var self = this;
-    axios.post('http://10.2.106.85:3000/api/facebook/retrieveInfo', {name, id, token})
+    axios.post('http://10.2.106.85:3000/api/facebook/retrieveInfo', {name, facebookId, token})
       .then(user => {
         self.setState({user});
       });
