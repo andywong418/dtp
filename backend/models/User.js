@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10;
 
@@ -32,7 +32,9 @@ const UserSchema = new Schema({
     rooms: {},
     profilePic: String,
     photos: [{}],
-    friends: [{}]
+    friends: [{}],
+    purpose: String,
+    profileComplete: Boolean
 })
 
 UserSchema.pre('save', function (next) {

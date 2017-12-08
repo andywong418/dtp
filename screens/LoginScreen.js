@@ -9,21 +9,34 @@ import {
   Image
 } from 'react-native';
 import { connect } from 'react-redux';
-import { callLogin } from '../actions/index';
+import {
+  callLogin,
+  populateUser,
+} from '../actions/index';
 import { Constants, Facebook } from 'expo';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+import axios from 'axios';
+
 class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      name: undefined,
-      id: undefined,
-    }
   }
 
   static navigationOptions = {
     title: 'Login'
   };
+
+  // async _retrieveUserInfo(name, id, token) {
+  //   try {
+  //     let user = await axios.post('http://10.2.106.85:3000/api/facebook/retrieveInfo', {name, id, token})
+  //     this.props.populateUser(user);
+  //   }
+  //   catch (e) {
+  //     console.log("Error in App retrieveUserInfo: \n", e)
+  //   }
+  // }
 
   render() {
     return (
@@ -77,7 +90,15 @@ class LoginScreen extends React.Component {
           id: profile.id,
         }))
         this.props.callLogin(profile.name, profile.id)
-        await this.props.fetchUser(profile.name, profile.id, token);
+        let user = await axios.post(
+          'http://10.2.106.85:3000/api/facebook/retrieveInfo',
+          {
+            name: profile.name,
+            profile: profile.id,
+            token,
+          }
+        )
+        this.props.populateUser(user);
       }
     }
     catch (e) {
@@ -111,10 +132,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  login: state.login
+  login: state.login,
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  populateUser: (user) => dispatch(populateUser(user)),
   callLogin: (user, id) => dispatch(callLogin(user, id)),
 });
 

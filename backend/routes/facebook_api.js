@@ -16,9 +16,7 @@ let options = {
 FB.setOptions(options);
 
 router.post('/retrieveInfo', (req, queryRes) => {
-	// console.log(req);
-	let { token, id } = req.body;
-	// console.log('Received the body:', req.body);
+	let { token, facebookId } = req.body;
 	FB.setAccessToken(token);
 	FB.batch([
 		{
@@ -43,7 +41,7 @@ router.post('/retrieveInfo', (req, queryRes) => {
 		} else {
 			// console.log(res);
 			console.log('============================');
-			let { first_name, last_name, email, gender, birthday, id, hometown, education, languages } = JSON.parse(res[0].body);
+			let { first_name, last_name, email, gender, birthday, hometown, education, languages } = JSON.parse(res[0].body);
 			hometown = hometown ? hometown.name : null;
 			languages = languages ? languages.map(lang => lang.name) : null;
 			education = education ?
@@ -56,7 +54,7 @@ router.post('/retrieveInfo', (req, queryRes) => {
 			console.log('Info:');
 			console.log('First Name:', first_name);
 			console.log('Last Name:', last_name);
-			console.log('Facebook ID:', id);
+			console.log('Facebook ID:', facebookId);
 			console.log('Email:', email);
 			console.log('Gener:', gender);
 			console.log('Birthday:', birthday);
@@ -89,7 +87,7 @@ router.post('/retrieveInfo', (req, queryRes) => {
 							profilePicsURLS.sort((a, b) => new Date(b.date) - new Date(a.date))
 							console.log('Profile Pics:', profilePicsURLS);
 							console.log('============================');
-							User.findOne({ id }, (err, user) => {
+							User.findOne({ facebookId }, (err, user) => {
 								if (err) {
 									console.log('Error:', err);
 								} else {
@@ -100,7 +98,7 @@ router.post('/retrieveInfo', (req, queryRes) => {
 										User.create({
 											firstName: first_name,
 											lastName: last_name,
-											facebookId: req.body.id,
+											facebookId: req.body.facebookId,
 											email,
 											birthday,
 											profilePic: profilePicsURLS[0].url,

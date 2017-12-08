@@ -13,3 +13,10 @@ export function callLogout() {
     type: types.LOGOUT,
   };
 }
+
+export function populateUser(user) {
+  return {
+    type: types.POPULATEUSER,
+    user,
+  };
+}
