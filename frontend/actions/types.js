@@ -1,3 +1,4 @@
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
 export const POPULATEUSER = 'POPULATEUSER'
+export const FETCHUSERFROMDB='FETCHUSERFROMDB';

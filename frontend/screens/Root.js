@@ -18,6 +18,7 @@ import {
   callLogin,
   callLogout,
   populateUser,
+  fetchUserFromDB
  } from '../actions/index';
 
 import RootNavigation from '../navigation/RootNavigation';
@@ -36,8 +37,18 @@ class Root extends React.Component {
     try {
       let userJson = await AsyncStorage.getItem('user')
       user = JSON.parse(userJson);
-      if (user && user.name && user.id) this.props.callLogin(user.name, user.id)
-      else this.props.callLogout()
+      if (user && user.name && user.id) {
+        this.props.callLogin(user.name, user.id);
+        let userSend = await axios.post(
+          'http://10.2.106.70:3000/api/fetchUser',
+          {
+            facebookId: user.id
+          }
+        );
+        this.props.fetchUserFromDB(userSend);
+      } else {
+        this.props.callLogout()
+      }
     }
     catch (e) {
       console.log("Error in App componentDidMount: \n", e)
@@ -120,6 +131,7 @@ const mapDispatchToProps = (dispatch) => ({
   populateUser: (user) => dispatch(populateUser(user)),
   callLogin: (name, id) => dispatch(callLogin(name, id)),
   callLogout: () => dispatch(callLogout()),
+  fetchUserFromDB: (user) => dispatch(fetchUserFromDB(user))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Root);

@@ -18,6 +18,10 @@ const userReducer = (state = initialState, action) => {
     case types.POPULATEUSER:
       newState.user = action.user
       return newState;
+    case types.FETCHUSERFROMDB:
+      newState.user = action.user;
+      console.log("PLEASE", newState.user);
+      return newState;
     case types.LOGOUT:
       return generateState();
     default:

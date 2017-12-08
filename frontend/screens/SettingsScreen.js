@@ -30,6 +30,7 @@ import {
   WebBrowser,
   ImagePicker,
 } from 'expo';
+import Picture from '../components/Picture'
 
 class SettingsScreen extends React.Component {
   static navigationOptions = {
@@ -37,17 +38,30 @@ class SettingsScreen extends React.Component {
   };
 
   render() {
+    const {user} = this.props.user;
+    console.log("USER settings", user);
     return (
-      <List>
-        <ListItem style={{marginLeft: 0}}>
-          <Body>
-            <Button
-              title="Logout"
-              onPress={() => this._handleLogout()}
-            />
-          </Body>
-        </ListItem>
-      </List>
+      // TODO: pictures
+      // TODO: 3 main interests
+      // TODO: friend or d8? -- radio button native base
+      // TODO: one line bio
+      <ScrollView>
+        <View>
+          <Picture />
+          <Picture />
+          <Picture />
+        </View>
+        <List>
+          <ListItem style={{marginLeft: 0}}>
+            <Body>
+              <Button
+                title="Logout"
+                onPress={() => this._handleLogout()}
+              />
+            </Body>
+          </ListItem>
+        </List>
+      </ScrollView>
     )
   }
 
@@ -64,7 +78,8 @@ class SettingsScreen extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  login: state.login
+  login: state.login,
+  user: state.user
 });
 
 const mapDispatchToProps = (dispatch) => ({

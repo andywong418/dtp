@@ -69,6 +69,19 @@ class HomeScreen extends React.Component {
   };
 
   render() {
+    console.log(this.props.user);
+    if (!this.props.user.user) {
+      // this.props.navigation.navigate('Settings');
+      return (
+        <View>
+          <Text>Yaint set up bitch</Text>
+          <Button
+            title="nav to Settings"
+            onPress={() => this._navToSettings()}
+          />
+        </View>
+      )
+    }
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -143,7 +156,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  login: state.login
+  login: state.login,
+  user: state.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({

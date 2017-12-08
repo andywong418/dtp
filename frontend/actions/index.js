@@ -1,5 +1,5 @@
 import * as types from './types';
-
+import axios from 'axios';
 export function callLogin(name, id) {
   return {
     type: types.LOGIN,
@@ -19,4 +19,12 @@ export function populateUser(user) {
     type: types.POPULATEUSER,
     user,
   };
+}
+
+export function fetchUserFromDB(user) {
+  return {
+    type: types.FETCHUSERFROMDB,
+    user
+  };
+
 }
