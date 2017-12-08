@@ -38,31 +38,50 @@ class SettingsScreen extends React.Component {
   };
 
   render() {
+    //TODO pictures
+    //TODO 3 main interests
+    //TODO goals
+    //TODO Quick oneliner
     const {user} = this.props.user;
-    console.log("USER settings", user);
-    return (
-      // TODO: pictures
-      // TODO: 3 main interests
-      // TODO: friend or d8? -- radio button native base
-      // TODO: one line bio
-      <ScrollView>
-        <View>
-          <Picture />
-          <Picture />
-          <Picture />
-        </View>
-        <List>
-          <ListItem style={{marginLeft: 0}}>
-            <Body>
-              <Button
-                title="Logout"
-                onPress={() => this._handleLogout()}
-              />
-            </Body>
-          </ListItem>
-        </List>
-      </ScrollView>
-    )
+    if(user){
+      if(user.data) {
+        return (
+          <ScrollView>
+            <View>
+            {user.data.photos ? user.data.photos.map(photo => {
+              return (
+                <Picture key={photo.url} imageUri={photo.url} date={photo.date}/>
+              )
+            })
+            :
+            <View>
+              <Picture key={1} />
+              <Picture key={2}/>
+              <Picture key={3}/>
+            </View>
+          }
+
+            </View>
+            <List>
+              <ListItem style={{marginLeft: 0}}>
+                <Body>
+                  <Button
+                    title="Logout"
+                    onPress={() => this._handleLogout()}
+                  />
+                </Body>
+              </ListItem>
+            </List>
+          </ScrollView>
+        )
+      }
+
+    } else {
+      return (
+        <View><Text>Loading...</Text></View>
+      )
+    }
+
   }
 
   _handleLogout = async () => {

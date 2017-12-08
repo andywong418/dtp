@@ -11,6 +11,9 @@ export default class Picture extends React.Component {
     this.state = {
       imageUri: undefined,
     }
+    if(this.props.imageUri){
+      this.state.imageUri = this.props.imageUri;
+    }
   }
   render() {
 
