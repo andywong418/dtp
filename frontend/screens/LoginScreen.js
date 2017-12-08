@@ -93,8 +93,7 @@ class LoginScreen extends React.Component {
         let user = await axios.post(
           'http://10.2.106.85:3000/api/facebook/retrieveInfo',
           {
-            name: profile.name,
-            profile: profile.id,
+            facebookId: profile.id,
             token,
           }
         )
