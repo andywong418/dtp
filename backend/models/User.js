@@ -34,6 +34,7 @@ const UserSchema = new Schema({
     photos: [{}],
     friends: [{}],
     purpose: String,
+    bio: String,
     profileComplete: Boolean
 })
 
