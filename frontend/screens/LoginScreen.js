@@ -97,7 +97,6 @@ class LoginScreen extends React.Component {
             token,
           }
         )
-        console.log("backend", user);
         this.props.populateUser(user);
       }
     }

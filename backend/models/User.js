@@ -34,8 +34,11 @@ const UserSchema = new Schema({
     profilePic: String,
     photos: [{}],
     friends: [{}],
-    purpose: String,
     bio: String,
+    intention: {
+        type: String,
+        default: 'open_minded'
+    },
     profileComplete: Boolean
 })
 

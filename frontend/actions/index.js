@@ -28,6 +28,13 @@ export function fetchUserFromDB(user) {
   };
 }
 
+export function updateUserInfo(intention) {
+  return {
+    type: types.UPDATE_USER_INFO,
+    intention,
+  };
+}
+
 export function updateLocation(location) {
   let { lat, lng, city } = location;
   return {
