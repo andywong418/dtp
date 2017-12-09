@@ -10,7 +10,8 @@ const UserSchema = new Schema({
     birthday: Date,
     location: {
         lat: Number,
-        lng: Number
+        lng: Number,
+        city: String
     },
     hometown: String,
     languages: [String],

@@ -1,5 +1,5 @@
 import * as types from './types';
-
+import axios from 'axios';
 export function callLogin(name, id) {
   return {
     type: types.LOGIN,
@@ -16,7 +16,24 @@ export function callLogout() {
 
 export function populateUser(user) {
   return {
-    type: types.POPULATEUSER,
+    type: types.POPULATE_USER,
     user,
+  };
+}
+
+export function fetchUserFromDB(user) {
+  return {
+    type: types.FETCH_USER_FROM_DB,
+    user
+  };
+}
+
+export function updateLocation(location) {
+  let { lat, lng, city } = location;
+  return {
+    type: types.UPDATE_LOCATION,
+    lat,
+    lng,
+    city
   };
 }

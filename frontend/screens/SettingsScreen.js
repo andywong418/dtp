@@ -30,6 +30,7 @@ import {
   WebBrowser,
   ImagePicker,
 } from 'expo';
+import Picture from '../components/Picture'
 
 class SettingsScreen extends React.Component {
   static navigationOptions = {
@@ -37,18 +38,54 @@ class SettingsScreen extends React.Component {
   };
 
   render() {
-    return (
-      <List>
-        <ListItem style={{marginLeft: 0}}>
-          <Body>
-            <Button
-              title="Logout"
-              onPress={() => this._handleLogout()}
-            />
-          </Body>
-        </ListItem>
-      </List>
-    )
+    //TODO pictures
+    //TODO 3 main interests
+    //TODO goals
+    //TODO Quick oneliner
+    const { user } = this.props.user;
+    if (user) {
+      if (user.data) {
+        return (
+          <ScrollView>
+            <View>
+              {user.data.photos ? user.data.photos.map(photo => {
+                return (
+                  <Picture key={photo.url} imageUri={photo.url} date={photo.date} />
+                )
+              })
+                :
+                <View>
+                  <Picture key={1} />
+                  <Picture key={2} />
+                  <Picture key={3} />
+                </View>
+              }
+
+            </View>
+            <List>
+              <ListItem style={{ marginLeft: 0 }}>
+                <Body>
+                  <Button
+                    title="Logout"
+                    onPress={() => this._handleLogout()}
+                  />
+                </Body>
+              </ListItem>
+            </List>
+          </ScrollView>
+        )
+      }
+
+    } else {
+      return (
+        // <View><Text>Loading...</Text></View>
+        <Button
+          title="Logout"
+          onPress={() => this._handleLogout()}
+        />
+      )
+    }
+
   }
 
   _handleLogout = async () => {
@@ -64,7 +101,8 @@ class SettingsScreen extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  login: state.login
+  login: state.login,
+  user: state.user
 });
 
 const mapDispatchToProps = (dispatch) => ({

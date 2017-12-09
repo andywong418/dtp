@@ -2,10 +2,11 @@ import * as types from '../actions/types';
 
 const generateState = () => {
   return {
-    name: undefined,
-    id: undefined,
+    name: null,
+    id: null,
     isLoggedIn: false,
-    user: undefined,
+    user: null,
+    location: null
   }
 }
 
@@ -25,7 +26,7 @@ const loginReducer = (state = initialState, action) => {
       return newState;
     case types.LOGOUT:
       return generateState();
-    case types.POPULATEUSER:
+    case types.POPULATE_USER:
       newState.user = action.user
       return newState;
     default:
