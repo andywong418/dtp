@@ -16,6 +16,7 @@
     "native-base": "^2.3.4",
     "react": "16.0.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-23.0.0.tar.gz",
+    "react-native-material-dropdown": "^0.6.1",
     "react-native-safari-view": "^2.1.0",
     "react-native-swiper": "^1.5.13",
     "react-native-vector-icons": "^4.4.2",

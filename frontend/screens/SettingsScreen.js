@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
+  TextInput
 } from 'react-native';
 import { connect } from 'react-redux';
 import {
@@ -37,6 +38,8 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Picture from '../components/Picture';
 import IntentionButton from '../components/IntentionButton';
+import {Dropdown} from 'react-native-material-dropdown';
+import {categories, subCategories} from '../constants/Categories';
 const { width } = Dimensions.get('window')
 
 
@@ -60,6 +63,23 @@ class SettingsScreen extends React.Component {
           isSelected: this.props.user.intention == 'Dating',
         },
       ],
+      interests: {
+        'interest1': {
+          categorySelected: false,
+          subCategorySelected: false,
+          description: null
+        },
+        'interest2': {
+          categorySelected: false,
+          subCategorySelected: false,
+          description: null
+        },
+        'interest3': {
+          categorySelected: false,
+          subCategorySelected: false,
+          description: null
+        }
+      },
       intention: this.props.user.intention,
     }
   }
@@ -127,7 +147,7 @@ class SettingsScreen extends React.Component {
                 </Swiper>
               }
               <View>
-                <View style={{flexDirection: 'row', marginTop: 20, paddingLeft: 10, marginBottom: 10}}>
+                <View style={styles.viewFields}>
                   <Text style={styles.textHeading}>
                   Intention
                   </Text>
@@ -146,8 +166,24 @@ class SettingsScreen extends React.Component {
                   })}
                 </View>
               </View>
+
+              <View style={{marginTop: 20, padding: 10, marginBottom: 10}}>
+                <Text style={styles.textHeading}>
+                Specify your 3 main interests
+                </Text>
+                <View style={{marginTop: 20, paddingLeft: 15}}>
+                  <Text>
+                    Interest 1:
+                  </Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <Dropdown onChangeText={(value, index, data) => this._changeInterestState('interest1', 'categorySelected', value)} data={categories} label="Main Categories" containerStyle={{flex: 1, paddingTop: 0}} itemCount={6}/>
+                    {this.state.interests.interest1.categorySelected ? <Dropdown onChangeText={(value, index, data) => this._changeInterestState('interest1', 'subCategorySelected', value)} containerStyle={{marginLeft: 5}} data={subCategories[this.state.interests.interest1.categorySelected ]} label="Sub Categories" containerStyle={{flex: 1}} itemCount={6}/> : null}
+                  </View>
+                  {this.state.interests.interest1.subCategorySelected ? <TextInput style= {{backgroundColor: 'white'}} editable={true} maxLength={140} multiline={true} numOfLines={3} onChangeText={(text) => this._changeInterestState('interest1','value',text)} /> : null}
+                </View>
+              </View>
             </View>
-            <List style={{marginTop: 30}}>
+            <List style={{marginTop: 100}}>
               <ListItem style={{marginLeft: 0}}>
                 <Body>
                   <Button
@@ -205,6 +241,13 @@ class SettingsScreen extends React.Component {
         },
       ],
     })
+  };
+
+  _changeInterestState = async(interest, interestKey, value) => {
+    var newInterestState = Object.assign({}, this.state.interests);
+    newInterestState[interest] = Object.assign({}, newInterestState[interest]);
+    newInterestState[interest][interestKey] = value
+    this.setState({interests: newInterestState});
   }
 }
 
@@ -242,6 +285,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
+  viewFields:{
+    flexDirection: 'row',
+    marginTop: 20,
+    paddingLeft: 10,
+    marginBottom: 10
+  }
 });
 
 const mapStateToProps = (state) => ({
