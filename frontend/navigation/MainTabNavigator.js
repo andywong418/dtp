@@ -25,6 +25,10 @@ export default TabNavigator(
   },
   {
     navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: '#B400FF',
+      },
+      headerTintColor: 'white',
       tabBarIcon: ({ focused }) => {
         const { routeName } = navigation.state;
         let iconName;

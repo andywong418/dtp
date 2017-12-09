@@ -3,11 +3,12 @@ import * as types from '../actions/types';
 const generateState = () => {
   return {
     user: undefined,
+    intention: "Open Minded",
   }
 }
 
 const copyState = (state) => {
-  return Object.assign({}, state)
+  return JSON.parse(JSON.stringify(state))
 }
 
 const initialState = generateState();
@@ -20,7 +21,9 @@ const userReducer = (state = initialState, action) => {
       return newState;
     case types.FETCHUSERFROMDB:
       newState.user = action.user;
-      console.log("PLEASE", newState.user);
+      return newState;
+    case types.UPDATEUSERINFO:
+      newState.intention = action.intention;
       return newState;
     case types.LOGOUT:
       return generateState();

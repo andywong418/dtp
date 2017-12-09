@@ -24,7 +24,13 @@ export function populateUser(user) {
 export function fetchUserFromDB(user) {
   return {
     type: types.FETCHUSERFROMDB,
-    user
+    user,
   };
+}
 
+export function updateUserInfo(intention) {
+  return {
+    type: types.UPDATEUSERINFO,
+    intention,
+  };
 }
