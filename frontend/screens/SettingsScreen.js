@@ -167,7 +167,7 @@ class SettingsScreen extends React.Component {
                 </View>
               </View>
 
-              <View style={{marginTop: 20, paddingLeft: 10, marginBottom: 10}}>
+              <View style={{marginTop: 20, padding: 10, marginBottom: 10}}>
                 <Text style={styles.textHeading}>
                 Specify your 3 main interests
                 </Text>
@@ -176,10 +176,10 @@ class SettingsScreen extends React.Component {
                     Interest 1:
                   </Text>
                   <View style={{flexDirection: 'row'}}>
-                    <Dropdown onChangeText={(value, index, data) => this._selectCategory('interest1', value, index, data)} data={categories} label="Main Categories" containerStyle={{flex: 1, paddingTop: 0}} itemCount={6}/>
-                    {this.state.interests.interest1.categorySelected ? <Dropdown onChangeText={(value, index, data) => this._selectSubCategory('interest1', value, index, data)} containerStyle={{marginLeft: 5}} data={subCategories[this.state.interests.interest1.categorySelected ]} label="Sub Categories" containerStyle={{flex: 1}} itemCount={6}/> : null}
+                    <Dropdown onChangeText={(value, index, data) => this._changeInterestState('interest1', 'categorySelected', value)} data={categories} label="Main Categories" containerStyle={{flex: 1, paddingTop: 0}} itemCount={6}/>
+                    {this.state.interests.interest1.categorySelected ? <Dropdown onChangeText={(value, index, data) => this._changeInterestState('interest1', 'subCategorySelected', value)} containerStyle={{marginLeft: 5}} data={subCategories[this.state.interests.interest1.categorySelected ]} label="Sub Categories" containerStyle={{flex: 1}} itemCount={6}/> : null}
                   </View>
-                  {this.state.interests.interest1.subCategorySelected ? <TextInput editable={true} maxLength={140} multiline={true} numOfLines={3} onChangeText={(text) => this._setInterestValue('interest1', text)} /> : null}
+                  {this.state.interests.interest1.subCategorySelected ? <TextInput style= {{backgroundColor: 'white'}} editable={true} maxLength={140} multiline={true} numOfLines={3} onChangeText={(text) => this._changeInterestState('interest1','value',text)} /> : null}
                 </View>
               </View>
             </View>
@@ -243,24 +243,10 @@ class SettingsScreen extends React.Component {
     })
   };
 
-  _selectCategory = async(interest, value, index, data) => {
+  _changeInterestState = async(interest, interestKey, value) => {
     var newInterestState = Object.assign({}, this.state.interests);
     newInterestState[interest] = Object.assign({}, newInterestState[interest]);
-    newInterestState[interest]['categorySelected'] = value
-    this.setState({interests: newInterestState});
-  }
-
-  _selectSubCategory = async(interest, value, index, data) => {
-    var newInterestState = Object.assign({}, this.state.interests);
-    newInterestState[interest] = Object.assign({}, newInterestState[interest]);
-    newInterestState[interest]['subCategorySelected'] = value
-    this.setState({interests: newInterestState});
-  }
-
-  _setInterestValue = async(interest, text) => {
-    var newInterestState = Object.assign({}, this.state.interests);
-    newInterestState[interest] = Object.assign({}, newInterestState[interest]);
-    newInterestState[interest]['description'] = text
+    newInterestState[interest][interestKey] = value
     this.setState({interests: newInterestState});
   }
 }
