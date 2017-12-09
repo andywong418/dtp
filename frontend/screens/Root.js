@@ -40,7 +40,7 @@ class Root extends React.Component {
       if (user && user.name && user.id) {
         this.props.callLogin(user.name, user.id);
         let userSend = await axios.post(
-          'http://10.2.106.70:3000/api/fetchUser',
+          'http://10.2.106.91:3000/api/fetchUser',
           {
             facebookId: user.id
           }
