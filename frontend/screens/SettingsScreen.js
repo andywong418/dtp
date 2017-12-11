@@ -38,8 +38,8 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Picture from '../components/Picture';
 import IntentionButton from '../components/IntentionButton';
-import {Dropdown} from 'react-native-material-dropdown';
-import {categories, subCategories} from '../constants/Categories';
+import { Dropdown } from 'react-native-material-dropdown';
+import { categories, subCategories } from '../constants/Categories';
 const { width } = Dimensions.get('window')
 
 
@@ -99,61 +99,63 @@ class SettingsScreen extends React.Component {
     //TODO goals
     //TODO Quick oneliner
 
-    const {user} = this.props.user;
-    if(user){
-      if(user.data) {
+    const { user } = this.props.user;
+    if (user) {
+      if (user.data) {
         console.log(user.data.photos);
         return (
           <ScrollView>
             <View>
               {
                 user.data.photos
-                ?
-                <Swiper height={300}
-                  dot={<View style={{backgroundColor: 'rgba(0,0,0,.2)', width: 5, height: 5, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
-                  activeDot={<View style={{backgroundColor: '#B400FF', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
-                  paginationStyle={{
-                    bottom: -23, left: null, right: 10
-                  }} loop>
-                  {user.data.photos.map(photo => { return (
-                      <View
-                        style={styles.slide}
-                        key={photo.url}
-                      >
-                        <Picture
-                        imageUri={photo.url}
-                        date={photo.date}
-                        />
-                      </View>
+                  ?
+                  <Swiper height={300}
+                    dot={<View style={{ backgroundColor: 'rgba(0,0,0,.2)', width: 5, height: 5, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />}
+                    activeDot={<View style={{ backgroundColor: '#B400FF', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />}
+                    paginationStyle={{
+                      bottom: -23, left: null, right: 10
+                    }} loop>
+                    {user.data.photos.map(photo => {
+                      return (
+                        <View
+                          style={styles.slide}
+                          key={photo.url}
+                        >
+                          <Picture
+                            imageUri={photo.url}
+                            date={photo.date}
+                          />
+                        </View>
+                      )
+                    }
                     )}
-                  )}
-                </Swiper>
-                :
-                <Swiper height={300}
-                  dot={<View style={{backgroundColor: 'rgba(0,0,0,.2)', width: 5, height: 5, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
-                  activeDot={<View style={{backgroundColor: '#B400FF', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
-                  paginationStyle={{
-                    bottom: -23, left: null, right: 10
-                  }} loop>
-                  <View style={styles.slide} title={<Text numberOfLines={1}>Aussie tourist dies at Bali hotel</Text>}>
-                    <Picture key={1}/>
-                  </View>
-                  <View style={styles.slide} title={<Text numberOfLines={1}>Big lie behind Nine’s new show</Text>}>
-                    <Picture key={2}/>
-                  </View>
-                  <View style={styles.slide} title={<Text numberOfLines={1}>Why Stone split from Garfield</Text>}>
-                    <Picture key={3}/>
-                  </View>
-                </Swiper>
+                  </Swiper>
+                  :
+                  <Swiper height={300}
+                    dot={<View style={{ backgroundColor: 'rgba(0,0,0,.2)', width: 5, height: 5, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />}
+                    activeDot={<View style={{ backgroundColor: '#B400FF', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />}
+                    paginationStyle={{
+                      bottom: -23, left: null, right: 10
+                    }} loop>
+                    <View style={styles.slide} title={<Text numberOfLines={1}>Aussie tourist dies at Bali hotel</Text>}>
+                      <Picture key={1} />
+                    </View>
+                    <View style={styles.slide} title={<Text numberOfLines={1}>Big lie behind Nine’s new show</Text>}>
+                      <Picture key={2} />
+                    </View>
+                    <View style={styles.slide} title={<Text numberOfLines={1}>Why Stone split from Garfield</Text>}>
+                      <Picture key={3} />
+                    </View>
+                  </Swiper>
               }
               <View>
                 <View style={styles.viewFields}>
                   <Text style={styles.textHeading}>
-                  Intention
+                    Intention
                   </Text>
-                  <Icon name="question-circle" style={{marginLeft: 5, marginTop: 2}} size={16}/>
+                  <Icon name="question-circle" style={{ marginLeft: 5, marginTop: 2 }} size={16} />
                 </View>
-                <View style={{flexDirection: 'row', padding: 10, paddingTop: 0, alignItems: 'center'}}>
+                <View style={{ flexDirection: 'row', padding: 10, paddingTop: 0, alignItems: 'center' }}>
                   {this.state.intentions.map(intention => {
                     return (
                       <IntentionButton
@@ -167,24 +169,24 @@ class SettingsScreen extends React.Component {
                 </View>
               </View>
 
-              <View style={{marginTop: 20, padding: 10, marginBottom: 10}}>
+              <View style={{ marginTop: 20, padding: 10, marginBottom: 10 }}>
                 <Text style={styles.textHeading}>
-                Specify your 3 main interests
+                  Specify your 3 main interests
                 </Text>
-                <View style={{marginTop: 20, paddingLeft: 15}}>
+                <View style={{ marginTop: 20, paddingLeft: 15 }}>
                   <Text>
                     Interest 1:
                   </Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Dropdown onChangeText={(value, index, data) => this._changeInterestState('interest1', 'categorySelected', value)} data={categories} label="Main Categories" containerStyle={{flex: 1, paddingTop: 0}} itemCount={6}/>
-                    {this.state.interests.interest1.categorySelected ? <Dropdown onChangeText={(value, index, data) => this._changeInterestState('interest1', 'subCategorySelected', value)} containerStyle={{marginLeft: 5}} data={subCategories[this.state.interests.interest1.categorySelected ]} label="Sub Categories" containerStyle={{flex: 1}} itemCount={6}/> : null}
+                  <View style={{ flexDirection: 'row' }}>
+                    <Dropdown onChangeText={(value, index, data) => this._changeInterestState('interest1', 'categorySelected', value)} data={categories} label="Main Categories" containerStyle={{ flex: 1, paddingTop: 0 }} itemCount={6} />
+                    {this.state.interests.interest1.categorySelected ? <Dropdown onChangeText={(value, index, data) => this._changeInterestState('interest1', 'subCategorySelected', value)} containerStyle={{ marginLeft: 5 }} data={subCategories[this.state.interests.interest1.categorySelected]} label="Sub Categories" containerStyle={{ flex: 1 }} itemCount={6} /> : null}
                   </View>
-                  {this.state.interests.interest1.subCategorySelected ? <TextInput style= {{backgroundColor: 'white'}} editable={true} maxLength={140} multiline={true} numOfLines={3} onChangeText={(text) => this._changeInterestState('interest1','value',text)} /> : null}
+                  {this.state.interests.interest1.subCategorySelected ? <TextInput style={{ backgroundColor: 'white' }} editable={true} maxLength={140} multiline={true} numOfLines={3} onChangeText={(text) => this._changeInterestState('interest1', 'value', text)} /> : null}
                 </View>
               </View>
             </View>
-            <List style={{marginTop: 100}}>
-              <ListItem style={{marginLeft: 0}}>
+            <List style={{ marginTop: 100 }}>
+              <ListItem style={{ marginLeft: 0 }}>
                 <Body>
                   <Button
                     title="Logout"
@@ -243,11 +245,11 @@ class SettingsScreen extends React.Component {
     })
   };
 
-  _changeInterestState = async(interest, interestKey, value) => {
+  _changeInterestState = async (interest, interestKey, value) => {
     var newInterestState = Object.assign({}, this.state.interests);
     newInterestState[interest] = Object.assign({}, newInterestState[interest]);
     newInterestState[interest][interestKey] = value
-    this.setState({interests: newInterestState});
+    this.setState({ interests: newInterestState });
   }
 }
 
@@ -266,7 +268,7 @@ const styles = StyleSheet.create({
   textHeading: {
     fontWeight: 'bold',
   },
-  intentionButton:{
+  intentionButton: {
     flex: 1,
     padding: 10,
     margin: 5,
@@ -285,7 +287,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
-  viewFields:{
+  viewFields: {
     flexDirection: 'row',
     marginTop: 20,
     paddingLeft: 10,

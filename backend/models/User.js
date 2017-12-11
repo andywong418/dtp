@@ -10,7 +10,8 @@ const UserSchema = new Schema({
     birthday: Date,
     location: {
         lat: Number,
-        lng: Number
+        lng: Number,
+        city: String
     },
     hometown: String,
     languages: [String],
@@ -33,9 +34,10 @@ const UserSchema = new Schema({
     profilePic: String,
     photos: [{}],
     friends: [{}],
+    bio: String,
     intention: {
-      type: String,
-      default: 'open_minded'
+        type: String,
+        default: 'open_minded'
     },
     profileComplete: Boolean
 })

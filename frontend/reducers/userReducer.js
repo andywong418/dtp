@@ -2,7 +2,7 @@ import * as types from '../actions/types';
 
 const generateState = () => {
   return {
-    user: undefined,
+    user: null,
     intention: "Open Minded",
   }
 }
@@ -16,13 +16,13 @@ const initialState = generateState();
 const userReducer = (state = initialState, action) => {
   let newState = copyState(state);
   switch (action.type) {
-    case types.POPULATEUSER:
+    case types.POPULATE_USER:
       newState.user = action.user
       return newState;
-    case types.FETCHUSERFROMDB:
+    case types.FETCH_USER_FROM_DB:
       newState.user = action.user;
       return newState;
-    case types.UPDATEUSERINFO:
+    case types.UPDATE_USER_INFO:
       newState.intention = action.intention;
       return newState;
     case types.LOGOUT:

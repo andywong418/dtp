@@ -41,18 +41,18 @@ class LoginScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-      <Image
+        <Image
           source={require('../assets/images/Seren_Logo.png')}
-          style={{width: 200, height: 200, marginTop: -80}}
+          style={{ width: 200, height: 200, marginTop: -80 }}
         />
         <Text style={styles.headlineText}>
           Seren - the new way to social
         </Text>
         <TouchableOpacity style={styles.logInButton}>
 
-        <Icon.Button onPress= {() => this._handleFacebookLogin()} name="facebook" backgroundColor="#3b5998" style={{padding: 16, paddingLeft: 50, paddingRight: 50}}>
-          <Text style={styles.button}>Log in with Facebook</Text>
-        </Icon.Button>
+          <Icon.Button onPress={() => this._handleFacebookLogin()} name="facebook" backgroundColor="#3b5998" style={{ padding: 16, paddingLeft: 50, paddingRight: 50 }}>
+            <Text style={styles.button}>Log in with Facebook</Text>
+          </Icon.Button>
         </TouchableOpacity>
       </View>
     )
@@ -91,7 +91,7 @@ class LoginScreen extends React.Component {
         }))
         this.props.callLogin(profile.name, profile.id)
         let user = await axios.post(
-          'http://10.2.106.91:3000/api/facebook/retrieveInfo',
+          'http://10.2.106.85:3000/api/facebook/retrieveInfo',
           {
             facebookId: profile.id,
             token,
@@ -125,8 +125,8 @@ const styles = StyleSheet.create({
   },
   button: {
     color: 'white',
-    fontSize: 20,
-    fontFamily: 'Arial'
+    fontSize: 20
+    // fontFamily: 'Arial'
   }
 });
 
