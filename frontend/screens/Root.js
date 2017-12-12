@@ -37,6 +37,7 @@ class Root extends React.Component {
     try {
       let userJson = await AsyncStorage.getItem('user')
       user = JSON.parse(userJson);
+      console.log(user ? 'AsyncStorage user exists' : 'AsyncStorage user does not exist')
       if (user && user.name && user.id) {
         this.props.callLogin(user.name, user.id);
         let userSend = await axios.post(

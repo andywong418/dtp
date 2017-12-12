@@ -69,7 +69,6 @@ class HomeScreen extends React.Component {
   };
 
   render() {
-    console.log(this.props.user.user);
     if (!this.props.user.profileComplete) {
       // this.props.navigation.navigate('Settings');
       return (

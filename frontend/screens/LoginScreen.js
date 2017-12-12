@@ -28,17 +28,14 @@ class LoginScreen extends React.Component {
     title: 'Login'
   };
 
-  // async _retrieveUserInfo(name, id, token) {
-  //   try {
-  //     let user = await axios.post('http://10.2.106.85:3000/api/facebook/retrieveInfo', {name, id, token})
-  //     this.props.populateUser(user);
-  //   }
-  //   catch (e) {
-  //     console.log("Error in App retrieveUserInfo: \n", e)
-  //   }
-  // }
+  forceLogin = (email, password) => {
+    this._handleFacebookLogin();
+  }
 
   render() {
+    // call if you're testing to make logging in faster
+    this.forceLogin()
+
     return (
       <View style={styles.container}>
       <Image
@@ -91,7 +88,7 @@ class LoginScreen extends React.Component {
         }))
         this.props.callLogin(profile.name, profile.id)
         let user = await axios.post(
-          'http://10.2.106.91:3000/api/facebook/retrieveInfo',
+          'http://10.2.106.70:3000/api/facebook/retrieveInfo',
           {
             facebookId: profile.id,
             token,
