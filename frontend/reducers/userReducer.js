@@ -4,6 +4,7 @@ const generateState = () => {
   return {
     user: null,
     intention: "Open Minded",
+    matchedUsers: null
   }
 }
 
@@ -24,6 +25,9 @@ const userReducer = (state = initialState, action) => {
       return newState;
     case types.UPDATE_USER_INFO:
       newState.intention = action.intention;
+      return newState;
+    case types.GET_NEARBY_USERS:
+      newState.matchedUsers = action.users
       return newState;
     case types.LOGOUT:
       return generateState();

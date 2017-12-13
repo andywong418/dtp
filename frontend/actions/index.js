@@ -44,3 +44,10 @@ export function updateLocation(location) {
     city
   };
 }
+
+export function getNearbyUsers(users) {
+  return {
+    type: types.GET_NEARBY_USERS,
+    users
+  }
+}
