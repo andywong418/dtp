@@ -102,7 +102,6 @@ class SettingsScreen extends React.Component {
     const { user } = this.props.user;
     if (user) {
       if (user.data) {
-        console.log(user.data.photos);
         return (
           <ScrollView>
             <View>
