@@ -39,7 +39,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Picture from '../components/Picture';
 import IntentionButton from '../components/IntentionButton';
 import { Dropdown } from 'react-native-material-dropdown';
-import { categories, subCategories } from '../constants/Categories';
+import { subCategories, categories } from '../constants/Categories';
 const { width } = Dimensions.get('window')
 
 
@@ -178,8 +178,8 @@ class SettingsScreen extends React.Component {
                     Interest 1:
                   </Text>
                   <View style={{ flexDirection: 'row' }}>
-                    <Dropdown onChangeText={(value, index, data) => this._changeInterestState('interest1', 'categorySelected', value)} data={categories} label="Main Categories" containerStyle={{ flex: 1, paddingTop: 0 }} itemCount={6} />
-                    {this.state.interests.interest1.categorySelected ? <Dropdown onChangeText={(value, index, data) => this._changeInterestState('interest1', 'subCategorySelected', value)} containerStyle={{ marginLeft: 5 }} data={subCategories[this.state.interests.interest1.categorySelected]} label="Sub Categories" containerStyle={{ flex: 1 }} itemCount={6} /> : null}
+                    {/* <Dropdown onChangeText={(value, index, data) => this._changeInterestState('interest1', 'categorySelected', value)} data={categories} label="Main Categories" containerStyle={{ flex: 1, paddingTop: 0 }} itemCount={6} /> */}
+                    {/* {this.state.interests.interest1.categorySelected ? <Dropdown onChangeText={(value, index, data) => this._changeInterestState('interest1', 'subCategorySelected', value)} containerStyle={{ marginLeft: 5 }} data={subCategories[this.state.interests.interest1.categorySelected]} label="Sub Categories" containerStyle={{ flex: 1 }} itemCount={6} /> : null} */}
                   </View>
                   {this.state.interests.interest1.subCategorySelected ? <TextInput style={{ backgroundColor: 'white' }} editable={true} maxLength={140} multiline={true} numOfLines={3} onChangeText={(text) => this._changeInterestState('interest1', 'value', text)} /> : null}
                 </View>
@@ -203,6 +203,7 @@ class SettingsScreen extends React.Component {
     return (
       <View>
         <Text>Loading...</Text>
+        <Text>OBADAH...</Text>
         <Body>
           <Button
             title="Logout"
