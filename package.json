@@ -15,6 +15,7 @@
     "express": "^4.16.2",
     "native-base": "^2.3.5",
     "native-base-shoutem-theme": "^0.2.1",
+    "haversine": "^1.1.0",
     "react": "16.0.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-23.0.0.tar.gz",
     "react-native-branch": "^2.1.1",

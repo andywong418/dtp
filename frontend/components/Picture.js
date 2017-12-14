@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    height: 300,
-    width: 200,
+    height: 350,
+    width: 300,
   }
 });

@@ -23,7 +23,8 @@ import {
   callLogout,
   populateUser,
   fetchUserFromDB,
-  updateLocation
+  updateLocation,
+  getNearbyUsers
 } from '../actions/index';
 
 import RootNavigation from '../navigation/RootNavigation';
@@ -54,12 +55,14 @@ class Root extends React.Component {
       if (user && user.name && user.id) {
         this.props.callLogin(user.name, user.id);
         let fetchedUser = await axios.post(
-          'http://10.2.106.85:3000/api/users/fetchUser',
+          'http://10.2.106.91:3000/api/users/fetchUser',
           { facebookId: user.id }
         );
         let location = await this.updateLocationDB(coords, fetchedUser.data.facebookId);
+        let matchUsers = await this.getNearbyUsersDB(location);
         this.props.updateLocation(location)
         this.props.fetchUserFromDB(fetchedUser);
+        this.props.getNearbyUsers(matchUsers);
       } else {
         this.props.callLogout()
       }
@@ -73,7 +76,7 @@ class Root extends React.Component {
     let lat = location.coords.latitude;
     let lng = location.coords.longitude;
     let response = await axios.post(
-      'http://10.2.106.85:3000/api/users/updateLocation',
+      'http://10.2.106.91:3000/api/users/updateLocation',
       {
         facebookId: id,
         lat,
@@ -88,6 +91,18 @@ class Root extends React.Component {
     };
   };
 
+  getNearbyUsersDB = async (location, facebookId) => {
+    let response = await axios.post(
+      'http://10.2.106.91:3000/api/users/getNearbyUsers',
+      {
+        facebookId,
+        location
+      }
+    );
+
+    let users = response.data;
+    return users;
+  }
   getLocation = async () => {
     return Location.getCurrentPositionAsync({ enableHighAccuracy: true });
   };
@@ -195,7 +210,8 @@ const mapDispatchToProps = (dispatch) => ({
   callLogin: (name, id) => dispatch(callLogin(name, id)),
   callLogout: () => dispatch(callLogout()),
   fetchUserFromDB: (user) => dispatch(fetchUserFromDB(user)),
-  updateLocation: (location) => dispatch(updateLocation(location))
+  updateLocation: (location) => dispatch(updateLocation(location)),
+  getNearbyUsers: (users) => dispatch(getNearbyUsers(users)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Root);

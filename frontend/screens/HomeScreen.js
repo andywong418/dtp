@@ -37,7 +37,7 @@ import {
 
 import LinksScreen from './LinksScreen';
 import SettingsScreen from './SettingsScreen';
-
+import SwipableList from '../components/SwipableList';
 const cards = [
   {
     text: 'Card 1',
@@ -61,6 +61,8 @@ class HomeScreen extends React.Component {
     super(props)
     this.state = {
       image: null,
+      viewMoreInfo: false,
+
     }
   }
 
@@ -69,50 +71,48 @@ class HomeScreen extends React.Component {
   };
 
   render() {
-    console.log(this.props.user.user);
-    if (!this.props.user.profileComplete) {
-      // this.props.navigation.navigate('Settings');
-      return (
-        <View>
-          <Text>Unfinished setup -> direct to settings and cloud screen</Text>
-          <Button
-            title="nav to Settings"
-            onPress={() => this._navToSettings()}
-          />
-        </View>
-      )
+    if (this.props.user.user  ) {
+      console.log("home user check",this.props.user.user.data);
+      if (!this.props.user.user.data.profileComplete) {
+        // this.props.navigation.navigate('Settings');
+        return (
+          <View>
+            <Text>Unfinished setup -> direct to settings and cloud screen</Text>
+            <Button
+              title="nav to Settings"
+              onPress={() => this._navToSettings()}
+            />
+          </View>
+        )
+      } else{
+        return (
+          <View>
+          {this.props.user.matchedUsers ?
+              <View>
+                { this.state.viewMoreInfo ?
+                    null
+                  :
+
+                    <SwipableList
+                    users={this.props.user.matchedUsers}
+                    user={this.props.user.user.data}
+                    reject={(user) => this.rejectUser(user)}
+                    meet={(user) => this.meetUser(user)} />
+
+                }
+              </View>
+
+            :
+              null
+          }
+
+          </View>
+        )
+
+      }
+    } else{
+      return null;
     }
-    return (
-      <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <Button
-            title="Pick an image from camera roll"
-            onPress={() => this._pickImage()}
-          />
-          <Button
-            title="nav to Links"
-            onPress={() => this._navToLinks()}
-          />
-          <Button
-            title="nav to Settings"
-            onPress={() => this._navToSettings()}
-          />
-          {this.state.image && <Image source={{ uri: this.state.image }} style={{ width: 200, height: 200 }} />}
-          <Image
-            source={{ uri: 'https://scontent-sjc2-1.xx.fbcdn.net/v/t1.0-9/18193988_10212890054110652_6684327312202603844_n.jpg?oh=3edb4dc74f50aef189092d237556886d&oe=5ACEEBFE' }}
-            style={{ width: 200, height: 200 }}
-          />
-          <Image
-            source={{ uri: 'https://scontent-sjc2-1.xx.fbcdn.net/v/t1.0-9/13001076_10209237661643123_8464693319251522402_n.jpg?oh=e6473082226187179c5860f7c42b0010&oe=5AC8C9A6' }}
-            style={{ width: 200, height: 200 }}
-          />
-          <Image
-            source={{ uri: 'https://scontent.xx.fbcdn.net/v/t1.0-9/22814524_10212833454884011_1009317153681447778_n.jpg?oh=6a1b5b73bbe146361c4c991218eeb99f&oe=5AC442F6' }}
-            style={{ width: 200, height: 200 }}
-          />
-        </ScrollView>
-      </View>
-    );
   }
 
 
