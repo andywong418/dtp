@@ -91,7 +91,7 @@ class Root extends React.Component {
     };
   };
 
-  getNearbyUsersDB = async(location, facebookId) => {
+  getNearbyUsersDB = async (location, facebookId) => {
     let response = await axios.post(
       'http://10.2.106.91:3000/api/users/getNearbyUsers',
       {
