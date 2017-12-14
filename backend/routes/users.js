@@ -70,7 +70,11 @@ router.post('/getNearbyUsers', (req, res) => {
         userArr.push({user: selectedUser, distance});
       }
     });
-
+    //search for mutual friends.
+    //streaks/points?
+    //mutual interests
+    //Non specific interests
+    //Look for users who have swiped yes or not on you AND you haven't swiped on. Also only return users who are looking for the same goals.
     res.json(userArr);
   });
 })

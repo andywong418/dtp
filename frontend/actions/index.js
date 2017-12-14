@@ -51,3 +51,17 @@ export function getNearbyUsers(users) {
     users
   }
 }
+
+export function meetTopUser(user) {
+  return {
+    type: types.MEET_TOP_USER,
+    user
+  }
+}
+
+export function avoidTopUser(user) {
+  return {
+    type: types.AVOID_TOP_USER,
+    user
+  }
+}
