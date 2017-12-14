@@ -16,21 +16,38 @@ export function callLogout() {
 
 export function populateUser(user) {
   return {
-    type: types.POPULATEUSER,
+    type: types.POPULATE_USER,
     user,
   };
 }
 
 export function fetchUserFromDB(user) {
   return {
-    type: types.FETCHUSERFROMDB,
-    user,
+    type: types.FETCH_USER_FROM_DB,
+    user
   };
 }
 
 export function updateUserInfo(intention) {
   return {
-    type: types.UPDATEUSERINFO,
+    type: types.UPDATE_USER_INFO,
     intention,
   };
+}
+
+export function updateLocation(location) {
+  let { lat, lng, city } = location;
+  return {
+    type: types.UPDATE_LOCATION,
+    lat,
+    lng,
+    city
+  };
+}
+
+export function getNearbyUsers(users) {
+  return {
+    type: types.GET_NEARBY_USERS,
+    users
+  }
 }
