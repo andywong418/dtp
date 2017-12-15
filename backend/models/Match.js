@@ -2,16 +2,17 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const MatchSchema = new Schema({
-  personA: {
-    type: Schema.ObjectId,
-    ref: 'User'
-  },
-  personB: {
-    type: Schema.ObjectId,
-    ref: 'User'
-  },
-  createdAt: Date,
-  status: String,
+    personA: String,
+    personB: String,
+    createdAt: Date,
+    response: {
+        type: Boolean,
+        default: null
+    },
+    matched: {
+        type: Boolean,
+        default: null
+    },
 })
 
 module.exports = mongoose.model('Match', MatchSchema);
