@@ -38,13 +38,14 @@ export default class IntentionButton extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  // puke-red color: #E06457
   intentionButton:{
     flex: 1,
     padding: 10,
     margin: 5,
     borderRadius: 20,
-    borderWidth: 0.5,
-    borderColor: '#e06457',
+    borderWidth: 1,
+    borderColor: '#B400FF',
     backgroundColor: 'white'
   },
   intentionButtonSelected:{
@@ -52,12 +53,10 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     borderRadius: 20,
-    borderWidth: 0.5,
-    borderColor: 'white',
-    backgroundColor: '#e06457'
+    backgroundColor: '#B400FF'
   },
   intentionText: {
-    color: '#e06457',
+    color: '#B400FF',
     fontSize: 14,
     textAlign: 'center',
   },

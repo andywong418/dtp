@@ -29,6 +29,16 @@ const userReducer = (state = initialState, action) => {
     case types.GET_NEARBY_USERS:
       newState.matchedUsers = action.users
       return newState;
+    case types.MEET_TOP_USER:
+      newState.matchedUsers = newState.matchedUsers.filter(matchedUser => {
+        return matchedUser.user._id !== action.user.user._id;
+      });
+      return newState;
+    case types.AVOID_TOP_USER:
+      newState.matchedUsers = newState.matchedUsers.filter(matchedUser => {
+        return matchedUser.user._id !== action.user.user._id;
+      });
+      return newState;
     case types.LOGOUT:
       return generateState();
     default:
