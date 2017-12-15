@@ -79,17 +79,22 @@ class SettingsScreen extends React.Component {
   _handleSave = async () => {
     // TODO: check if everything is filled out
     // TODO: save settings to global setState
-    this.props.updateUserDetails(this.state.intention)
-    let user = AsyncStorage.getItem('user');
-    let response = await axios.post(
-      'http://10.2.106.70:3000/api/users/updateProfile',
-      {
-        facebookId: user.id,
-        intention: this.state.intention,
-        interests: this.state.interests,
-        bio: this.state.bio,
-      }
-    )
+    try {
+      // this.props.updateUserDetails(this.state.intention)
+      let user = AsyncStorage.getItem('user');
+      let response = await axios.post(
+        'http://10.2.106.85:3000/api/users/updateProfile',
+        {
+          facebookId: user.id,
+          intention: this.state.intention,
+          interests: this.state.interests,
+          bio: this.state.bio,
+        }
+      )
+    }
+    catch (e) {
+      console.log("error in save settings: ", e);
+    }
   }
 
   static navigationOptions = ({navigation}) => {
