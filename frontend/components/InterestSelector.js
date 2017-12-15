@@ -6,7 +6,10 @@ import {
   View,
 } from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
-import {categories, subCategories} from '../constants/Categories';
+import {
+  categories,
+  subCategories,
+} from '../constants/Categories';
 
 
 export default class InterestSelector extends React.Component {

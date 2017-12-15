@@ -2,6 +2,7 @@ import React from 'react';
 import {
   AsyncStorage,
   Button,
+  StyleSheet,
 } from 'react-native';
 import {
   Body,
@@ -25,6 +26,8 @@ class LogoutButton extends React.Component {
           <Button
             title="Logout"
             onPress={() => this._handleLogout()}
+            color="#B400FF"
+            style={styles.button}
           />
         </Body>
       </ListItem>
@@ -41,6 +44,13 @@ class LogoutButton extends React.Component {
     }
   };
 }
+
+const styles = StyleSheet.create({
+  button: {
+    marginTop: 5,
+    paddingTop: 5,
+  },
+});
 
 const mapDispatchToProps = (dispatch) => ({
   callLogout: () => dispatch(callLogout()),

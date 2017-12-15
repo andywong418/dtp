@@ -35,7 +35,6 @@ import {
   ImagePicker
 } from 'expo';
 
-import LinksScreen from './LinksScreen';
 import SettingsScreen from './SettingsScreen';
 import SwipableList from '../components/SwipableList';
 const cards = [

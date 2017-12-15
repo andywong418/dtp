@@ -2,60 +2,29 @@ import React from 'react';
 import {
   AsyncStorage,
   Button,
-  Image,
-  Platform,
   ScrollView,
-  StyleSheet,
-  // Text,
-  TouchableOpacity,
-  View,
-  Dimensions,
-  TextInput
+  Text,
 } from 'react-native';
 import { connect } from 'react-redux';
-import {
-  Container,
-  Header,
-  Content,
-  List,
-  ListItem,
-  Text,
-  Left,
-  Body,
-  Right,
-  Switch,
-  Spinner,
-} from 'native-base';
-import Swiper from 'react-native-swiper';
 import {
   callLogout,
   updateUserDetails,
 } from '../actions/index';
-import {
-  WebBrowser,
-  ImagePicker,
-} from 'expo';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Picture from '../components/Picture';
 import PersonalPictureSwiper from '../components/PersonalPictureSwiper';
-import IntentionButton from '../components/IntentionButton';
 import Intentions from '../components/Intentions';
-import InterestSelector from '../components/InterestSelector';
+import Interests from '../components/Interests';
 import PersonalBio from '../components/PersonalBio';
 import LogoutButton from '../components/LogoutButton';
-import { Dropdown } from 'react-native-material-dropdown';
-import {
-  categories,
-  subCategories,
-} from '../constants/Categories';
-const { width } = Dimensions.get('window')
-
+import SaveSettingsButton from '../components/SaveSettingsButton';
+import axios from 'axios';
 
 class SettingsScreen extends React.Component {
   constructor(props) {
     super(props);
+    // kept inside the local state
+    // will be transferred upon unmounting or hitting save button
     this.state = {
-      intention: 'open_minded',
+      intention: this.props.user.intention,
       showIntentionHelperText: false,
       intentions: [
         {
@@ -88,25 +57,61 @@ class SettingsScreen extends React.Component {
           description: null
         }
       },
-      intention: this.props.user.intention,
       bio: '',
     }
   }
 
-  static navigationOptions = {
-    title: 'Settings',
+  checkSettingsFinished = () => {
+    return (
+      this.state.interests.interest1.categorySelected &&
+      this.state.interests.interest1.subCategorySelected &&
+      this.state.interests.interest1.description &&
+      this.state.interests.interest2.categorySelected &&
+      this.state.interests.interest2.subCategorySelected &&
+      this.state.interests.interest2.description &&
+      this.state.interests.interest3.categorySelected &&
+      this.state.interests.interest3.subCategorySelected &&
+      this.state.interests.interest3.description &&
+      this.state.bio
+    )
+  }
+
+  _handleSave = async () => {
+    // TODO: check if everything is filled out
+    // TODO: save settings to global setState
+    this.props.updateUserDetails(this.state.intention)
+    let user = AsyncStorage.getItem('user');
+    let response = await axios.post(
+      'http://10.2.106.70:3000/api/users/updateProfile',
+      {
+        facebookId: user.id,
+        intention: this.state.intention,
+        interests: this.state.interests,
+        bio: this.state.bio,
+      }
+    )
+  }
+
+  static navigationOptions = ({navigation}) => {
+    return {
+      title: 'Settings',
+      headerRight: <SaveSettingsButton handleSave={() => navigation.state.params._handleSave() } />,
+    }
+  }
+
+  componentDidMount = () => {
+    this.props.navigation.setParams({
+      _handleSave: this._handleSave,
+    })
+    // TODO: grab settings from global state
   }
 
   componentWillUmount = () => {
     this.props.updateUserDetails(this.state.intention)
-    // TODO: server call
   }
 
   render() {
-    //TODO pictures
-    //TODO 3 main interests
-    //TODO goals
-    //TODO Quick oneliner
+    //TODO pictures editing
 
     const {user} = this.props.user;
     console.log(user ? 'user exists' : 'user does not exist')
@@ -121,19 +126,10 @@ class SettingsScreen extends React.Component {
               intentions={this.state.intentions}
               _handleIntentionChoice={(intention) => this._handleIntentionChoice(intention)}
             />
-            <View style={styles.interestContainer}>
-              <Text style={styles.textHeading}>Specify your 3 main interests</Text>
-              {Object.keys(this.state.interests).map(interest => {
-                return (
-                  <InterestSelector
-                    key={interest}
-                    interestName={interest}
-                    interest={this.state.interests[interest]}
-                    changeInterestState={(interestKey, value) => this._changeInterestState(interest, interestKey, value)}
-                  />
-                )
-              })}
-            </View>
+            <Interests
+              interests={this.state.interests}
+              _changeInterestState={(interest, interestKey, value) => this._changeInterestState(interest, interestKey, value)}
+            />
             <PersonalBio
               setBio={(value) => this._setBio(value)}
             />
@@ -193,50 +189,8 @@ class SettingsScreen extends React.Component {
     }
     this.setState({interests: newInterestState});
   }
-
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#B400FF',
-  },
-  intentionButton:{
-    flex: 1,
-    padding: 10,
-    margin: 5,
-    borderRadius: 20,
-    borderWidth: 0.5,
-    borderColor: '#e06457',
-    backgroundColor: 'white'
-  },
-  intentionText: {
-    color: '#e06457',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  intentionTextSelected: {
-    color: '#e06457',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  interestContainer: {
-    marginBottom: 10,
-    marginTop: 20,
-    padding: 10,
-  },
-  textHeading: {
-    fontWeight: 'bold',
-  },
-  viewFields:{
-    flexDirection: 'row',
-    marginTop: 20,
-    paddingLeft: 10,
-    marginBottom: 10
-  }
-});
 
 const mapStateToProps = (state) => ({
   login: state.login,
