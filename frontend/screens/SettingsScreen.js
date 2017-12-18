@@ -116,7 +116,6 @@ class SettingsScreen extends React.Component {
     //TODO pictures editing
 
     const {user} = this.props.user;
-    console.log(user ? 'user exists' : 'user does not exist')
     if(user){
       if(user.data) {
         return (
