@@ -55,7 +55,7 @@ class Root extends React.Component {
       if (user && user.name && user.id) {
         this.props.callLogin(user.name, user.id);
         let fetchedUser = await axios.post(
-          'http://10.2.106.91:3000/api/users/fetchUser',
+          'http://10.2.106.85:3000/api/users/fetchUser',
           { facebookId: user.id }
         );
         let location = await this.updateLocationDB(coords, fetchedUser.data.facebookId);
@@ -76,7 +76,7 @@ class Root extends React.Component {
     let lat = location.coords.latitude;
     let lng = location.coords.longitude;
     let response = await axios.post(
-      'http://10.2.106.91:3000/api/users/updateLocation',
+      'http://10.2.106.85:3000/api/users/updateLocation',
       {
         facebookId: id,
         lat,
@@ -93,7 +93,7 @@ class Root extends React.Component {
 
   getNearbyUsersDB = async (location, facebookId) => {
     let response = await axios.post(
-      'http://10.2.106.91:3000/api/users/getNearbyUsers',
+      'http://10.2.106.85:3000/api/users/getNearbyUsers',
       {
         facebookId,
         location

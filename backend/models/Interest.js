@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const InterestSchema = new Schema({
-	name: String,
-	subcategory: String,
+	description: String,
+	subCategory: String,
 	category: String
 });
 

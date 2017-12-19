@@ -101,6 +101,7 @@ router.post('/retrieveInfo', (req, queryRes) => {
 											facebookId: req.body.facebookId,
 											email,
 											birthday,
+											hometown,
 											profilePic: profilePicsURLS[0].url,
 											education,
 											languages,
