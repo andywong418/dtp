@@ -30,12 +30,12 @@ export default class SwipableList extends React.Component {
   }
 
   clickYesOnUser = async (user) => {
-    await axios.post('', {user})
+    await axios.post('http://10.2.106.91:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
     this.props.reject(this.state.currentUserCard)
   }
 
   clickNoOnUser= async (user) => {
-    await axios.post('', {user})
+    await axios.post('http://10.2.106.91:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: false})
     this.props.reject(this.state.currentUserCard)
   }
 
@@ -81,11 +81,11 @@ export default class SwipableList extends React.Component {
             </View>
             <View style={{flex:1,  flexDirection:'row', alignItems:'center', width: '100%', justifyContent:'space-around', marginTop: 20}}>
 
-                <TouchableOpacity style={styles.meetButtons} onPress={() => this.props.reject(this.state.currentUserCard)}>
+                <TouchableOpacity style={styles.meetButtons} onPress={() => this.clickNoOnUser(this.state.currentUserCard)}>
                   <Icon color='red' name='clear' size={30}>
                   </Icon>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.meetButtons} onPress={() => this.props.meet(this.state.currentUserCard)}>
+                <TouchableOpacity style={styles.meetButtons} onPress={() => this.clickYesOnUser(this.state.currentUserCard)}>
                   <Icon color='green' name='done' size={40}>
                   </Icon>
                 </TouchableOpacity>
