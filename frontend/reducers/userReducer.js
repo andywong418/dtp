@@ -4,6 +4,24 @@ const generateState = () => {
   return {
     user: null,
     intention: "Open Minded",
+    interests: {
+      'interest1': {
+        categorySelected: false,
+        subCategorySelected: false,
+        description: null
+      },
+      'interest2': {
+        categorySelected: false,
+        subCategorySelected: false,
+        description: null
+      },
+      'interest3': {
+        categorySelected: false,
+        subCategorySelected: false,
+        description: null
+      }
+    },
+    bio: '',
     matchedUsers: null
   }
 }
@@ -24,7 +42,10 @@ const userReducer = (state = initialState, action) => {
       newState.user = action.user;
       return newState;
     case types.UPDATE_USER_INFO:
+      console.log('updateUserInfo called: ', action);
       newState.intention = action.intention;
+      newState.interests = action.interests;
+      newState.bio = action.bio;
       return newState;
     case types.GET_NEARBY_USERS:
       newState.matchedUsers = action.users

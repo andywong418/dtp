@@ -17,9 +17,11 @@ export default class PersonalBio extends React.Component {
 
   render() {
     return (
-      <View style={{marginTop: 20, paddingLeft: 15}}>
+      <View style={{margin: 20}}>
         <Text style={styles.textHeading}>Personal Bio</Text>
         <TextInput
+          value={this.props.value}
+          // placeholder={this.props.placeholder}
           style={{backgroundColor: 'white'}}
           editable={true}
           maxLength={140}

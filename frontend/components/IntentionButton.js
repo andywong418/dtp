@@ -14,10 +14,6 @@ export default class IntentionButton extends React.Component {
     }
   }
 
-  componentWillMount = () => {
-    console.log('mounting');
-  }
-
   render() {
     return (
       <TouchableOpacity

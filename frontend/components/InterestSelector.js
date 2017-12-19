@@ -57,7 +57,7 @@ export default class InterestSelector extends React.Component {
             maxLength={140}
             multiline={true}
             numOfLines={3}
-            onChangeText={(text) => this.props.changeInterestState('value', text)}
+            onChangeText={(text) => this.props.changeInterestState('description', text)}
           />
           :
           null
