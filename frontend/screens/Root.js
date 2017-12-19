@@ -55,13 +55,15 @@ class Root extends React.Component {
       let userJson = await AsyncStorage.getItem('user');
       user = JSON.parse(userJson);
       if (user && user.name && user.id) {
+        console.log("HUH")
         this.props.callLogin(user.name, user.id);
         let fetchedUser = await axios.post(
           'http://10.2.106.85:3000/api/users/fetchUser',
           { facebookId: user.id }
         );
         let location = await this.updateLocationDB(coords, fetchedUser.data.facebookId);
-        let matchUsers = await this.getNearbyUsersDB(location);
+        console.log("fetchedUser", fetchedUser.data._id);
+        let matchUsers = await this.getNearbyUsersDB(location, fetchedUser.data.facebookId);
         this.props.updateLocation(location)
         this.props.fetchUserFromDB(fetchedUser);
         this.props.getNearbyUsers(matchUsers);
