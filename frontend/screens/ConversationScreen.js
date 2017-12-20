@@ -16,7 +16,8 @@ export default class ConversationScreen extends React.Component {
     console.log("this. props", this.props)
     return (
       <View>
-        Hello
+      <Text>Hello</Text>
+
       </View>
     )
   }
