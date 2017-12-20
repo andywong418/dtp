@@ -54,6 +54,11 @@ export default class SwipableList extends React.Component {
     this.setState({modalMatch: false});
     this.props.meet(this.state.currentUserCard);
   }
+
+  sendMessage = () => {
+    this.props.meet(this.state.currentUserCard);
+    
+  }
   render() {
     if (!this.state.currentUserCard) {
       return (

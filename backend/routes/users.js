@@ -76,10 +76,11 @@ router.post('/getNearbyUsers', (req, res) => {
           .then(match => {
             if(!match || match.response) {
               //no match yet or match is a yes
+              console.log("MATCH", match)
               if(match) {
                 if(match.response) {
                   selectedUser = {user: selectedUser, matchme: true};
-                  console.log("selectedPost", selectedUser);
+
                 }
               }
 

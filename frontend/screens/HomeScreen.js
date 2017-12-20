@@ -54,10 +54,12 @@ class HomeScreen extends React.Component {
 
   static navigationOptions = {
     title: 'Home',
+
   };
 
-
+  // navigateTo
   render() {
+
     if (this.props.user.user  ) {
       if (!this.props.user.user.data.profileComplete) {
         // this.props.navigation.navigate('Settings');

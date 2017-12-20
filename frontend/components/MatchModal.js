@@ -17,6 +17,7 @@ import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome'
 
 
 const MatchModal = (props) => {
+  console.log("PROPS", props);
   return(
     <View style={{backgroundColor: '#B400FF',height: '100%', justifyContent: 'center', alignItems:'center'}}>
       <TouchableOpacity onPress={() => props.closeModal()} style={{position: 'absolute', top: 10, right:10}}><FontAwesomeIcons name='times' color="white" size={30}></FontAwesomeIcons></TouchableOpacity>
