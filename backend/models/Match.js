@@ -13,6 +13,10 @@ const MatchSchema = new Schema({
         type: Boolean,
         default: null
     },
+    expired: {
+      type: Boolean,
+      default: false
+    }
 })
 
 module.exports = mongoose.model('Match', MatchSchema);

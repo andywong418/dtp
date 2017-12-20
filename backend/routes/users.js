@@ -76,8 +76,15 @@ router.post('/getNearbyUsers', (req, res) => {
           .then(match => {
             if(!match || match.response) {
               //no match yet or match is a yes
-              console.log("matches", facebookId, selectedUser.facebookId);
-              return Match.findOne({personA: facebookId, personB: selectedUser.facebookId, response: false})
+              if(match) {
+                if(match.response) {
+                  selectedUser = {user: selectedUser, matchme: true};
+                  console.log("selectedPost", selectedUser);
+                }
+              }
+
+              var personBFacebookId = selectedUser.matchme ? selectedUser.user.facebookId : selectedUser.facebookId
+              return Match.findOne({personA: facebookId, personB: personBFacebookId, response: false})
               .exec()
               .then(reverseMatch => {
                 console.log("reverseMatch", reverseMatch);
@@ -92,7 +99,8 @@ router.post('/getNearbyUsers', (req, res) => {
           .then(user => {
             if(user) {
               //populate the interests array of the selectedUser
-              return Interest.find({userId: user._id})
+              var queryInterest = user.matchme ? user.user._id : user._id
+              return Interest.find({userId: queryInterest})
               .exec()
               .then(selectedInterests => {
                 selectedUser.mainInterests = selectedInterests;
@@ -104,7 +112,11 @@ router.post('/getNearbyUsers', (req, res) => {
           .then(user => {
             //append to array - postpone logic to the next promise
             if(user) {
-              userArr.push({user: selectedUser, distance});
+              if (user.matchme) {
+                user.distance = distance;
+              }
+              var objToPush = user.matchme ? user : {user: selectedUser, distance};
+              userArr.push(objToPush);
             }
 
             callback();
@@ -116,6 +128,7 @@ router.post('/getNearbyUsers', (req, res) => {
     }, () => {
       //do something with users.
       //TODO Score - interests, mutual friends, streaks/score/review. Rank by score.
+      // console.log("USERARR", userArr);
       res.send(userArr);
     })
 
