@@ -53,72 +53,75 @@ router.post('/updateLocation', function (req, res, next) {
 });
 
 router.post('/getNearbyUsers', (req, res) => {
-    let { location, facebookId } = req.body;
-    User.find({ "location.city": location.city })
-        .exec()
-        .then(users => {
-            let userArr = [];
-            async.each(users, (selectedUser, callback) => {
-                const start = {
-                    latitude: location.lat,
-                    longitude: location.lng
-                };
-                const end = {
-                    latitude: selectedUser.location.lat,
-                    longitude: selectedUser.location.lng
-                }
-                let distance = haversine(start, end, { unit: 'mile' });
-                if (distance > 0 && distance < TARGET_DIST) {
-                    distance = Math.ceil(distance * 1760 / 100) * 100;
-                    //filters. check for distance, Look for users who have swiped yes or not on you AND you haven't swiped on. Also only return users who are looking for the same goals.
-                    Match.findOne({ personA: selectedUser.facebookId, personB: facebookId })
-                        .exec()
-                        .then(match => {
-                            if (!match || match.response) {
-                                //no match yet or match is a yes
-                                // console.log("matches", facebookId, selectedUser.facebookId);
-                                return Match.findOne({ personA: facebookId, personB: selectedUser.facebookId, response: false })
-                                    .exec()
-                                    .then(reverseMatch => {
-                                        // console.log("reverseMatch", reverseMatch);
-                                        if (!reverseMatch) {
-                                            return selectedUser;
-                                        }
-                                        return false;
-                                    })
-                            }
-                            return false;
-                        })
-                        .then(user => {
-                            if (user) {
-                                //populate the interests array of the selectedUser
-                                return Interest.find({ userId: user._id })
-                                    .exec()
-                                    .then(selectedInterests => {
-                                        selectedUser.mainInterests = selectedInterests;
-                                        return selectedUser
-                                    });
-                            }
-                            return false;
-                        })
-                        .then(user => {
-                            //append to array - postpone logic to the next promise
-                            if (user) {
-                                userArr.push({ user: selectedUser, distance });
-                            }
+  let {location, facebookId} = req.body;
+  User.find({"location.city": location.city}).populate('mainInterests')
+  .exec()
+  .then(users => {
+    let userArr = [];
+    async.each(users, (selectedUser, callback) => {
+      const start = {
+        latitude: location.lat,
+        longitude: location.lng
+      };
+      const end = {
+        latitude: selectedUser.location.lat,
+        longitude: selectedUser.location.lng
+      }
+      let distance = haversine(start, end, {unit: 'mile'});
+      if (distance > 0 && distance < TARGET_DIST) {
+        distance = Math.ceil(distance*1760/100)*100;
+        //filters. check for distance, Look for users who have swiped yes or not on you AND you haven't swiped on. Also only return users who are looking for the same goals.
+        Match.findOne({personA: selectedUser.facebookId, personB: facebookId})
+          .exec()
+          .then(match => {
+            if(!match || match.response) {
+              //no match yet or match is a yes
+              console.log("MATCH", match)
+              if(match) {
+                if(match.response) {
+                  selectedUser = {user: selectedUser, matchme: true};
 
-                            callback();
-                        })
-
-                } else {
-                    callback();
                 }
-            }, () => {
-                //do something with users.
-                //TODO Score - interests, mutual friends, streaks/score/review. Rank by score.
-                res.send(userArr);
-            })
-        })
+              }
+
+              var personBFacebookId = selectedUser.matchme ? selectedUser.user.facebookId : selectedUser.facebookId
+              return Match.findOne({personA: facebookId, personB: personBFacebookId, response: false})
+              .exec()
+              .then(reverseMatch => {
+                console.log("reverseMatch", reverseMatch);
+                if(!reverseMatch) {
+                  return selectedUser;
+                }
+                return false;
+              })
+            }
+            return false;
+          })
+
+          .then(user => {
+            //append to array - postpone logic to the next promise
+            if(user) {
+              if (user.matchme) {
+                user.distance = distance;
+              }
+              var objToPush = user.matchme ? user : {user: selectedUser, distance};
+              userArr.push(objToPush);
+            }
+
+            callback();
+          })
+
+      } else {
+        callback();
+      }
+    }, () => {
+      //do something with users.
+      //TODO Score - interests, mutual friends, streaks/score/review. Rank by score.
+      // console.log("USERARR", userArr);
+      res.send(userArr);
+    })
+
+  })
 })
 
 

@@ -50,14 +50,21 @@ class HomeScreen extends React.Component {
       viewMoreInfo: false,
 
     }
+    this.navigateToConvo = this.navigateToConvo.bind(this);
   }
 
   static navigationOptions = {
     title: 'Home',
+
   };
 
+  navigateToConvo(user) {
+    console.log("THIS PROPS", this.props);
+    this.props.navigation.navigate('Conversation', {user});
+  }
 
   render() {
+
     if (this.props.user.user  ) {
       if (!this.props.user.user.data.profileComplete) {
         // this.props.navigation.navigate('Settings');
@@ -83,7 +90,8 @@ class HomeScreen extends React.Component {
                     users={this.props.user.matchedUsers}
                     user={this.props.user.user.data}
                     reject={this.props.avoidTopUser}
-                    meet={this.props.meetTopUser} />
+                    meet={this.props.meetTopUser}
+                    sendMessage={this.navigateToConvo}/>
 
                 }
               </View>
