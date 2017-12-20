@@ -24,7 +24,8 @@ import {
   populateUser,
   fetchUserFromDB,
   updateLocation,
-  getNearbyUsers
+  getNearbyUsers,
+  updateUserInfo,
 } from '../actions/index';
 
 import RootNavigation from '../navigation/RootNavigation';
@@ -36,7 +37,8 @@ class Root extends React.Component {
     this.state = {};
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
+    this.setState({isLoadingComplete: false})
     let user, coords = null;
     try {
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -53,16 +55,23 @@ class Root extends React.Component {
       let userJson = await AsyncStorage.getItem('user');
       user = JSON.parse(userJson);
       if (user && user.name && user.id) {
+        console.log("HUH")
         this.props.callLogin(user.name, user.id);
         let fetchedUser = await axios.post(
           'http://10.2.106.85:3000/api/users/fetchUser',
           { facebookId: user.id }
         );
         let location = await this.updateLocationDB(coords, fetchedUser.data.facebookId);
-        let matchUsers = await this.getNearbyUsersDB(location);
+        console.log("fetchedUser", fetchedUser.data._id);
+        let matchUsers = await this.getNearbyUsersDB(location, fetchedUser.data.facebookId);
         this.props.updateLocation(location)
         this.props.fetchUserFromDB(fetchedUser);
         this.props.getNearbyUsers(matchUsers);
+        this.props.updateUserInfo(fetchedUser.data.intention, null, fetchedUser.data.bio)
+        console.log('this.props.user in ROOT componentWillMount: ');
+        console.log(this.props.user.bio);
+        console.log(this.props.user.interests);
+        console.log(this.props.user.intention);
       } else {
         this.props.callLogout()
       }
@@ -70,6 +79,7 @@ class Root extends React.Component {
     catch (e) {
       console.log("Error in App componentDidMount: \n", e)
     }
+    this.setState({isLoadingComplete: true})
   }
 
   updateLocationDB = async (location, id) => {
@@ -212,6 +222,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchUserFromDB: (user) => dispatch(fetchUserFromDB(user)),
   updateLocation: (location) => dispatch(updateLocation(location)),
   getNearbyUsers: (users) => dispatch(getNearbyUsers(users)),
+  updateUserInfo: (intention, interests, bio) => dispatch(updateUserInfo(intention, interests, bio)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Root);

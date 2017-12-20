@@ -1,5 +1,6 @@
 import * as types from './types';
 import axios from 'axios';
+
 export function callLogin(name, id) {
   return {
     type: types.LOGIN,
@@ -28,10 +29,12 @@ export function fetchUserFromDB(user) {
   };
 }
 
-export function updateUserInfo(intention) {
+export function updateUserInfo(intention, interests, bio) {
   return {
     type: types.UPDATE_USER_INFO,
     intention,
+    interests,
+    bio,
   };
 }
 
@@ -49,5 +52,19 @@ export function getNearbyUsers(users) {
   return {
     type: types.GET_NEARBY_USERS,
     users
+  }
+}
+
+export function meetTopUser(user) {
+  return {
+    type: types.MEET_TOP_USER,
+    user
+  }
+}
+
+export function avoidTopUser(user) {
+  return {
+    type: types.AVOID_TOP_USER,
+    user
   }
 }

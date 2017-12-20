@@ -7,7 +7,7 @@ router.post('/updateMatchResponse', (req, res) => {
 	Match.findOne({ personA: personB, personB: personA }, (error, match) => {
 		if (error) {
 			console.log('Error finding match:', error);
-		} else if (!match) {	//This person is swiping first
+		} else if (!match) {	// This person is swiping first
 			Match.create({ personA, personB, response }, (error, match) => {
 				if (error) {
 					console.log('Error creating match:', error);
@@ -17,8 +17,8 @@ router.post('/updateMatchResponse', (req, res) => {
 					res.send('Match created successfully!');
 				}
 			})
-		} else {	//If other person has swiped on them
-			if (match.response && response) {	// * Both said yes
+		} else {	// If other person has swiped on them
+			if (match.response && response) {	// Both said yes
 				Match.update({ matched: true }, (error, match) => {
 					if (error) {
 						console.log('Error updating match:', error);

@@ -3,22 +3,25 @@ const router = express.Router();
 const axios = require('axios');
 const haversine = require('haversine');
 const User = require('../models/User');
+const Match = require('../models/Match');
 const Interest = require('../models/Interest');
-
 const TARGET_DIST = 5;
+const async = require('async');
 /* GET users listing. */
 router.get('/', function (req, res, next) {
     res.send('respond with a resource');
 });
 
 router.post('/fetchUser', function (req, res, next) {
-    User.findOne({ facebookId: req.body.facebookId }, (err, user) => {
-        if (err) {
-            res.send("ERROR", err);
-        } else {
-            res.json(user);
-        }
-    })
+    User.findOne({ facebookId: req.body.facebookId })
+        .populate('mainInterests')
+        .exec((err, user) => {
+            if (err) {
+                res.send("ERROR", err);
+            } else {
+                res.json(user);
+            }
+        })
 });
 
 router.post('/updateLocation', function (req, res, next) {
@@ -50,36 +53,81 @@ router.post('/updateLocation', function (req, res, next) {
 });
 
 router.post('/getNearbyUsers', (req, res) => {
-    let { location } = req.body;
-    User.find({ "location.city": location.city }, (err, users) => {
-        //Filter users
-        let userArr = [];
-        users.forEach(selectedUser => {
-            const start = {
-                latitude: location.lat,
-                longitude: location.lng
-            };
-            const end = {
-                latitude: selectedUser.location.lat,
-                longitude: selectedUser.location.lng
-            }
-            let distance = haversine(start, end, { unit: 'mile' });
-            if (distance > 0 && distance < TARGET_DIST) {
-                distance = Math.ceil(distance * 1760 / 100) * 100;
-                userArr.push({ user: selectedUser, distance });
-            }
-        });
+    let { location, facebookId } = req.body;
+    User.find({ "location.city": location.city })
+        .exec()
+        .then(users => {
+            let userArr = [];
+            async.each(users, (selectedUser, callback) => {
+                const start = {
+                    latitude: location.lat,
+                    longitude: location.lng
+                };
+                const end = {
+                    latitude: selectedUser.location.lat,
+                    longitude: selectedUser.location.lng
+                }
+                let distance = haversine(start, end, { unit: 'mile' });
+                if (distance > 0 && distance < TARGET_DIST) {
+                    distance = Math.ceil(distance * 1760 / 100) * 100;
+                    //filters. check for distance, Look for users who have swiped yes or not on you AND you haven't swiped on. Also only return users who are looking for the same goals.
+                    Match.findOne({ personA: selectedUser.facebookId, personB: facebookId })
+                        .exec()
+                        .then(match => {
+                            if (!match || match.response) {
+                                //no match yet or match is a yes
+                                // console.log("matches", facebookId, selectedUser.facebookId);
+                                return Match.findOne({ personA: facebookId, personB: selectedUser.facebookId, response: false })
+                                    .exec()
+                                    .then(reverseMatch => {
+                                        // console.log("reverseMatch", reverseMatch);
+                                        if (!reverseMatch) {
+                                            return selectedUser;
+                                        }
+                                        return false;
+                                    })
+                            }
+                            return false;
+                        })
+                        .then(user => {
+                            if (user) {
+                                //populate the interests array of the selectedUser
+                                return Interest.find({ userId: user._id })
+                                    .exec()
+                                    .then(selectedInterests => {
+                                        selectedUser.mainInterests = selectedInterests;
+                                        return selectedUser
+                                    });
+                            }
+                            return false;
+                        })
+                        .then(user => {
+                            //append to array - postpone logic to the next promise
+                            if (user) {
+                                userArr.push({ user: selectedUser, distance });
+                            }
 
-        res.json(userArr);
-    });
-});
+                            callback();
+                        })
+
+                } else {
+                    callback();
+                }
+            }, () => {
+                //do something with users.
+                //TODO Score - interests, mutual friends, streaks/score/review. Rank by score.
+                res.send(userArr);
+            })
+        })
+})
+
 
 router.post('/updateProfile', (req, res) => {
     let { facebookId, bio, intention, interests } = req.body;
     let interestIds = [];
     for (let interest in interests) {
         let currentInterest = interests[interest];
-        Interest.findOne({  // * Might be more elegant to generate a string representation/hash and search with it
+        Interest.findOne({
             category: currentInterest.categorySelected,
             subCategory: currentInterest.subCategorySelected,
             description: currentInterest.description
@@ -115,6 +163,5 @@ router.post('/updateProfile', (req, res) => {
         })
     }
 });
-
 
 module.exports = router;
