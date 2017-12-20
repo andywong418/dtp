@@ -21,7 +21,7 @@ class LogoutButton extends React.Component {
 
   render() {
     return (
-      <ListItem style={{marginLeft: 0, marginTop:30}}>
+      <ListItem style={{marginLeft: 0, marginTop:10, justifyContent: 'flex-end'}}>
         <Body>
           <Button
             title="Logout"

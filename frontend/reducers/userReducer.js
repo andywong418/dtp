@@ -42,7 +42,6 @@ const userReducer = (state = initialState, action) => {
       newState.user = action.user;
       return newState;
     case types.UPDATE_USER_INFO:
-      console.log('updateUserInfo called: ', action);
       newState.intention = action.intention;
       newState.interests = action.interests;
       newState.bio = action.bio;

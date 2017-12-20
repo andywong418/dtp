@@ -30,12 +30,12 @@ export default class SwipableList extends React.Component {
   }
 
   clickYesOnUser = async (user) => {
-    await axios.post('http://10.2.106.91:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
+    await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
     this.props.reject(this.state.currentUserCard)
   }
 
   clickNoOnUser= async (user) => {
-    await axios.post('http://10.2.106.91:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: false})
+    await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: false})
     this.props.reject(this.state.currentUserCard)
   }
 

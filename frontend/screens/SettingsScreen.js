@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   AsyncStorage,
+  ActivityIndicator,
   Button,
   ScrollView,
   Text,
@@ -15,6 +16,7 @@ import Intentions from '../components/Intentions';
 import Interests from '../components/Interests';
 import PersonalBio from '../components/PersonalBio';
 import LogoutButton from '../components/LogoutButton';
+import Loading from '../components/Loading';
 import SaveSettingsButton from '../components/SaveSettingsButton';
 import axios from 'axios';
 
@@ -61,9 +63,10 @@ class SettingsScreen extends React.Component {
   }
 
   _handleSave = async () => {
-    // TODO: check if everything is filled out
-    // TODO: save settings to global setState
-    // this.props.updateUserInfo(this.state.intention)
+    console.log('\n\nHANDLE SAVE CALLED\n\n');
+    console.log(this.state.intention);
+    console.log(this.state.interests);
+    console.log(this.state.bio);
     this.props.updateUserInfo(this.state.intention, this.state.interests, this.state.bio)
     try {
       let user = await AsyncStorage.getItem('user');
@@ -91,14 +94,12 @@ class SettingsScreen extends React.Component {
   }
 
   componentDidMount = () => {
-    console.log('this.props.user in SETTING componentDidMount: ', this.props.user);
     this.props.navigation.setParams({
       _handleSave: this._handleSave,
     })
   }
 
   componentWillReceiveProps = (nextProps) => {
-    console.log('settings getting new props: ', nextProps.user.bio);
     this.setState({
       intention: nextProps.user.intention,
       showIntentionHelperText: false,
@@ -116,25 +117,13 @@ class SettingsScreen extends React.Component {
           isSelected: nextProps.user.intention == 'Dating',
         },
       ],
-      interests: {
-        'interest1': {
-          categorySelected: false,
-          subCategorySelected: false,
-          description: null
-        },
-        'interest2': {
-          categorySelected: false,
-          subCategorySelected: false,
-          description: null
-        },
-        'interest3': {
-          categorySelected: false,
-          subCategorySelected: false,
-          description: null
-        }
-      },
+      interests: nextProps.user.interests,
       bio: nextProps.user.bio,
     })
+  }
+
+  componentDidUpdate = () => {
+    console.log('this.state.interests in SettingsScreen componentDidUpdate: ', this.state.interests);
   }
 
   componentWillUmount = () => {
@@ -142,41 +131,32 @@ class SettingsScreen extends React.Component {
   }
 
   render() {
-    //TODO pictures editing
-
     const {user} = this.props.user;
-    if(user){
-      if(user.data) {
-        return (
-          <ScrollView>
-            <PersonalPictureSwiper
-              photos={user.data.photos}
-            />
-            <Intentions
-              intentions={this.state.intentions}
-              _handleIntentionChoice={(intention) => this._handleIntentionChoice(intention)}
-            />
-            <Interests
-              interests={this.state.interests}
-              _changeInterestState={(interest, interestKey, description) => this._changeInterestState(interest, interestKey, description)}
-            />
-            <PersonalBio
-              value={this.state.bio}
-              setBio={(value) => this._setBio(value)}
-            />
-            <LogoutButton />
-          </ScrollView>
-        )
-      }
-
+    if (!user || !user.data) {
+      return (
+        <Loading/>
+      )
     }
     return (
       <ScrollView>
-        <Text>Loading...</Text>
-        <LogoutButton/>
+        <PersonalPictureSwiper
+          photos={user.data.photos}
+        />
+        <Intentions
+          intentions={this.state.intentions}
+          _handleIntentionChoice={(intention) => this._handleIntentionChoice(intention)}
+        />
+        <Interests
+          interests={this.state.interests}
+          _changeInterestState={(interest, interestKey, description) => this._changeInterestState(interest, interestKey, description)}
+        />
+        <PersonalBio
+          value={this.state.bio}
+          setBio={(value) => this._setBio(value)}
+        />
+        <LogoutButton />
       </ScrollView>
     )
-
   }
 
   _setBio = (value) => {

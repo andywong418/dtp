@@ -55,23 +55,17 @@ class Root extends React.Component {
       let userJson = await AsyncStorage.getItem('user');
       user = JSON.parse(userJson);
       if (user && user.name && user.id) {
-        console.log("HUH")
         this.props.callLogin(user.name, user.id);
         let fetchedUser = await axios.post(
           'http://10.2.106.85:3000/api/users/fetchUser',
           { facebookId: user.id }
         );
         let location = await this.updateLocationDB(coords, fetchedUser.data.facebookId);
-        console.log("fetchedUser", fetchedUser.data._id);
         let matchUsers = await this.getNearbyUsersDB(location, fetchedUser.data.facebookId);
         this.props.updateLocation(location)
         this.props.fetchUserFromDB(fetchedUser);
         this.props.getNearbyUsers(matchUsers);
-        this.props.updateUserInfo(fetchedUser.data.intention, null, fetchedUser.data.bio)
-        console.log('this.props.user in ROOT componentWillMount: ');
-        console.log(this.props.user.bio);
-        console.log(this.props.user.interests);
-        console.log(this.props.user.intention);
+        this.props.updateUserInfo(fetchedUser.data.intention, this.parseInterestsFromDB(fetchedUser.data.mainInterests), fetchedUser.data.bio)
       } else {
         this.props.callLogout()
       }
@@ -80,6 +74,14 @@ class Root extends React.Component {
       console.log("Error in App componentDidMount: \n", e)
     }
     this.setState({isLoadingComplete: true})
+  }
+
+  parseInterestsFromDB = (interestsArray) => {
+    let res = {}
+    res['interest1'] = interestsArray[0];
+    res['interest2'] = interestsArray[1];
+    res['interest3'] = interestsArray[2];
+    return res
   }
 
   updateLocationDB = async (location, id) => {
