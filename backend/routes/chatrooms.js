@@ -13,8 +13,8 @@ const capitalize = (s) => {
 router.get('/generateUsername', (req, res) => {
 	let adjective = adjectives[Math.floor(Math.random() * adjectives.length)],
 		noun = nouns[Math.floor(Math.random() * nouns.length)],
-		randomNumber = Math.floor(Math.random() * 100);
-	res.send(capitalize(adjective) + capitalize(noun) + randomNumber);
+		randomNumber = Math.floor(Math.random() * 9 + 1); // Add a random number to the end
+	res.send(capitalize(adjective) + capitalize(noun) + ''/*randomNumber*/);
 });
 
 module.exports = router;
