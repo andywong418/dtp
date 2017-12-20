@@ -15,13 +15,16 @@ import {
 import Swiper from 'react-native-swiper';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import MatchModal from './MatchModal';
 import Picture from './Picture';
+
 
 export default class SwipableList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentUserCard: this.props.users[0]
+      currentUserCard: this.props.users[0],
+      modalMatch: false
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -30,8 +33,17 @@ export default class SwipableList extends React.Component {
   }
 
   clickYesOnUser = async (user) => {
-    await axios.post('http://10.2.106.91:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
-    this.props.reject(this.state.currentUserCard)
+    console.log("WHAT");
+    if(this.state.currentUserCard.matchme) {
+      var self = this;
+      this.setState({modalMatch: true}, async () => {
+        await axios.post('http://10.2.106.91:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
+      });
+    } else {
+      await axios.post('http://10.2.106.91:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
+      this.props.meet(this.state.currentUserCard);
+    }
+
   }
 
   clickNoOnUser= async (user) => {
@@ -39,6 +51,15 @@ export default class SwipableList extends React.Component {
     this.props.reject(this.state.currentUserCard)
   }
 
+  closeModal = () => {
+    this.setState({modalMatch: false});
+    this.props.meet(this.state.currentUserCard);
+  }
+
+  sendMessage = () => {
+    this.props.meet(this.state.currentUserCard);
+    this.navigateToConvo(this.state.currentUserCard);
+  }
   render() {
     if (!this.state.currentUserCard) {
       return (
@@ -51,47 +72,54 @@ export default class SwipableList extends React.Component {
       )
     }
     return (
-        <ScrollView style={{padding: 15, display:'flex', flexDirection: 'column',
-         height: '100%',
-      width: '100%',}} >
-            <View
-              style={styles.slide}
-              key={this.state.currentUserCard.user.photos[0].url}
-            >
-                <Image
-                  source={
-                    this.state.currentUserCard.user.photos[0].url
-                    ? {uri: this.state.currentUserCard.user.photos[0].url}
-                    : require('../assets/images/icon.png')
-                  }
-                  style={styles.picture}
-                />
+      <View>
+        {
+          this.state.modalMatch ?
 
-            </View>
-            <View style={{flexDirection: 'row', justifyContent:'space-between', marginTop: 20}}>
-              <View flexDirection='row'>
-                <Icon name='room' size={25} color='grey'></Icon>
-                <Text style={styles.belowCardInfo}> {this.state.currentUserCard.distance} Feet Away</Text>
+          <MatchModal closeModal={this.closeModal} user={this.props.user} currentUserCard={this.state.currentUserCard}/>
+          :
+          <ScrollView style={{padding: 15, display:'flex', flexDirection: 'column',
+           height: '100%',
+        width: '100%',}} >
+              <View
+                style={styles.slide}
+                key={this.state.currentUserCard.user.photos[0].url}
+              >
+                  <Image
+                    source={
+                      this.state.currentUserCard.user.photos[0].url
+                      ? {uri: this.state.currentUserCard.user.photos[0].url}
+                      : require('../assets/images/icon.png')
+                    }
+                    style={styles.picture}
+                  />
+
               </View>
+              <View style={{flexDirection: 'row', justifyContent:'space-between', marginTop: 20}}>
+                <View flexDirection='row'>
+                  <Icon name='room' size={25} color='grey'></Icon>
+                  <Text style={styles.belowCardInfo}> {this.state.currentUserCard.distance} Feet Away</Text>
+                </View>
 
-              <View flexDirection='row'>
-                <Icon name='face' size={25} color='grey'></Icon>
-                <Text style={styles.belowCardInfo}> {this.state.currentUserCard.user.peopleMet ? this.state.currentUserCard.user.peopleMet + ' people met' : 'New User' } </Text>
+                <View flexDirection='row'>
+                  <Icon name='face' size={25} color='grey'></Icon>
+                  <Text style={styles.belowCardInfo}> {this.state.currentUserCard.user.peopleMet ? this.state.currentUserCard.user.peopleMet + ' people met' : 'New User' } </Text>
+                </View>
               </View>
-            </View>
-            <View style={{flex:1,  flexDirection:'row', alignItems:'center', width: '100%', justifyContent:'space-around', marginTop: 20}}>
+              <View style={{flex:1,  flexDirection:'row', alignItems:'center', width: '100%', justifyContent:'space-around', marginTop: 20}}>
 
-                <TouchableOpacity style={styles.meetButtons} onPress={() => this.clickNoOnUser(this.state.currentUserCard)}>
-                  <Icon color='red' name='clear' size={30}>
-                  </Icon>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.meetButtons} onPress={() => this.clickYesOnUser(this.state.currentUserCard)}>
-                  <Icon color='green' name='done' size={40}>
-                  </Icon>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
-
+                  <TouchableOpacity style={styles.meetButtons} onPress={() => this.clickNoOnUser(this.state.currentUserCard)}>
+                    <Icon color='red' name='clear' size={30}>
+                    </Icon>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.meetButtons} onPress={() => this.clickYesOnUser(this.state.currentUserCard)}>
+                    <Icon color='green' name='done' size={40}>
+                    </Icon>
+                  </TouchableOpacity>
+              </View>
+          </ScrollView>
+        }
+      </View>
 
     )
   }

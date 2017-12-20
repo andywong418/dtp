@@ -278,6 +278,11 @@ const subCategories = {
     {
       "value": "Other"
     }
+  ],
+  "Other": [
+    {
+      "value": "Other"
+    }
   ]
 }
 module.exports = {

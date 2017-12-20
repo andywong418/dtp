@@ -16,7 +16,10 @@ const UserSchema = new Schema({
     hometown: String,
     languages: [String],
     education: [{}],
-    mainInterests: [String],
+    mainInterests: [{
+        type: Schema.ObjectId,
+        ref: 'Interest'
+    },],
     nonSpecificInterests: [String],
     peopleMet: {
         type: Number,

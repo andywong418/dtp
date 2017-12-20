@@ -17,12 +17,11 @@ export default class PersonalBio extends React.Component {
 
   render() {
     return (
-      <View style={{margin: 20}}>
+      <View style={styles.viewFields}>
         <Text style={styles.textHeading}>Personal Bio</Text>
         <TextInput
           value={this.props.value}
-          // placeholder={this.props.placeholder}
-          style={{backgroundColor: 'white'}}
+          style={styles.text}
           editable={true}
           maxLength={140}
           multiline={true}
@@ -49,9 +48,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   viewFields:{
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginTop: 20,
+    marginBottom: 10,
     paddingLeft: 10,
-    marginBottom: 10
-  }
+    paddingRight: 10,
+  },
+  text: {
+    backgroundColor: 'white',
+    borderColor: '#B400FF',
+    borderRadius: 2,
+    borderWidth: 1,
+    height: 150,
+    marginTop: 10,
+    padding: 5,
+  },
 });

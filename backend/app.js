@@ -11,6 +11,8 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -23,9 +25,11 @@ const MongoDB = mongoose.connect(process.env.MONGODB_URI);
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(session({
   secret: 'dtp',
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  resave: true,
+  saveUninitialized: true
 }))
-// app.use('/api/facebook', facebook_api);
+
 app.use('/api', index);
 app.use('/users', users);
 

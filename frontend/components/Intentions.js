@@ -21,7 +21,7 @@ export default class Intentions extends React.Component {
           <Icon
             name="question-circle"
             style={styles.icon}
-            size={16}
+            size={15}
           />
         </View>
         <View style={styles.intentionList}>
@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
   viewFields:{
     flexDirection: 'row',
     marginTop: 20,
+    marginBottom: 10,
     paddingLeft: 10,
-    marginBottom: 10
+    paddingRight: 10,
   }
 });
