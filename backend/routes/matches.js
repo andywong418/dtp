@@ -18,8 +18,8 @@ router.post('/updateMatchResponse', (req, res) => {
 					res.send('Match created successfully!');
 				}
 			})
-		} else {	//If other person has swiped on them
-			if (match.response && response) {	// * Both said yes
+		} else {	// If other person has swiped on them
+			if (match.response && response) {	// Both said yes
 				Match.update({ matched: true }, (error, match) => {
 					if (error) {
 						console.log('Error updating match:', error);

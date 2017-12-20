@@ -23,7 +23,7 @@ const passportSetUp = (passport) => {
   passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: "http://10.2.106.85:3000/auth/facebook/callback",
+    callbackURL: "http://10.2.106.91:3000/auth/facebook/callback",
     profileFields: ['first_name', 'last_name', 'birthday', 'languages', 'hometown', 'photos', 'likes', 'interested_in', 'movies', 'music', 'television', 'favorite_teams', 'favorite_athletes','games', 'education', 'work', 'read_custom_friendlists'],
     scope: ['user_birthday','user_hometown', 'user_friends', 'read_custom_friendlists']
   }, async (accessToken, refreshToken, profile, done) => {

@@ -9,52 +9,52 @@ const TARGET_DIST = 5;
 const async = require('async');
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-  res.send('respond with a resource');
+    res.send('respond with a resource');
 });
 
 router.post('/fetchUser', function (req, res, next) {
-  User.findOne({ facebookId: req.body.facebookId }, (err, user) => {
-    if (err) {
-      res.send("ERROR", err);
-    } else {
-      res.json(user);
-    }
-  })
+    User.findOne({ facebookId: req.body.facebookId })
+        .populate('mainInterests')
+        .exec((err, user) => {
+            if (err) {
+                res.send("ERROR", err);
+            } else {
+                res.json(user);
+            }
+        })
 });
 
 router.post('/updateLocation', function (req, res, next) {
-  let key = process.env.GOOGLE_API_KEY;
-  let { lat, lng, facebookId } = req.body;
-  console.log("lat, lng", lat, lng);
-  let query = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${key}`;
-  axios.get(query)
-    .then(response => {
-      let city = response.data.results[0].address_components[3].long_name;
-      User.findOneAndUpdate({ facebookId }, {
-        location: {
-          lat,
-          lng,
-          city
-        }
-      }, (err, user) => {
-        if (err) {
-          res.send("Error:", err);
-        } else if (!user) {
-          res.send('User not found');
-        } else {
-          res.send(city);
-        }
-      })
-    })
-    .catch(error => {
-      console.log('Error:', error);
-    })
+    let key = process.env.GOOGLE_API_KEY;
+    let { lat, lng, facebookId } = req.body;
+    let query = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${key}`;
+    axios.get(query)
+        .then(response => {
+            let city = response.data.results[0].address_components[3].long_name;
+            User.findOneAndUpdate({ facebookId }, {
+                location: {
+                    lat,
+                    lng,
+                    city
+                }
+            }, (err, user) => {
+                if (err) {
+                    res.send("Error:", err);
+                } else if (!user) {
+                    res.send('User not found');
+                } else {
+                    res.send(city);
+                }
+            })
+        })
+        .catch(error => {
+            console.log('Error:', error);
+        })
 });
 
 router.post('/getNearbyUsers', (req, res) => {
-  console.log("GETTING IN?");
   let {location, facebookId} = req.body;
-  User.find({"location.city": location.city})
+  User.find({"location.city": location.city}).populate('mainInterests')
   .exec()
   .then(users => {
     let userArr = [];
@@ -97,19 +97,7 @@ router.post('/getNearbyUsers', (req, res) => {
             }
             return false;
           })
-          .then(user => {
-            if(user) {
-              //populate the interests array of the selectedUser
-              var queryInterest = user.matchme ? user.user._id : user._id
-              return Interest.find({userId: queryInterest})
-              .exec()
-              .then(selectedInterests => {
-                selectedUser.mainInterests = selectedInterests;
-                return selectedUser
-              });
-            }
-            return false;
-          })
+
           .then(user => {
             //append to array - postpone logic to the next promise
             if(user) {
@@ -134,9 +122,49 @@ router.post('/getNearbyUsers', (req, res) => {
     })
 
   })
-
-
 })
 
+
+router.post('/updateProfile', (req, res) => {
+    let { facebookId, bio, intention, interests } = req.body;
+    let interestIds = [];
+    for (let interest in interests) {
+        let currentInterest = interests[interest];
+        Interest.findOne({
+            category: currentInterest.categorySelected,
+            subCategory: currentInterest.subCategorySelected,
+            description: currentInterest.description
+        }, (error, interest) => {
+            if (error) {
+                console.log('Error finding interest', error);
+            } else if (interest) {
+                interestIds.push(interest._id);
+            } else if (!error && !interest) {
+                Interest.create({
+                    category: currentInterest.categorySelected,
+                    subCategory: currentInterest.subCategorySelected,
+                    description: currentInterest.description
+                }, (error, interest) => {
+                    if (error) {
+                        console.log('Error saving interest:', error);
+                    } else {
+                        interestIds.push(interest._id);
+                        if (interestIds.length === 3) {
+                            User.findOneAndUpdate({ facebookId }, { bio, intention, mainInterests: interestIds, profileComplete: true }, (error, user) => {
+                                if (error) {
+                                    console.log('Error updating user:', error);
+                                } else if (!user) {
+                                    console.log('Could not find a person with id', facebookId);
+                                } else {
+                                    res.send('Success!');
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+        })
+    }
+});
 
 module.exports = router;

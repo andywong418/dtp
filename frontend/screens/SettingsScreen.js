@@ -72,7 +72,7 @@ class SettingsScreen extends React.Component {
       let user = await AsyncStorage.getItem('user');
       user = JSON.parse(user);
       await axios.post(
-        'http://10.2.106.85:3000/api/users/updateProfile',
+        'http://10.2.106.91:3000/api/users/updateProfile',
         {
           facebookId: user.id,
           intention: this.state.intention,
