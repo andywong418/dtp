@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   AsyncStorage,
+  ActivityIndicator,
   Button,
   ScrollView,
   Text,
@@ -15,6 +16,7 @@ import Intentions from '../components/Intentions';
 import Interests from '../components/Interests';
 import PersonalBio from '../components/PersonalBio';
 import LogoutButton from '../components/LogoutButton';
+import Loading from '../components/Loading';
 import SaveSettingsButton from '../components/SaveSettingsButton';
 import axios from 'axios';
 
@@ -24,24 +26,24 @@ class SettingsScreen extends React.Component {
     // kept inside the local state
     // will be transferred upon unmounting or hitting save button
     this.state = {
-      intention: this.props.user.intention,
+      intention: props.user.intention,
       showIntentionHelperText: false,
       intentions: [
         {
           name: 'Open Minded',
-          isSelected: this.props.user.intention == 'Open Minded',
+          isSelected: props.user.intention == 'Open Minded',
         },
         {
           name: 'Friendship',
-          isSelected: this.props.user.intention == 'Friendship',
+          isSelected: props.user.intention == 'Friendship',
         },
         {
           name: 'Dating',
-          isSelected: this.props.user.intention == 'Dating',
+          isSelected: props.user.intention == 'Dating',
         },
       ],
-      interests: this.props.user.interests,
-      bio: this.props.user.bio,
+      interests: props.user.interests,
+      bio: props.user.bio,
     }
   }
 
@@ -61,15 +63,16 @@ class SettingsScreen extends React.Component {
   }
 
   _handleSave = async () => {
-    // TODO: check if everything is filled out
-    // TODO: save settings to global setState
-    // this.props.updateUserInfo(this.state.intention)
+    console.log('\n\nHANDLE SAVE CALLED\n\n');
+    console.log(this.state.intention);
+    console.log(this.state.interests);
+    console.log(this.state.bio);
     this.props.updateUserInfo(this.state.intention, this.state.interests, this.state.bio)
     try {
       let user = await AsyncStorage.getItem('user');
       user = JSON.parse(user);
       await axios.post(
-        'http://10.2.106.91:3000/api/users/updateProfile',
+        'http://10.2.106.85:3000/api/users/updateProfile',
         {
           facebookId: user.id,
           intention: this.state.intention,
@@ -91,14 +94,13 @@ class SettingsScreen extends React.Component {
   }
 
   componentDidMount = () => {
-    console.log('this.props.user in SETTING componentDidMount: ', this.props.user);
     this.props.navigation.setParams({
       _handleSave: this._handleSave,
     })
   }
 
   componentWillReceiveProps = (nextProps) => {
-    console.log('settings getting new props: ', nextProps.user.bio);
+    console.log('nextProps in componentWillReceiveProps: ', nextProps.user.interests);
     this.setState({
       intention: nextProps.user.intention,
       showIntentionHelperText: false,
@@ -116,25 +118,13 @@ class SettingsScreen extends React.Component {
           isSelected: nextProps.user.intention == 'Dating',
         },
       ],
-      interests: {
-        'interest1': {
-          categorySelected: false,
-          subCategorySelected: false,
-          description: null
-        },
-        'interest2': {
-          categorySelected: false,
-          subCategorySelected: false,
-          description: null
-        },
-        'interest3': {
-          categorySelected: false,
-          subCategorySelected: false,
-          description: null
-        }
-      },
+      interests: nextProps.user.interests,
       bio: nextProps.user.bio,
     })
+  }
+
+  componentDidUpdate = () => {
+    console.log('\n\n\nthis.state.interests in SettingsScreen componentDidUpdate: \n\n\n', this.state.interests);
   }
 
   componentWillUmount = () => {
@@ -142,41 +132,32 @@ class SettingsScreen extends React.Component {
   }
 
   render() {
-    //TODO pictures editing
-
     const {user} = this.props.user;
-    if(user){
-      if(user.data) {
-        return (
-          <ScrollView>
-            <PersonalPictureSwiper
-              photos={user.data.photos}
-            />
-            <Intentions
-              intentions={this.state.intentions}
-              _handleIntentionChoice={(intention) => this._handleIntentionChoice(intention)}
-            />
-            <Interests
-              interests={this.state.interests}
-              _changeInterestState={(interest, interestKey, description) => this._changeInterestState(interest, interestKey, description)}
-            />
-            <PersonalBio
-              value={this.state.bio}
-              setBio={(value) => this._setBio(value)}
-            />
-            <LogoutButton />
-          </ScrollView>
-        )
-      }
-
+    if (!user || !user.data) {
+      return (
+        <Loading/>
+      )
     }
     return (
       <ScrollView>
-        <Text>Loading...</Text>
-        <LogoutButton/>
+        <PersonalPictureSwiper
+          photos={user.data.photos}
+        />
+        <Intentions
+          intentions={this.state.intentions}
+          _handleIntentionChoice={(intention) => this._handleIntentionChoice(intention)}
+        />
+        <Interests
+          interests={this.state.interests}
+          _changeInterestState={(interest, interestKey, description) => this._changeInterestState(interest, interestKey, description)}
+        />
+        <PersonalBio
+          value={this.state.bio}
+          setBio={(value) => this._setBio(value)}
+        />
+        <LogoutButton />
       </ScrollView>
     )
-
   }
 
   _setBio = (value) => {
@@ -204,22 +185,21 @@ class SettingsScreen extends React.Component {
   };
 
   _changeInterestState = (interest, interestKey, description) => {
+    console.log("interest HIT ME", interest);
     let newInterestState = Object.assign({}, this.state.interests);
     newInterestState[interest] = Object.assign({}, newInterestState[interest]);
     newInterestState[interest][interestKey] = description
     if (newInterestState[interest][interestKey] != this.state.interests[interest][interestKey]) {
       if (interestKey == 'categorySelected') {
-        console.log('changing down the line from categorySelected: ', interest, interestKey, description);
         newInterestState[interest]['subCategorySelected'] = false;
         newInterestState[interest]['description'] = null;
       }
       if (interestKey == 'subCategorySelected') {
-        console.log('changing down the line from subCategorySelected: ', interest, interestKey, description);
         newInterestState[interest]['description'] = null;
       }
     }
     this.setState({interests: newInterestState});
-    console.log(this.state.interests);
+    // console.log(this.state.interests);
   }
 }
 

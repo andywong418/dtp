@@ -19,6 +19,7 @@
     "react": "16.0.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-23.0.0.tar.gz",
     "react-native-branch": "^2.1.1",
+    "react-native-calendar": "^0.13.1",
     "react-native-gesture-handler": "^1.0.0-alpha.35",
     "react-native-maps": "^0.18.3",
     "react-native-material-dropdown": "^0.6.1",

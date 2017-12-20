@@ -33,20 +33,21 @@ export default class SwipableList extends React.Component {
   }
 
   clickYesOnUser = async (user) => {
+    console.log("WHAT");
     if(this.state.currentUserCard.matchme) {
       var self = this;
       this.setState({modalMatch: true}, async () => {
-        await axios.post('http://10.2.106.91:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
+        await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
       });
     } else {
-      await axios.post('http://10.2.106.91:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
+      await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
       this.props.meet(this.state.currentUserCard);
     }
 
   }
 
   clickNoOnUser= async (user) => {
-    await axios.post('http://10.2.106.91:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: false})
+    await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: false})
     this.props.reject(this.state.currentUserCard)
   }
 
@@ -57,7 +58,7 @@ export default class SwipableList extends React.Component {
 
   sendMessage = () => {
     this.props.meet(this.state.currentUserCard);
-    
+    this.navigateToConvo(this.state.currentUserCard);
   }
   render() {
     if (!this.state.currentUserCard) {

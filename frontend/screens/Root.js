@@ -55,23 +55,18 @@ class Root extends React.Component {
       let userJson = await AsyncStorage.getItem('user');
       user = JSON.parse(userJson);
       if (user && user.name && user.id) {
-        console.log("HUH")
         this.props.callLogin(user.name, user.id);
         let fetchedUser = await axios.post(
-          'http://10.2.106.91:3000/api/users/fetchUser',
+          'http://10.2.106.85:3000/api/users/fetchUser',
           { facebookId: user.id }
         );
         let location = await this.updateLocationDB(coords, fetchedUser.data.facebookId);
-        console.log("fetchedUser", fetchedUser.data._id);
         let matchUsers = await this.getNearbyUsersDB(location, fetchedUser.data.facebookId);
         this.props.updateLocation(location)
         this.props.fetchUserFromDB(fetchedUser);
         this.props.getNearbyUsers(matchUsers);
-        this.props.updateUserInfo(fetchedUser.data.intention, null, fetchedUser.data.bio)
-        console.log('this.props.user in ROOT componentWillMount: ');
-        console.log(this.props.user.bio);
-        console.log(this.props.user.interests);
-        console.log(this.props.user.intention);
+        console.log('fetchedUser.data in ROOT DB CALL: ', fetchedUser.data);
+        this.props.updateUserInfo(fetchedUser.data.intention, this.parseInterestsFromDB(fetchedUser.data.mainInterests), fetchedUser.data.bio)
       } else {
         this.props.callLogout()
       }
@@ -82,11 +77,31 @@ class Root extends React.Component {
     this.setState({isLoadingComplete: true})
   }
 
+  parseInterestsFromDB = (interestsArray) => {
+    let res = {}
+    res['interest1'] = interestsArray[0];
+    res['interest1']['categorySelected'] = res['interest1']['category']
+    res['interest1']['subCategorySelected'] = res['interest1']['subCategory']
+    res['interest2'] = interestsArray[1];
+    res['interest2']['categorySelected'] = res['interest2']['category']
+    res['interest2']['subCategorySelected'] = res['interest2']['subCategory']
+    res['interest3'] = interestsArray[2];
+    res['interest3']['categorySelected'] = res['interest3']['category']
+    res['interest3']['subCategorySelected'] = res['interest3']['subCategory']
+    delete res['interest1']['category']
+    delete res['interest1']['subCategory']
+    delete res['interest2']['category']
+    delete res['interest2']['subCategory']
+    delete res['interest3']['category']
+    delete res['interest3']['subCategory']
+    return res
+  }
+
   updateLocationDB = async (location, id) => {
     let lat = location.coords.latitude;
     let lng = location.coords.longitude;
     let response = await axios.post(
-      'http://10.2.106.91:3000/api/users/updateLocation',
+      'http://10.2.106.85:3000/api/users/updateLocation',
       {
         facebookId: id,
         lat,
@@ -103,7 +118,7 @@ class Root extends React.Component {
 
   getNearbyUsersDB = async (location, facebookId) => {
     let response = await axios.post(
-      'http://10.2.106.91:3000/api/users/getNearbyUsers',
+      'http://10.2.106.85:3000/api/users/getNearbyUsers',
       {
         facebookId,
         location

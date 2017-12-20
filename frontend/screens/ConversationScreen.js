@@ -13,6 +13,11 @@ export default class ConversationScreen extends React.Component {
   }
 
   render() {
-    
+    console.log("this. props", this.props)
+    return (
+      <View>
+        Hello
+      </View>
+    )
   }
 }
