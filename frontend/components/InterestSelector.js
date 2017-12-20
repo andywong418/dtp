@@ -16,23 +16,31 @@ export default class InterestSelector extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      category: this.props.interest.category,
-      subCategory: this.props.interest.subCategory,
+      categorySelected: props.interest.categorySelected,
+      subCategorySelected: props.interest.subCategorySelected,
     }
   }
 
   handleCategoryChange = (value) => {
-    this.setState({category: value})
+    this.setState({categorySelected: value})
     this.props.changeInterestState('categorySelected', value)
   }
 
   handleSubcategoryChange = (value) => {
-    this.setState({subCategory: value})
+    this.setState({subCategorySelected: value})
     this.props.changeInterestState('subCategorySelected', value)
   }
 
+  componentWillReceiveProps = (newProps) => {
+    this.setState({
+      categorySelected: newProps.interest.categorySelected,
+      subCategorySelected: newProps.interest.subCategorySelected,
+    })
+  }
   componentDidUpdate = () => {
-    console.log('this.props in InterestSelector componentDidUpdate: ', this.props);
+    console.log('\n\n\nvvv componentDidUpdate vvv\n\n\n');
+    console.log('\n\nthis.state in InterestSelector componentDidUpdate: ', this.state);
+    console.log('\n\n\n^^^ componentDidUpdate ^^^\n\n\n');
   }
 
   render() {
@@ -45,7 +53,7 @@ export default class InterestSelector extends React.Component {
           <Picker
             style={styles.category}
             itemStyle={styles.itemStyle}
-            selectedValue={this.state.category}
+            selectedValue={this.state.categorySelected}
             onValueChange={(itemValue) => this.handleCategoryChange(itemValue)}>
             {categories.map(category => <Picker.Item
               label={category.value}
@@ -58,7 +66,7 @@ export default class InterestSelector extends React.Component {
           <Picker
             style={styles.category}
             itemStyle={styles.itemStyle}
-            selectedValue={this.state.subCategory}
+            selectedValue={this.state.subCategorySelected}
             onValueChange={(itemValue) => this.handleSubcategoryChange(itemValue)}>
             {subCategories[this.props.interest.categorySelected].map(subCategory => <Picker.Item
               label={subCategory.value}
@@ -73,6 +81,7 @@ export default class InterestSelector extends React.Component {
         {this.props.interest.subCategorySelected
         ?
         <TextInput
+          value={this.props.interest.description}
           autoGrow={true}
           style={styles.text}
           editable={true}

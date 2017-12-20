@@ -79,8 +79,20 @@ class Root extends React.Component {
   parseInterestsFromDB = (interestsArray) => {
     let res = {}
     res['interest1'] = interestsArray[0];
+    res['interest1']['categorySelected'] = res['interest1']['category']
+    res['interest1']['subCategorySelected'] = res['interest1']['subCategory']
     res['interest2'] = interestsArray[1];
+    res['interest2']['categorySelected'] = res['interest2']['category']
+    res['interest2']['subCategorySelected'] = res['interest2']['subCategory']
     res['interest3'] = interestsArray[2];
+    res['interest3']['categorySelected'] = res['interest3']['category']
+    res['interest3']['subCategorySelected'] = res['interest3']['subCategory']
+    delete res['interest1']['category']
+    delete res['interest1']['subCategory']
+    delete res['interest2']['category']
+    delete res['interest2']['subCategory']
+    delete res['interest3']['category']
+    delete res['interest3']['subCategory']
     return res
   }
 

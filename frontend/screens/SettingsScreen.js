@@ -26,24 +26,24 @@ class SettingsScreen extends React.Component {
     // kept inside the local state
     // will be transferred upon unmounting or hitting save button
     this.state = {
-      intention: this.props.user.intention,
+      intention: props.user.intention,
       showIntentionHelperText: false,
       intentions: [
         {
           name: 'Open Minded',
-          isSelected: this.props.user.intention == 'Open Minded',
+          isSelected: props.user.intention == 'Open Minded',
         },
         {
           name: 'Friendship',
-          isSelected: this.props.user.intention == 'Friendship',
+          isSelected: props.user.intention == 'Friendship',
         },
         {
           name: 'Dating',
-          isSelected: this.props.user.intention == 'Dating',
+          isSelected: props.user.intention == 'Dating',
         },
       ],
-      interests: this.props.user.interests,
-      bio: this.props.user.bio,
+      interests: props.user.interests,
+      bio: props.user.bio,
     }
   }
 
@@ -100,6 +100,7 @@ class SettingsScreen extends React.Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
+    console.log('nextProps in componentWillReceiveProps: ', nextProps.user.interests);
     this.setState({
       intention: nextProps.user.intention,
       showIntentionHelperText: false,
@@ -123,7 +124,7 @@ class SettingsScreen extends React.Component {
   }
 
   componentDidUpdate = () => {
-    console.log('this.state.interests in SettingsScreen componentDidUpdate: ', this.state.interests);
+    console.log('\n\n\nthis.state.interests in SettingsScreen componentDidUpdate: \n\n\n', this.state.interests);
   }
 
   componentWillUmount = () => {
@@ -189,17 +190,15 @@ class SettingsScreen extends React.Component {
     newInterestState[interest][interestKey] = description
     if (newInterestState[interest][interestKey] != this.state.interests[interest][interestKey]) {
       if (interestKey == 'categorySelected') {
-        console.log('changing down the line from categorySelected: ', interest, interestKey, description);
         newInterestState[interest]['subCategorySelected'] = false;
         newInterestState[interest]['description'] = null;
       }
       if (interestKey == 'subCategorySelected') {
-        console.log('changing down the line from subCategorySelected: ', interest, interestKey, description);
         newInterestState[interest]['description'] = null;
       }
     }
     this.setState({interests: newInterestState});
-    console.log(this.state.interests);
+    // console.log(this.state.interests);
   }
 }
 
