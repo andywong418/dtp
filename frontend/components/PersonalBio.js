@@ -49,14 +49,14 @@ const styles = StyleSheet.create({
   },
   viewFields:{
     flexDirection: 'column',
-    marginTop: 20,
-    marginBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: 'rgba(0,0,0,0.3)',
   },
   text: {
     backgroundColor: 'white',
     borderColor: '#B400FF',
+    borderColor: 'rgba(0,0,0,0.3)',
     borderRadius: 2,
     borderWidth: 1,
     height: 150,

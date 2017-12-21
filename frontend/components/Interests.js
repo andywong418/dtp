@@ -12,7 +12,6 @@ export default class Intentions extends React.Component {
   }
 
   render() {
-    console.log('this.props.interests in INTEREST RENDER: ', this.props.interests);
     return (
       <View style={styles.interestContainer}>
         <Text style={styles.textHeading}>Specify your 3 main interests</Text>
@@ -33,10 +32,9 @@ export default class Intentions extends React.Component {
 
 const styles = StyleSheet.create({
   interestContainer: {
-    marginTop: 30,
-    marginBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: 'rgba(0,0,0,0.3)',
   },
   textHeading: {
     fontWeight: 'bold',

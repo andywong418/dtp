@@ -15,7 +15,7 @@ export default class Intentions extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.border}>
         <View style={styles.viewFields}>
           <Text style={styles.textHeading}>Intention</Text>
           <Icon
@@ -42,6 +42,11 @@ export default class Intentions extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  border: {
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: 'rgba(0,0,0,0.3)',
+  },
   icon: {
     marginLeft: 5,
     marginTop: 2,

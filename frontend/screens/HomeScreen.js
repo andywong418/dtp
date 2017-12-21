@@ -79,28 +79,24 @@ class HomeScreen extends React.Component {
         return (
           <View>
           {this.props.user.matchedUsers ?
-              <View>
-                { this.state.viewMoreInfo ?
-                    null
-                  :
-
-                    <SwipableList
-                    users={this.props.user.matchedUsers}
-                    user={this.props.user.user.data}
-                    reject={this.props.avoidTopUser}
-                    meet={this.props.meetTopUser}
-                    sendMessage={this.navigateToConvo}/>
-
-                }
-              </View>
-
-            :
+            <View>
+            {this.state.viewMoreInfo ?
               null
+              :
+              <SwipableList
+                users={this.props.user.matchedUsers}
+                user={this.props.user.user.data}
+                reject={this.props.avoidTopUser}
+                meet={this.props.meetTopUser}
+                sendMessage={this.navigateToConvo}
+              />
+            }
+            </View>
+          :
+          null
           }
-
           </View>
         )
-
       }
     } else{
       return null;

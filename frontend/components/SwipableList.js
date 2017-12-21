@@ -13,6 +13,7 @@ import {
   TextInput
 } from 'react-native';
 import Swiper from 'react-native-swiper';
+import PersonalPictureSwiper from './PersonalPictureSwiper';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MatchModal from './MatchModal';
@@ -37,17 +38,17 @@ export default class SwipableList extends React.Component {
     if(this.state.currentUserCard.matchme) {
       var self = this;
       this.setState({modalMatch: true}, async () => {
-        await axios.post('http://10.2.106.91:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
+        await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
       });
     } else {
-      await axios.post('http://10.2.106.91:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
+      await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
       this.props.meet(this.state.currentUserCard);
     }
 
   }
 
   clickNoOnUser= async (user) => {
-    await axios.post('http://10.2.106.91:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: false})
+    await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: false})
     this.props.reject(this.state.currentUserCard)
   }
 
@@ -71,6 +72,9 @@ export default class SwipableList extends React.Component {
         </View>
       )
     }
+    let user = this.state.currentUserCard.user;
+    console.log(user);
+    console.log(user.mainInterests);
     return (
       <View>
         {
@@ -78,45 +82,57 @@ export default class SwipableList extends React.Component {
 
           <MatchModal closeModal={this.closeModal} user={this.props.user} currentUserCard={this.state.currentUserCard}/>
           :
-          <ScrollView style={{padding: 15, display:'flex', flexDirection: 'column',
-           height: '100%',
-        width: '100%',}} >
-              <View
-                style={styles.slide}
-                key={this.state.currentUserCard.user.photos[0].url}
-              >
-                  <Image
-                    source={
-                      this.state.currentUserCard.user.photos[0].url
-                      ? {uri: this.state.currentUserCard.user.photos[0].url}
-                      : require('../assets/images/icon.png')
-                    }
-                    style={styles.picture}
-                  />
+          <ScrollView style={{display:'flex', flexDirection: 'column', height: '100%', width: '100%',}} >
 
-              </View>
-              <View style={{flexDirection: 'row', justifyContent:'space-between', marginTop: 20}}>
+            <PersonalPictureSwiper
+              photos={user.photos}
+            />
+
+
+            <View style={{flex:1,  flexDirection:'row', alignItems:'center', width: '100%', justifyContent:'space-around', marginTop: 25}}>
+              <TouchableOpacity style={styles.meetButtons} onPress={() => this.clickNoOnUser(this.state.currentUserCard)}>
+                <Icon color='red' name='clear' size={30}>
+                </Icon>
+              </TouchableOpacity>
+              <View style={{flexDirection: 'column', alignItems:'center'}}>
                 <View flexDirection='row'>
-                  <Icon name='room' size={25} color='grey'></Icon>
+                  <Icon name='room' size={20} color='grey'></Icon>
                   <Text style={styles.belowCardInfo}> {this.state.currentUserCard.distance} Feet Away</Text>
                 </View>
-
                 <View flexDirection='row'>
-                  <Icon name='face' size={25} color='grey'></Icon>
-                  <Text style={styles.belowCardInfo}> {this.state.currentUserCard.user.peopleMet ? this.state.currentUserCard.user.peopleMet + ' people met' : 'New User' } </Text>
+                  <Icon name='face' size={20} color='grey'></Icon>
+                  <Text style={styles.belowCardInfo}> {user.peopleMet ? user.peopleMet + ' people met' : 'New User' } </Text>
                 </View>
+                <Text style={styles.belowCardInfo}>
+                  {user.friends.length} mutual friends
+                </Text>
+                <Text style={styles.belowCardInfo}>
+                  Looking for: {user.intention}
+                </Text>
               </View>
-              <View style={{flex:1,  flexDirection:'row', alignItems:'center', width: '100%', justifyContent:'space-around', marginTop: 20}}>
+              <TouchableOpacity style={styles.meetButtons} onPress={() => this.clickYesOnUser(this.state.currentUserCard)}>
+                <Icon color='green' name='done' size={30}>
+                </Icon>
+              </TouchableOpacity>
+            </View>
+            <View style={{flex:1, width: '100%', marginTop: 15, padding: 4, borderTopWidth: 1, borderBottomWidth: 1,borderColor: 'rgba(0,0,0,0.3)',}}>
+              <Text style={{fontWeight: '100', fontSize: 10, color: 'grey'}}>
+                Their interests:
+              </Text>
+              {user.mainInterests.map(interest => <Text key={interest._id}>
+                {interest.category}, {interest.subCategory}: {interest.description}
+                </Text>
+              )}
+              <Text style={{fontWeight: '100', fontSize: 10, color: 'grey', marginTop: 10,}}>
+                What they have to say about themselves:
+              </Text>
+              <Text>
+                {user.bio}
+              </Text>
+            </View>
 
-                  <TouchableOpacity style={styles.meetButtons} onPress={() => this.clickNoOnUser(this.state.currentUserCard)}>
-                    <Icon color='red' name='clear' size={30}>
-                    </Icon>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.meetButtons} onPress={() => this.clickYesOnUser(this.state.currentUserCard)}>
-                    <Icon color='green' name='done' size={40}>
-                    </Icon>
-                  </TouchableOpacity>
-              </View>
+
+
           </ScrollView>
         }
       </View>
@@ -137,18 +153,19 @@ const styles = StyleSheet.create({
   },
   belowCardInfo: {
     fontWeight: '100',
-    fontSize: 15,
+    fontSize: 12,
     color: 'grey',
     paddingTop: 3
   },
   meetButtons: {
-        borderWidth:1,
-       borderColor:'rgba(0,0,0,0.2)',
-       alignItems:'center',
-       justifyContent:'center',
-       width:70,
-       height:70,
-       backgroundColor:'#fff',
-       borderRadius:70,
+    borderWidth:1,
+    borderColor:'rgba(0,0,0,0.3)',
+    // borderColor:'#B400FF',
+    alignItems:'center',
+    justifyContent:'center',
+    width:70,
+    height:70,
+    backgroundColor:'#fff',
+    borderRadius:35,
   }
 });

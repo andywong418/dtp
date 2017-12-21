@@ -63,16 +63,12 @@ class SettingsScreen extends React.Component {
   }
 
   _handleSave = async () => {
-    console.log('\n\nHANDLE SAVE CALLED\n\n');
-    console.log(this.state.intention);
-    console.log(this.state.interests);
-    console.log(this.state.bio);
     this.props.updateUserInfo(this.state.intention, this.state.interests, this.state.bio)
     try {
       let user = await AsyncStorage.getItem('user');
       user = JSON.parse(user);
       await axios.post(
-        'http://10.2.106.91:3000/api/users/updateProfile',
+        'http://10.2.106.85:3000/api/users/updateProfile',
         {
           facebookId: user.id,
           intention: this.state.intention,
@@ -80,6 +76,7 @@ class SettingsScreen extends React.Component {
           bio: this.state.bio,
         }
       )
+      this.state.navigation.navigate('Home');
     }
     catch (e) {
       console.log("error in save settings: ", e);
@@ -100,7 +97,6 @@ class SettingsScreen extends React.Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    console.log('nextProps in componentWillReceiveProps: ', nextProps.user.interests);
     this.setState({
       intention: nextProps.user.intention,
       showIntentionHelperText: false,
@@ -121,10 +117,6 @@ class SettingsScreen extends React.Component {
       interests: nextProps.user.interests,
       bio: nextProps.user.bio,
     })
-  }
-
-  componentDidUpdate = () => {
-    console.log('\n\n\nthis.state.interests in SettingsScreen componentDidUpdate: \n\n\n', this.state.interests);
   }
 
   componentWillUmount = () => {

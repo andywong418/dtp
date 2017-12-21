@@ -37,11 +37,6 @@ export default class InterestSelector extends React.Component {
       subCategorySelected: newProps.interest.subCategorySelected,
     })
   }
-  componentDidUpdate = () => {
-    console.log('\n\n\nvvv componentDidUpdate vvv\n\n\n');
-    console.log('\n\nthis.state in InterestSelector componentDidUpdate: ', this.state);
-    console.log('\n\n\n^^^ componentDidUpdate ^^^\n\n\n');
-  }
 
   render() {
     let interestName = this.props.interestName;
@@ -121,7 +116,8 @@ const styles = StyleSheet.create({
   },
   text: {
     backgroundColor: 'white',
-    borderColor: '#B400FF',
+    // borderColor: '#B400FF',
+    borderColor: 'rgba(0,0,0,0.3)',
     borderRadius: 2,
     borderWidth: 1,
     height: 60,
