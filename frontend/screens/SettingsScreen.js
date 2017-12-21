@@ -64,7 +64,6 @@ class SettingsScreen extends React.Component {
   }
 
   _handleSave = async () => {
-    console.log('save called');
     this.props.updateUserInfo(this.state.intention, this.state.interests, this.state.bio)
     try {
       let userJson = await AsyncStorage.getItem('user');
@@ -78,17 +77,6 @@ class SettingsScreen extends React.Component {
           bio: this.state.bio,
         }
       )
-      let fetchedUser = await axios.post(
-        'http://10.2.106.85:3000/api/users/fetchUser',
-        { facebookId: user.id }
-      );
-      let location = await this.updateLocationDB(coords, fetchedUser.data.facebookId);
-      let matchUsers = await this.getNearbyUsersDB(location, fetchedUser.data.facebookId);
-      this.props.updateLocation(location)
-      this.props.fetchUserFromDB(fetchedUser);
-      this.props.getNearbyUsers(matchUsers);
-      console.log('right above navigation');
-      console.log("NAVIGATION", this.props.navigation);
       this.props.navigation.navigate('Home');
     }
     catch (e) {
