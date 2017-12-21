@@ -32,8 +32,11 @@ export default class Intentions extends React.Component {
 
 const styles = StyleSheet.create({
   interestContainer: {
-    padding: 10,
-    borderBottomWidth: 1,
+    paddingTop: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom:30,
+    borderTopWidth: 1,
     borderColor: 'rgba(0,0,0,0.3)',
   },
   textHeading: {

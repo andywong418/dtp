@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   AsyncStorage,
+  ActivityIndicator,
   Button,
   Image,
   Platform,
@@ -62,47 +63,36 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-
-    if (this.props.user.user  ) {
-      if (!this.props.user.user.data.profileComplete) {
-        // this.props.navigation.navigate('Settings');
-        return (
-          <View>
-            <Text>Unfinished setup -> direct to settings and cloud screen</Text>
-            <Button
-              title="nav to Settings"
-              onPress={() => this._navToSettings()}
-            />
-          </View>
-        )
-      } else{
-        return (
-          <View>
-          {this.props.user.matchedUsers ?
-            <View>
-            {this.state.viewMoreInfo ?
-              null
-              :
-              <SwipableList
-                users={this.props.user.matchedUsers}
-                user={this.props.user.user.data}
-                reject={this.props.avoidTopUser}
-                meet={this.props.meetTopUser}
-                sendMessage={this.navigateToConvo}
-              />
-            }
-            </View>
-          :
-          null
-          }
-          </View>
-        )
-      }
-    } else{
-      return null;
+    if (this.props.user.user && !this.props.user.user.data.profileComplete) {
+      return (
+        <View>
+          <Text>Unfinished setup -> direct to settings and cloud screen</Text>
+          <Button
+            title="nav to Settings"
+            onPress={() => this._navToSettings()}
+          />
+        </View>
+      )
+    }
+    else if (this.props.user.user && this.props.user.matchedUsers && !this.state.viewMoreInfo) {
+      return (
+        <SwipableList
+          users={this.props.user.matchedUsers}
+          user={this.props.user.user.data}
+          reject={this.props.avoidTopUser}
+          meet={this.props.meetTopUser}
+          sendMessage={this.navigateToConvo}
+        />
+      )
+    }
+    else {
+      return (
+        <View style={styles.spinnerContainer}>
+          <ActivityIndicator size="large" color="#B400FF"/>
+        </View>
+      );
     }
   }
-
 
   _navToLinks = () => {
     this.props.navigation.navigate('Links');
@@ -141,6 +131,13 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingTop: 30,
   },
+  spinnerContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    height: '100%',
+    width: '100%',
+  }
 });
 
 const mapStateToProps = (state) => ({

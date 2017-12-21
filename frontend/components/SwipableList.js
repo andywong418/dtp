@@ -73,8 +73,6 @@ export default class SwipableList extends React.Component {
       )
     }
     let user = this.state.currentUserCard.user;
-    console.log(user);
-    console.log(user.mainInterests);
     return (
       <View>
         {
@@ -91,7 +89,7 @@ export default class SwipableList extends React.Component {
 
             <View style={{flex:1,  flexDirection:'row', alignItems:'center', width: '100%', justifyContent:'space-around', marginTop: 25}}>
               <TouchableOpacity style={styles.meetButtons} onPress={() => this.clickNoOnUser(this.state.currentUserCard)}>
-                <Icon color='red' name='clear' size={30}>
+                <Icon color='red' name='clear' size={40}>
                 </Icon>
               </TouchableOpacity>
               <View style={{flexDirection: 'column', alignItems:'center'}}>
@@ -111,7 +109,7 @@ export default class SwipableList extends React.Component {
                 </Text>
               </View>
               <TouchableOpacity style={styles.meetButtons} onPress={() => this.clickYesOnUser(this.state.currentUserCard)}>
-                <Icon color='green' name='done' size={30}>
+                <Icon color='green' name='done' size={40}>
                 </Icon>
               </TouchableOpacity>
             </View>
@@ -161,7 +159,7 @@ const styles = StyleSheet.create({
   },
   belowCardInfo: {
     fontWeight: '100',
-    fontSize: 12,
+    fontSize: 15,
     color: 'grey',
     paddingTop: 4
   },
@@ -171,9 +169,9 @@ const styles = StyleSheet.create({
     // borderColor:'#B400FF',
     alignItems:'center',
     justifyContent:'center',
-    width:70,
-    height:70,
+    width:80,
+    height:80,
     backgroundColor:'#fff',
-    borderRadius:35,
+    borderRadius:40,
   }
 });

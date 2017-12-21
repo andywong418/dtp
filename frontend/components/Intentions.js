@@ -44,8 +44,11 @@ export default class Intentions extends React.Component {
 const styles = StyleSheet.create({
   border: {
     borderTopWidth: 1,
-    borderBottomWidth: 1,
     borderColor: 'rgba(0,0,0,0.3)',
+    paddingTop:5,
+    paddingBottom:15,
+    marginTop:45,
+    marginBottom:15,
   },
   icon: {
     marginLeft: 5,
@@ -62,7 +65,6 @@ const styles = StyleSheet.create({
   },
   viewFields:{
     flexDirection: 'row',
-    marginTop: 20,
     marginBottom: 10,
     paddingLeft: 10,
     paddingRight: 10,

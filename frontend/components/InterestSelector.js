@@ -46,7 +46,7 @@ export default class InterestSelector extends React.Component {
         <Text style={styles.interestHeader}>{interestName}</Text>
         <View style={styles.pickerContainer}>
           <Picker
-            style={styles.category}
+            style={this.props.interest.categorySelected ? styles.pickerLeft : styles.picker}
             itemStyle={styles.itemStyle}
             selectedValue={this.state.categorySelected}
             onValueChange={(itemValue) => this.handleCategoryChange(itemValue)}>
@@ -59,7 +59,7 @@ export default class InterestSelector extends React.Component {
           {this.props.interest.categorySelected
           ?
           <Picker
-            style={styles.category}
+            style={styles.pickerRight}
             itemStyle={styles.itemStyle}
             selectedValue={this.state.subCategorySelected}
             onValueChange={(itemValue) => this.handleSubcategoryChange(itemValue)}>
@@ -83,27 +83,45 @@ export default class InterestSelector extends React.Component {
           maxLength={140}
           multiline={true}
           numOfLines={4}
+          placeholder={'Describe your interest'}
           onChangeText={(text) => this.props.changeInterestState('description', text)}
         />
         :
         null
         }
-        </View>
+      </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  category: {
+  picker: {
     flex: 1,
-    borderColor: '#c6c6c6',
-    borderWidth: 1,
+    marginBottom: 1,
+    backgroundColor: 'white',
+    borderRadius: 5,
+  },
+  pickerLeft: {
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    flex: 1,
+    marginBottom: 1,
+    backgroundColor: 'white',
+  },
+  pickerRight: {
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+    flex: 1,
+    marginBottom: 1,
+    backgroundColor: 'white',
   },
   interestHeader: {
-    // marginLeft: 10,
+    marginBottom:2,
+    alignSelf: 'flex-end',
   },
   itemStyle: {
     fontSize: 15,
+    height: 120,
   },
   pickerContainer: {
     display: 'flex',
@@ -112,16 +130,14 @@ const styles = StyleSheet.create({
   selectorContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop:10,
+    marginTop:20,
+    marginBottom:20,
   },
   text: {
     backgroundColor: 'white',
-    // borderColor: '#B400FF',
-    borderColor: 'rgba(0,0,0,0.3)',
-    borderRadius: 2,
-    borderWidth: 1,
     height: 60,
     padding: 5,
-
+    marginTop:5,
+    borderRadius: 5,
   }
 });

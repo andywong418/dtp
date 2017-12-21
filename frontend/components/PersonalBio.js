@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   StyleSheet,
+  KeyboardAvoidingView,
   Text,
   TextInput,
   View,
@@ -49,16 +50,17 @@ const styles = StyleSheet.create({
   },
   viewFields:{
     flexDirection: 'column',
-    padding: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 5,
+    paddingBottom: 45,
+    borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: 'rgba(0,0,0,0.3)',
   },
   text: {
     backgroundColor: 'white',
-    borderColor: '#B400FF',
-    borderColor: 'rgba(0,0,0,0.3)',
-    borderRadius: 2,
-    borderWidth: 1,
+    borderRadius: 5,
     height: 150,
     marginTop: 10,
     padding: 5,

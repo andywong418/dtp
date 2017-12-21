@@ -2,6 +2,7 @@ import React from 'react';
 import {
   AsyncStorage,
   ActivityIndicator,
+  KeyboardAvoidingView,
   Button,
   ScrollView,
   Text,
@@ -63,10 +64,11 @@ class SettingsScreen extends React.Component {
   }
 
   _handleSave = async () => {
+    console.log('save called');
     this.props.updateUserInfo(this.state.intention, this.state.interests, this.state.bio)
     try {
-      let user = await AsyncStorage.getItem('user');
-      user = JSON.parse(user);
+      let userJson = await AsyncStorage.getItem('user');
+      user = JSON.parse(userJson);
       await axios.post(
         'http://10.2.106.85:3000/api/users/updateProfile',
         {
@@ -76,7 +78,18 @@ class SettingsScreen extends React.Component {
           bio: this.state.bio,
         }
       )
-      this.state.navigation.navigate('Home');
+      let fetchedUser = await axios.post(
+        'http://10.2.106.85:3000/api/users/fetchUser',
+        { facebookId: user.id }
+      );
+      let location = await this.updateLocationDB(coords, fetchedUser.data.facebookId);
+      let matchUsers = await this.getNearbyUsersDB(location, fetchedUser.data.facebookId);
+      this.props.updateLocation(location)
+      this.props.fetchUserFromDB(fetchedUser);
+      this.props.getNearbyUsers(matchUsers);
+      console.log('right above navigation');
+      console.log("NAVIGATION", this.props.navigation);
+      this.props.navigation.navigate('Home');
     }
     catch (e) {
       console.log("error in save settings: ", e);
@@ -127,7 +140,7 @@ class SettingsScreen extends React.Component {
     const {user} = this.props.user;
     if (!user || !user.data) {
       return (
-        <Loading/>
+        <Loading style={{height: '100%'}}/>
       )
     }
     return (
