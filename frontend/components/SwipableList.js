@@ -33,7 +33,6 @@ export default class SwipableList extends React.Component {
   }
 
   clickYesOnUser = async (user) => {
-    console.log("WHAT");
     if(this.state.currentUserCard.matchme) {
       var self = this;
       this.setState({modalMatch: true}, async () => {

@@ -39,7 +39,8 @@ import SettingsScreen from './SettingsScreen';
 import SwipableList from '../components/SwipableList';
 import {
   avoidTopUser,
-  meetTopUser
+  meetTopUser,
+  navigateToConvo,
 } from '../actions/index';
 
 class HomeScreen extends React.Component {
@@ -50,7 +51,7 @@ class HomeScreen extends React.Component {
       viewMoreInfo: false,
 
     }
-    this.navigateToConvo = this.navigateToConvo.bind(this);
+    this.sendMessage= this.sendMessage.bind(this);
   }
 
   static navigationOptions = {
@@ -58,13 +59,12 @@ class HomeScreen extends React.Component {
 
   };
 
-  navigateToConvo(user) {
-    console.log("THIS PROPS", this.props);
-    this.props.navigation.navigate('Conversation', {user});
+  sendMessage(user) {
+
+    this.props.navigateToConvo(user);
   }
 
   render() {
-
     if (this.props.user.user  ) {
       if (!this.props.user.user.data.profileComplete) {
         // this.props.navigation.navigate('Settings');
@@ -91,18 +91,18 @@ class HomeScreen extends React.Component {
                     user={this.props.user.user.data}
                     reject={this.props.avoidTopUser}
                     meet={this.props.meetTopUser}
-                    sendMessage={this.navigateToConvo}/>
+                    sendMessage={this.sendMessage}
+                    navigateToConvo={this.props.navigateToConvo}
+                    navigateBackToMessages={this._navtoMessages}
+                    />
 
                 }
               </View>
-
             :
               null
           }
-
           </View>
         )
-
       }
     } else{
       return null;
@@ -157,7 +157,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   callLogout: () => dispatch(callLogout()),
   meetTopUser: (user) => dispatch(meetTopUser(user)),
-  avoidTopUser: (user) => dispatch(avoidTopUser(user))
+  avoidTopUser: (user) => dispatch(avoidTopUser(user)),
+  navigateToConvo: (user) => dispatch(navigateToConvo(user))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

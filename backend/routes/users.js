@@ -71,7 +71,7 @@ router.post('/getNearbyUsers', (req, res) => {
       if (distance > 0 && distance < TARGET_DIST) {
         distance = Math.ceil(distance*1760/100)*100;
         //filters. check for distance, Look for users who have swiped yes or not on you AND you haven't swiped on. Also only return users who are looking for the same goals.
-        Match.findOne({personA: selectedUser.facebookId, personB: facebookId})
+        Match.findOne({$or : [{personA: selectedUser.facebookId, personB: facebookId}, {personA: facebookId, personB: selectedUser.facebookId, matched: true}]})
           .exec()
           .then(match => {
             if(!match || match.response) {

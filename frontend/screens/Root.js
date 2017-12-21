@@ -30,6 +30,7 @@ import {
 
 import RootNavigation from '../navigation/RootNavigation';
 import LoginScreen from './LoginScreen.js';
+import DirectMessageScreen from './DirectMessageScreen.js';
 
 class Root extends React.Component {
   constructor(props) {
@@ -157,6 +158,7 @@ class Root extends React.Component {
     );
   }
 
+
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -168,6 +170,11 @@ class Root extends React.Component {
       );
     }
     else {
+      if(this.props.user.sendMessage) {
+        return(
+          <DirectMessageScreen user={this.props.user.user} messageTo={this.props.user.sendMessage} navigateBackToMessages={() => this.props.navigation.navigate('Conversation')}/>
+        )
+      }
       return (
         <View style={styles.container}>
           {
@@ -211,6 +218,7 @@ class Root extends React.Component {
   _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
   };
+
 }
 
 const styles = StyleSheet.create({
@@ -222,12 +230,17 @@ const styles = StyleSheet.create({
     height: 24,
     backgroundColor: 'rgba(0,0,0,0.2)',
   },
+  messageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
 
 const mapStateToProps = (state) => ({
   login: state.login,
   user: state.user,
-  location: state.location
+  location: state.location,
 });
 
 const mapDispatchToProps = (dispatch) => ({
