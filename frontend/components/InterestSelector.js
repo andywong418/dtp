@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 5,
     flex: 1,
     marginBottom: 1,
+    marginRight: 1,
     backgroundColor: 'white',
   },
   pickerRight: {
@@ -113,6 +114,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
     flex: 1,
     marginBottom: 1,
+    marginLeft: 1,
     backgroundColor: 'white',
   },
   interestHeader: {

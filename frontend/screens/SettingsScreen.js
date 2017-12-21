@@ -5,13 +5,24 @@ import {
   KeyboardAvoidingView,
   Button,
   ScrollView,
+  StyleSheet,
   Text,
+  View,
 } from 'react-native';
+import {
+  Location,
+} from 'expo';
 import { connect } from 'react-redux';
 import {
   callLogout,
   updateUserInfo,
+  callLogin,
+  fetchUserFromDB,
+  updateLocation,
+  getNearbyUsers,
 } from '../actions/index';
+import Dimensions from 'Dimensions';
+let { width, height } = Dimensions.get('window');
 import PersonalPictureSwiper from '../components/PersonalPictureSwiper';
 import Intentions from '../components/Intentions';
 import Interests from '../components/Interests';
@@ -45,6 +56,7 @@ class SettingsScreen extends React.Component {
       ],
       interests: props.user.interests,
       bio: props.user.bio,
+      isSaving: false,
     }
   }
 
@@ -63,11 +75,47 @@ class SettingsScreen extends React.Component {
     )
   }
 
+  updateLocationDB = async (location, id) => {
+    let lat = location.coords.latitude;
+    let lng = location.coords.longitude;
+    let response = await axios.post(
+      'http://10.2.106.85:3000/api/users/updateLocation',
+      {
+        facebookId: id,
+        lat,
+        lng
+      }
+    )
+    let city = response.data;
+    return {
+      lat,
+      lng,
+      city
+    };
+  };
+
+  getNearbyUsersDB = async (location, facebookId) => {
+    let response = await axios.post(
+      'http://10.2.106.85:3000/api/users/getNearbyUsers',
+      {
+        facebookId,
+        location
+      }
+    );
+
+    let users = response.data;
+    return users;
+  }
+
   _handleSave = async () => {
+    console.log(this.state.isSaving);
+    this.setState({isSaving:true})
+    console.log(this.state.isSaving);
     this.props.updateUserInfo(this.state.intention, this.state.interests, this.state.bio)
     try {
       let userJson = await AsyncStorage.getItem('user');
       user = JSON.parse(userJson);
+      console.log('user from AsyncStorage');
       await axios.post(
         'http://10.2.106.85:3000/api/users/updateProfile',
         {
@@ -77,11 +125,24 @@ class SettingsScreen extends React.Component {
           bio: this.state.bio,
         }
       )
+      console.log('settings sent to db');
+      let coords = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+      console.log('location retrieved');
+      let location = await this.updateLocationDB(coords, user.id);
+      console.log('location updated in db');
+      let matchUsers = await this.getNearbyUsersDB(location, user.id);
+      console.log('matched users retrieved');
+      this.props.updateLocation(location)
+      this.props.getNearbyUsers(matchUsers);
       this.props.navigation.navigate('Home');
+      console.log('navigated to home');
     }
     catch (e) {
       console.log("error in save settings: ", e);
     }
+    console.log(this.state.isSaving);
+    this.setState({isSaving:false})
+    console.log(this.state.isSaving);
   }
 
   static navigationOptions = ({navigation}) => {
@@ -132,24 +193,31 @@ class SettingsScreen extends React.Component {
       )
     }
     return (
-      <ScrollView>
-        <PersonalPictureSwiper
-          photos={user.data.photos}
-        />
-        <Intentions
-          intentions={this.state.intentions}
-          _handleIntentionChoice={(intention) => this._handleIntentionChoice(intention)}
-        />
-        <Interests
-          interests={this.state.interests}
-          _changeInterestState={(interest, interestKey, description) => this._changeInterestState(interest, interestKey, description)}
-        />
-        <PersonalBio
-          value={this.state.bio}
-          setBio={(value) => this._setBio(value)}
-        />
-        <LogoutButton />
-      </ScrollView>
+      <View>
+        <ScrollView>
+          <PersonalPictureSwiper
+            photos={user.data.photos}
+          />
+          <Intentions
+            intentions={this.state.intentions}
+            _handleIntentionChoice={(intention) => this._handleIntentionChoice(intention)}
+          />
+          <Interests
+            interests={this.state.interests}
+            _changeInterestState={(interest, interestKey, description) => this._changeInterestState(interest, interestKey, description)}
+          />
+          <PersonalBio
+            value={this.state.bio}
+            setBio={(value) => this._setBio(value)}
+          />
+          <LogoutButton />
+        </ScrollView>
+        {
+          this.state.isSaving
+          ? <View style={styles.overlay}><ActivityIndicator size="large" color="#B400FF" style={{opacity:1}}/></View>
+          : null
+        }
+      </View>
     )
   }
 
@@ -196,6 +264,23 @@ class SettingsScreen extends React.Component {
   }
 }
 
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    position: 'absolute',
+    height: height*.3,
+    left: width*.2,
+    top: height*.3,
+    opacity: 1,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    width: width*.6,
+    borderRadius:10,
+    borderRadius:10,
+    borderRadius:10,
+  },
+});
 
 const mapStateToProps = (state) => ({
   login: state.login,
@@ -205,6 +290,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   updateUserInfo: (intention, interests, bio) => dispatch(updateUserInfo(intention, interests, bio)),
   callLogout: () => dispatch(callLogout()),
+  updateLocation: (location) => dispatch(updateLocation(location)),
+  getNearbyUsers: (users) => dispatch(getNearbyUsers(users)),
+  fetchUserFromDB: (user) => dispatch(fetchUserFromDB(user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);
