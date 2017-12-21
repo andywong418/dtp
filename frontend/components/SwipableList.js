@@ -115,20 +115,28 @@ export default class SwipableList extends React.Component {
                 </Icon>
               </TouchableOpacity>
             </View>
-            <View style={{flex:1, width: '100%', marginTop: 15, padding: 4, borderTopWidth: 1, borderBottomWidth: 1,borderColor: 'rgba(0,0,0,0.3)',}}>
-              <Text style={{fontWeight: '100', fontSize: 10, color: 'grey'}}>
+            <View style={{flex:1, width: '100%', marginTop: 15, borderTopWidth: 1, borderBottomWidth: 1,borderColor: 'rgba(0,0,0,0.3)',}}>
+              <Text style={{fontWeight: '100', fontSize: 12, color: 'grey', marginTop:5, marginLeft: 5,}}>
                 Their interests:
               </Text>
-              {user.mainInterests.map(interest => <Text key={interest._id}>
-                {interest.category}, {interest.subCategory}: {interest.description}
+              {user.mainInterests.map(interest => (
+                <View key={interest._id} style={{marginTop: 10, marginBottom: 10}}>
+                  <Text style={{fontSize: 15, color: 'grey', fontWeight: '200', marginLeft: 10,}}>
+                    {interest.category} -- {interest.subCategory}:
+                  </Text>
+                  <Text style={{fontSize: 16, color:'rgba(0,0,0,.7)', fontWeight: '400', marginLeft: 15, }}>
+                    {interest.description}
+                  </Text>
+                </View>
+              ))}
+              <View style={{borderTopWidth: 1, borderColor: 'rgba(0,0,0,0.3)',marginTop:5}}>
+                <Text style={{fontWeight: '100', fontSize: 12, color: 'grey', marginTop:5, marginLeft: 5,}}>
+                  What they have to say about themselves:
                 </Text>
-              )}
-              <Text style={{fontWeight: '100', fontSize: 10, color: 'grey', marginTop: 10,}}>
-                What they have to say about themselves:
-              </Text>
-              <Text>
-                {user.bio}
-              </Text>
+                <Text style={{marginLeft: 15, fontSize: 16, color:'rgba(0,0,0,.7)', fontWeight: '400', marginTop: 10, marginBottom: 30}}>
+                  {user.bio}
+                </Text>
+              </View>
             </View>
 
 
@@ -155,7 +163,7 @@ const styles = StyleSheet.create({
     fontWeight: '100',
     fontSize: 12,
     color: 'grey',
-    paddingTop: 3
+    paddingTop: 4
   },
   meetButtons: {
     borderWidth:1,

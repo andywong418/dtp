@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   interestHeader: {
-    marginLeft: 10,
+    // marginLeft: 10,
   },
   itemStyle: {
     fontSize: 15,
