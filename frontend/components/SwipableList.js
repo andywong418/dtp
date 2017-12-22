@@ -39,8 +39,14 @@ export default class SwipableList extends React.Component {
         await axios.post('http://172.31.245.115:3000/api/matches/updateMatchResponse', { personA: this.props.user.facebookId, personB: user.user.facebookId, response: true })
       });
     } else {
-      await axios.post('http://172.31.245.115:3000/api/matches/updateMatchResponse', { personA: this.props.user.facebookId, personB: user.user.facebookId, response: true })
-      this.props.meet(this.state.currentUserCard);
+      let checkIfMatch = await axios.post('http://172.31.245.115:3000/api/matches/updateMatchResponse', { personA: this.props.user.facebookId, personB: user.user.facebookId, response: true })
+      console.log("checkifMatch", checkIfMatch);
+      if (checkIfMatch.data == 'It\'s a match!') {
+        this.setState({modalMatch: true});
+      } else {
+        this.props.meet(this.state.currentUserCard);
+      }
+
     }
 
   }
