@@ -53,6 +53,7 @@ class HomeScreen extends React.Component {
       viewMoreInfo: false,
 
     }
+    this.navigateToConvo = this.navigateToConvo.bind(this);
   }
 
   static navigationOptions = {
@@ -60,6 +61,7 @@ class HomeScreen extends React.Component {
   };
 
   navigateToConvo(user) {
+    console.log("THIS PROPS", this.props);
     this.props.navigation.navigate('Conversation', {user});
   }
 

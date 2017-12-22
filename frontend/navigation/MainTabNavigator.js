@@ -12,11 +12,15 @@ import Colors from '../constants/Colors';
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import LoginScreen from '../screens/LoginScreen';
+import ConversationScreen from '../screens/ConversationScreen';
 
 export default TabNavigator(
   {
     Home: {
       screen: HomeScreen,
+    },
+    Conversation: {
+      screen: ConversationScreen
     },
     Settings: {
       screen: SettingsScreen,

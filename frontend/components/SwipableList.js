@@ -57,8 +57,7 @@ export default class SwipableList extends React.Component {
   }
 
   sendMessage = () => {
-    this.props.meet(this.state.currentUserCard);
-    this.navigateToConvo(this.state.currentUserCard);
+    this.props.sendMessage(this.state.currentUserCard);
   }
   render() {
     if (!this.state.currentUserCard) {
@@ -77,7 +76,7 @@ export default class SwipableList extends React.Component {
         {
           this.state.modalMatch ?
 
-          <MatchModal closeModal={this.closeModal} user={this.props.user} currentUserCard={this.state.currentUserCard}/>
+          <MatchModal sendMessage={this.sendMessage} closeModal={this.closeModal} user={this.props.user} currentUserCard={this.state.currentUserCard}/>
           :
           <ScrollView style={{display:'flex', flexDirection: 'column', height: '100%', width: '100%',}} >
 
