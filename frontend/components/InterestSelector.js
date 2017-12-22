@@ -43,7 +43,9 @@ export default class InterestSelector extends React.Component {
     interestName = 'I' + interestName.slice(1, 8) + ' ' + interestName.slice(-1);
     return (
       <View style={styles.selectorContainer}>
-        <Text style={styles.interestHeader}>{interestName}</Text>
+        <View style={styles.header}>
+          <Text style={styles.interestHeader}>{interestName}</Text>
+        </View>
         <View style={styles.pickerContainer}>
           <Picker
             style={this.props.interest.categorySelected ? styles.pickerLeft : styles.picker}
@@ -100,6 +102,8 @@ const styles = StyleSheet.create({
     marginBottom: 1,
     backgroundColor: 'white',
     borderRadius: 5,
+    marginLeft: 10,
+    marginRight: 10,
   },
   pickerLeft: {
     borderTopLeftRadius: 5,
@@ -108,6 +112,7 @@ const styles = StyleSheet.create({
     marginBottom: 1,
     marginRight: 1,
     backgroundColor: 'white',
+    marginLeft: 10,
   },
   pickerRight: {
     borderTopRightRadius: 5,
@@ -116,10 +121,11 @@ const styles = StyleSheet.create({
     marginBottom: 1,
     marginLeft: 1,
     backgroundColor: 'white',
+    marginRight: 10,
   },
   interestHeader: {
     marginBottom:2,
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
   },
   itemStyle: {
     fontSize: 15,
@@ -128,18 +134,29 @@ const styles = StyleSheet.create({
   pickerContainer: {
     display: 'flex',
     flexDirection: 'row',
+    marginTop: 5,
   },
   selectorContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop:20,
+    marginTop:10,
     marginBottom:20,
   },
   text: {
+    borderRadius: 5,
     backgroundColor: 'white',
     height: 60,
     padding: 5,
     marginTop:5,
-    borderRadius: 5,
-  }
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  header:{
+    paddingTop: 2,
+    paddingBottom: 2,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: 'rgba(0,0,0,0.3)',
+  },
 });

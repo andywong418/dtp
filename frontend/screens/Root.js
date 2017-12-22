@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   AsyncStorage,
+  KeyboardAvoidingView,
   Platform,
   StatusBar,
   StyleSheet,
@@ -57,7 +58,7 @@ class Root extends React.Component {
       if (user && user.name && user.id) {
         this.props.callLogin(user.name, user.id);
         let fetchedUser = await axios.post(
-          'http://10.2.106.85:3000/api/users/fetchUser',
+          'http://10.2.106.70:3000/api/users/fetchUser',
           { facebookId: user.id }
         );
         let location = await this.updateLocationDB(coords, fetchedUser.data.facebookId);
@@ -100,7 +101,7 @@ class Root extends React.Component {
     let lat = location.coords.latitude;
     let lng = location.coords.longitude;
     let response = await axios.post(
-      'http://10.2.106.85:3000/api/users/updateLocation',
+      'http://10.2.106.70:3000/api/users/updateLocation',
       {
         facebookId: id,
         lat,
@@ -117,7 +118,7 @@ class Root extends React.Component {
 
   getNearbyUsersDB = async (location, facebookId) => {
     let response = await axios.post(
-      'http://10.2.106.85:3000/api/users/getNearbyUsers',
+      'http://10.2.106.70:3000/api/users/getNearbyUsers',
       {
         facebookId,
         location
@@ -168,19 +169,22 @@ class Root extends React.Component {
     }
     else {
       return (
-        <View style={styles.container}>
-          {
-            this.props.login.isLoggedIn
-              ?
-              <View style={styles.container}>
-                {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-                {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-                <RootNavigation />
-              </View>
-              :
-              <LoginScreen />
-          }
-        </View>
+        <KeyboardAvoidingView style={{flex:1}}>
+          <View style={styles.container}>
+            {
+              this.props.login.isLoggedIn
+                ?
+                <View style={styles.container}>
+                  {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+                  {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+                  <RootNavigation />
+                </View>
+                :
+                <LoginScreen />
+            }
+          </View>
+        </KeyboardAvoidingView>
+
       );
     }
   }

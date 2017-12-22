@@ -13,8 +13,10 @@ export default class Intentions extends React.Component {
 
   render() {
     return (
-      <View style={styles.interestContainer}>
-        <Text style={styles.textHeading}>Specify your 3 main interests</Text>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.textHeading}>3 main interests</Text>
+        </View>
         {Object.keys(this.props.interests).map(interest => {
           return (
             <InterestSelector
@@ -31,12 +33,18 @@ export default class Intentions extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  interestContainer: {
-    paddingTop: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingBottom:30,
+  container: {
+    paddingBottom:15,
+    marginBottom:15,
+  },
+  header:{
+    marginBottom: 10,
+    paddingLeft: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: 'white',
     borderTopWidth: 1,
+    borderBottomWidth: 1,
     borderColor: 'rgba(0,0,0,0.3)',
   },
   textHeading: {

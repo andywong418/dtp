@@ -34,21 +34,20 @@ export default class SwipableList extends React.Component {
   }
 
   clickYesOnUser = async (user) => {
-    console.log("WHAT");
     if(this.state.currentUserCard.matchme) {
       var self = this;
       this.setState({modalMatch: true}, async () => {
-        await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
+        await axios.post('http://10.2.106.70:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
       });
     } else {
-      await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
+      await axios.post('http://10.2.106.70:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
       this.props.meet(this.state.currentUserCard);
     }
 
   }
 
   clickNoOnUser= async (user) => {
-    await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: false})
+    await axios.post('http://10.2.106.70:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: false})
     this.props.reject(this.state.currentUserCard)
   }
 
@@ -94,11 +93,11 @@ export default class SwipableList extends React.Component {
               </TouchableOpacity>
               <View style={{flexDirection: 'column', alignItems:'center'}}>
                 <View flexDirection='row'>
-                  <Icon name='room' size={20} color='grey'></Icon>
+                  <Icon name='room' size={17} color='grey' style={{marginTop:6}}></Icon>
                   <Text style={styles.belowCardInfo}> {this.state.currentUserCard.distance} Feet Away</Text>
                 </View>
                 <View flexDirection='row'>
-                  <Icon name='face' size={20} color='grey'></Icon>
+                  <Icon name='face' size={17} color='grey' style={{marginTop:6}}></Icon>
                   <Text style={styles.belowCardInfo}> {user.peopleMet ? user.peopleMet + ' people met' : 'New User' } </Text>
                 </View>
                 <Text style={styles.belowCardInfo}>
@@ -113,28 +112,25 @@ export default class SwipableList extends React.Component {
                 </Icon>
               </TouchableOpacity>
             </View>
-            <View style={{flex:1, width: '100%', marginTop: 15, borderTopWidth: 1, borderBottomWidth: 1,borderColor: 'rgba(0,0,0,0.3)',}}>
-              <Text style={{fontWeight: '100', fontSize: 12, color: 'grey', marginTop:5, marginLeft: 5,}}>
-                Their interests:
+            <View style={{marginTop: 15, paddingTop:15, borderTopWidth: 1,borderColor: 'rgba(0,0,0,0.3)',}}>
+
+              <Text style={styles.description}>
+                {user.bio.trim()}
               </Text>
+            </View>
+            <View style={{flex:1, width: '100%', marginTop: 15,}}>
               {user.mainInterests.map(interest => (
-                <View key={interest._id} style={{marginTop: 10, marginBottom: 10}}>
-                  <Text style={{fontSize: 15, color: 'grey', fontWeight: '200', marginLeft: 10,}}>
-                    {interest.category} -- {interest.subCategory}:
+                <View key={interest._id} style={{marginTop: 15, marginBottom: 15}}>
+                  <Text style={{fontSize: 18, color: 'rgba(0,0,0,.7)', fontWeight: '600', marginLeft: 10,}}>
+                    -- {interest.category} -- {interest.subCategory}:
                   </Text>
-                  <Text style={{fontSize: 16, color:'rgba(0,0,0,.7)', fontWeight: '400', marginLeft: 15, }}>
-                    {interest.description}
+                  <Text style={styles.description}>
+                    {interest.description.trim()}
                   </Text>
                 </View>
               ))}
-              <View style={{borderTopWidth: 1, borderColor: 'rgba(0,0,0,0.3)',marginTop:5}}>
-                <Text style={{fontWeight: '100', fontSize: 12, color: 'grey', marginTop:5, marginLeft: 5,}}>
-                  What they have to say about themselves:
-                </Text>
-                <Text style={{marginLeft: 15, fontSize: 16, color:'rgba(0,0,0,.7)', fontWeight: '400', marginTop: 10, marginBottom: 30}}>
-                  {user.bio}
-                </Text>
-              </View>
+
+              <View style={{height:30}}></View>
             </View>
 
 
@@ -152,21 +148,34 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 4,
   },
+  description: {
+    color: 'rgba(0,0,0,.7)',
+    fontSize: 18,
+    fontWeight: '400',
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  descriptionHeader: {
+    fontWeight: '100',
+    fontSize: 14,
+    color: 'grey',
+    marginTop: 10,
+    marginLeft: 10,
+  },
   picture: {
     flex: 1,
     height: 300,
     borderRadius: 10
   },
   belowCardInfo: {
-    fontWeight: '100',
-    fontSize: 15,
+    fontWeight: '300',
+    fontSize: 16,
     color: 'grey',
     paddingTop: 4
   },
   meetButtons: {
     borderWidth:1,
-    borderColor:'rgba(0,0,0,0.3)',
-    // borderColor:'#B400FF',
+    borderColor:'rgba(0,0,0,0.3 )',
     alignItems:'center',
     justifyContent:'center',
     width:80,

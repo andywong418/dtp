@@ -18,42 +18,36 @@ export default class PersonalBio extends React.Component {
 
   render() {
     return (
-      <View style={styles.viewFields}>
-        <Text style={styles.textHeading}>Personal Bio</Text>
-        <TextInput
-          value={this.props.value}
-          style={styles.text}
-          editable={true}
-          maxLength={140}
-          multiline={true}
-          numOfLines={3}
-          onChangeText={(text) => this.props.setBio(text)}
-        />
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.textHeading}>Personal Bio</Text>
+        </View>
+        <View style={styles.viewFields}>
+          <TextInput
+            value={this.props.value}
+            style={styles.text}
+            editable={true}
+            maxLength={140}
+            multiline={true}
+            numOfLines={3}
+            onChangeText={(text) => this.props.setBio(text)}
+          />
+        </View>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  icon: {
-    marginLeft: 5,
-    marginTop: 2,
+  container: {
+    paddingBottom:15,
+    marginBottom:15,
   },
-  intentionList: {
-    flexDirection: 'row',
-    padding: 10,
-    paddingTop: 0,
-    alignItems: 'center',
-  },
-  textHeading: {
-    fontWeight: 'bold',
-  },
-  viewFields:{
-    flexDirection: 'column',
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 5,
-    paddingBottom: 45,
+  header:{
+    paddingLeft: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: 'white',
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: 'rgba(0,0,0,0.3)',
@@ -64,5 +58,14 @@ const styles = StyleSheet.create({
     height: 150,
     marginTop: 10,
     padding: 5,
+  },
+  textHeading: {
+    fontWeight: 'bold',
+  },
+  viewFields:{
+    flexDirection: 'column',
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 45,
   },
 });

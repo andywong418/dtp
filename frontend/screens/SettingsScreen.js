@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Button,
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -75,11 +76,15 @@ class SettingsScreen extends React.Component {
     )
   }
 
+  static navigationOptions = {
+    title: 'Settings',
+  };
+
   updateLocationDB = async (location, id) => {
     let lat = location.coords.latitude;
     let lng = location.coords.longitude;
     let response = await axios.post(
-      'http://10.2.106.85:3000/api/users/updateLocation',
+      'http://10.2.106.70:3000/api/users/updateLocation',
       {
         facebookId: id,
         lat,
@@ -96,7 +101,7 @@ class SettingsScreen extends React.Component {
 
   getNearbyUsersDB = async (location, facebookId) => {
     let response = await axios.post(
-      'http://10.2.106.85:3000/api/users/getNearbyUsers',
+      'http://10.2.106.70:3000/api/users/getNearbyUsers',
       {
         facebookId,
         location
@@ -108,16 +113,13 @@ class SettingsScreen extends React.Component {
   }
 
   _handleSave = async () => {
-    console.log(this.state.isSaving);
     this.setState({isSaving:true})
-    console.log(this.state.isSaving);
     this.props.updateUserInfo(this.state.intention, this.state.interests, this.state.bio)
     try {
       let userJson = await AsyncStorage.getItem('user');
       user = JSON.parse(userJson);
-      console.log('user from AsyncStorage');
       await axios.post(
-        'http://10.2.106.85:3000/api/users/updateProfile',
+        'http://10.2.106.70:3000/api/users/updateProfile',
         {
           facebookId: user.id,
           intention: this.state.intention,
@@ -125,37 +127,17 @@ class SettingsScreen extends React.Component {
           bio: this.state.bio,
         }
       )
-      console.log('settings sent to db');
       let coords = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
-      console.log('location retrieved');
       let location = await this.updateLocationDB(coords, user.id);
-      console.log('location updated in db');
       let matchUsers = await this.getNearbyUsersDB(location, user.id);
-      console.log('matched users retrieved');
       this.props.updateLocation(location)
       this.props.getNearbyUsers(matchUsers);
       this.props.navigation.navigate('Home');
-      console.log('navigated to home');
     }
     catch (e) {
       console.log("error in save settings: ", e);
     }
-    console.log(this.state.isSaving);
     this.setState({isSaving:false})
-    console.log(this.state.isSaving);
-  }
-
-  static navigationOptions = ({navigation}) => {
-    return {
-      title: 'Settings',
-      headerRight: <SaveSettingsButton handleSave={() => navigation.state.params._handleSave() } />,
-    }
-  }
-
-  componentDidMount = () => {
-    this.props.navigation.setParams({
-      _handleSave: this._handleSave,
-    })
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -193,31 +175,46 @@ class SettingsScreen extends React.Component {
       )
     }
     return (
-      <View>
-        <ScrollView>
-          <PersonalPictureSwiper
-            photos={user.data.photos}
-          />
-          <Intentions
-            intentions={this.state.intentions}
-            _handleIntentionChoice={(intention) => this._handleIntentionChoice(intention)}
-          />
-          <Interests
-            interests={this.state.interests}
-            _changeInterestState={(interest, interestKey, description) => this._changeInterestState(interest, interestKey, description)}
-          />
-          <PersonalBio
-            value={this.state.bio}
-            setBio={(value) => this._setBio(value)}
-          />
-          <LogoutButton />
-        </ScrollView>
-        {
-          this.state.isSaving
-          ? <View style={styles.overlay}><ActivityIndicator size="large" color="#B400FF" style={{opacity:1}}/></View>
-          : null
-        }
-      </View>
+      <KeyboardAvoidingView
+        style={{flex:1}}
+        behavior='position'
+      >
+        <View>
+          <ScrollView style={{display: 'flex'}}>
+            <PersonalPictureSwiper
+              photos={user.data.photos}
+            />
+            <Intentions
+              intentions={this.state.intentions}
+              _handleIntentionChoice={(intention) => this._handleIntentionChoice(intention)}
+            />
+            <Interests
+              interests={this.state.interests}
+              _changeInterestState={(interest, interestKey, description) => this._changeInterestState(interest, interestKey, description)}
+            />
+            <PersonalBio
+              value={this.state.bio}
+              setBio={(value) => this._setBio(value)}
+            />
+            <SaveSettingsButton
+              handleSave={() => this._handleSave()}
+            />
+            <View style={{backgroundColor: "#B400FF"}}>
+              <Image
+                source={require('../assets/images/Seren_Logo.png')}
+                style={styles.logo}
+              />
+            </View>
+            <LogoutButton />
+          </ScrollView>
+          {
+            this.state.isSaving
+            ? <View style={styles.overlay}><ActivityIndicator size="large" color="#B400FF" style={{opacity:1}}/></View>
+            : null
+          }
+        </View>
+      </KeyboardAvoidingView>
+
     )
   }
 
@@ -246,7 +243,6 @@ class SettingsScreen extends React.Component {
   };
 
   _changeInterestState = (interest, interestKey, description) => {
-    console.log("interest HIT ME", interest);
     let newInterestState = Object.assign({}, this.state.interests);
     newInterestState[interest] = Object.assign({}, newInterestState[interest]);
     newInterestState[interest][interestKey] = description
@@ -260,7 +256,6 @@ class SettingsScreen extends React.Component {
       }
     }
     this.setState({interests: newInterestState});
-    // console.log(this.state.interests);
   }
 }
 
@@ -270,16 +265,21 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     position: 'absolute',
-    height: height*.3,
-    left: width*.2,
-    top: height*.3,
-    opacity: 1,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    width: width*.6,
+    height: width*.5,
+    width: width*.5,
+    left: width*.25,
+    top: height*.25,
+    backgroundColor: 'rgba(0,0,0,0.2)',
     borderRadius:10,
     borderRadius:10,
     borderRadius:10,
   },
+  logo: {
+    width: width*.5,
+    height: width*.5,
+    alignSelf: 'center',
+    backgroundColor: "#B400FF",
+  }
 });
 
 const mapStateToProps = (state) => ({

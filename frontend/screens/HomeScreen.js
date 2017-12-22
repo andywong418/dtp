@@ -55,7 +55,6 @@ class HomeScreen extends React.Component {
 
   static navigationOptions = {
     title: 'Home',
-
   };
 
   navigateToConvo(user) {

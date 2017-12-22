@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, KeyboardAvoidingView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {
   TabNavigator,
@@ -21,6 +21,14 @@ export default TabNavigator(
     Settings: {
       screen: SettingsScreen,
     },
+    // Settings: {
+    //   screen: <KeyboardAvoidingView
+    //             style={{height:'100%', flex:1}}
+    //             behavior='padding'
+    //           >
+    //             SettingsScreen
+    //           </KeyboardAvoidingView>,
+    // },
   },
   {
     navigationOptions: ({ navigation }) => ({
