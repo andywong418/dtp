@@ -38,10 +38,10 @@ const styles = StyleSheet.create({
     marginBottom:15,
   },
   header:{
-    marginBottom: 10,
+    // marginBottom: 10,
     paddingLeft: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 20,
+    paddingBottom: 20,
     backgroundColor: 'white',
     borderTopWidth: 1,
     borderBottomWidth: 1,
@@ -49,5 +49,6 @@ const styles = StyleSheet.create({
   },
   textHeading: {
     fontWeight: 'bold',
+    fontSize: 20,
   },
 });

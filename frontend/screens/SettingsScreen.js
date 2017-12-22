@@ -84,7 +84,7 @@ class SettingsScreen extends React.Component {
     let lat = location.coords.latitude;
     let lng = location.coords.longitude;
     let response = await axios.post(
-      'http://10.2.106.70:3000/api/users/updateLocation',
+      'http://10.2.106.85:3000/api/users/updateLocation',
       {
         facebookId: id,
         lat,
@@ -101,7 +101,7 @@ class SettingsScreen extends React.Component {
 
   getNearbyUsersDB = async (location, facebookId) => {
     let response = await axios.post(
-      'http://10.2.106.70:3000/api/users/getNearbyUsers',
+      'http://10.2.106.85:3000/api/users/getNearbyUsers',
       {
         facebookId,
         location
@@ -119,7 +119,7 @@ class SettingsScreen extends React.Component {
       let userJson = await AsyncStorage.getItem('user');
       user = JSON.parse(userJson);
       await axios.post(
-        'http://10.2.106.70:3000/api/users/updateProfile',
+        'http://10.2.106.85:3000/api/users/updateProfile',
         {
           facebookId: user.id,
           intention: this.state.intention,

@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Dimensions from 'Dimensions';
+let { width, height } = Dimensions.get('window');
 import { connect } from 'react-redux';
 import {
   Container,
@@ -64,12 +66,26 @@ class HomeScreen extends React.Component {
   render() {
     if (this.props.user.user && !this.props.user.user.data.profileComplete) {
       return (
-        <View>
-          <Text>Unfinished setup -> direct to settings and cloud screen</Text>
-          <Button
-            title="nav to Settings"
-            onPress={() => this._navToSettings()}
-          />
+        <View style={styles.setupIncompleteContainer}>
+          <View style={styles.header}>
+            <Text style={styles.textHeading}>Finish setting up your profile and get matching!</Text>
+          </View>
+          <View style={{backgroundColor: "#B400FF"}}>
+            <Image
+              source={require('../assets/images/Seren_Logo.png')}
+              style={styles.logo}
+            />
+          </View>
+          <ListItem style={{marginLeft: 0,}}>
+            <Body>
+              <Button
+                title="Go to Settings"
+                onPress={() => this._navToSettings()}
+                color="#B400FF"
+                style={styles.button}
+              />
+            </Body>
+          </ListItem>
         </View>
       )
     }
@@ -136,7 +152,38 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: '100%',
     width: '100%',
-  }
+  },
+  setupIncompleteContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100%',
+    backgroundColor: "#B400FF",
+  },
+  logo: {
+    width: width*.3,
+    height: width*.3,
+    alignSelf: 'center',
+    backgroundColor: "#B400FF",
+  },
+  button: {
+    justifyContent: 'flex-end',
+    marginTop: 5,
+    paddingTop: 5,
+  },
+  textHeading: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  header:{
+    paddingLeft: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: 'rgba(0,0,0,0.3)',
+  },
 });
 
 const mapStateToProps = (state) => ({

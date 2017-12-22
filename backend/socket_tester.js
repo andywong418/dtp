@@ -1,6 +1,6 @@
 const io = require('socket.io-client');
 
-let socket = io.connect('http://10.2.106.70:3000');
+let socket = io.connect('http://10.2.106.85:3000');
 
 setTimeout(() => sendEvent('CHAT_ENTER', 'XD'), 500);
 setTimeout(() => sendEvent('SEND_MESSAGE', createMessage()), 1500);

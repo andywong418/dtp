@@ -37,17 +37,17 @@ export default class SwipableList extends React.Component {
     if(this.state.currentUserCard.matchme) {
       var self = this;
       this.setState({modalMatch: true}, async () => {
-        await axios.post('http://10.2.106.70:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
+        await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
       });
     } else {
-      await axios.post('http://10.2.106.70:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
+      await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
       this.props.meet(this.state.currentUserCard);
     }
 
   }
 
   clickNoOnUser= async (user) => {
-    await axios.post('http://10.2.106.70:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: false})
+    await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: false})
     this.props.reject(this.state.currentUserCard)
   }
 
@@ -112,28 +112,27 @@ export default class SwipableList extends React.Component {
                 </Icon>
               </TouchableOpacity>
             </View>
-            <View style={{marginTop: 15, paddingTop:15, borderTopWidth: 1,borderColor: 'rgba(0,0,0,0.3)',}}>
 
-              <Text style={styles.description}>
-                {user.bio.trim()}
-              </Text>
-            </View>
-            <View style={{flex:1, width: '100%', marginTop: 15,}}>
+            <View style={styles.card}>
+              <View style={styles.bioHeader}>
+                <Text style={styles.textHeading}>Bio</Text>
+              </View>
+              <View>
+                <Text style={styles.description}>{user.bio.trim()}</Text>
+              </View>
+
               {user.mainInterests.map(interest => (
-                <View key={interest._id} style={{marginTop: 15, marginBottom: 15}}>
-                  <Text style={{fontSize: 18, color: 'rgba(0,0,0,.7)', fontWeight: '600', marginLeft: 10,}}>
-                    -- {interest.category} -- {interest.subCategory}:
-                  </Text>
-                  <Text style={styles.description}>
-                    {interest.description.trim()}
-                  </Text>
+                <View key={interest._id} style={{marginTop: 15}}>
+                  <View style={styles.header}>
+                    <Text style={styles.textHeading}>-- {interest.category} -- {interest.subCategory}:</Text>
+                  </View>
+                  <Text style={styles.description}>{interest.description.trim()}</Text>
                 </View>
               ))}
 
               <View style={{height:30}}></View>
             </View>
-
-
+            <View style={{height:30}}></View>
 
           </ScrollView>
         }
@@ -144,6 +143,22 @@ export default class SwipableList extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  card : {
+    marginBottom: 20,
+    marginTop: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    borderRadius: 20,
+    borderColor: 'rgba(0,0,0,.1)',
+    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    shadowOffset: {
+      height: 12,
+      width: 2,
+    },
+  },
   slide: {
     flexDirection: 'row',
     flex: 4,
@@ -152,8 +167,9 @@ const styles = StyleSheet.create({
     color: 'rgba(0,0,0,.7)',
     fontSize: 18,
     fontWeight: '400',
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 10,
   },
   descriptionHeader: {
     fontWeight: '100',
@@ -182,5 +198,33 @@ const styles = StyleSheet.create({
     height:80,
     backgroundColor:'#fff',
     borderRadius:40,
-  }
+  },
+  header:{
+    marginBottom: 10,
+    marginTop: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: 'rgba(0,0,0,0.3)',
+  },
+  bioHeader:{
+    marginBottom: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderBottomWidth: 1,
+    borderColor: 'rgba(0,0,0,0.3)',
+  },
+  textHeading: {
+    fontWeight: 'bold',
+    fontSize: 17,
+  },
 });
