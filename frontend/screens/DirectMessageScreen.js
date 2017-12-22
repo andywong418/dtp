@@ -11,6 +11,7 @@ import {
   AppState
 } from 'react-native';
 const io = require('socket.io-client');
+import MessageBubble from '../components/MessageBubble';
 
 export default class ConversationScreen extends React.Component {
   constructor(props) {
@@ -20,11 +21,11 @@ export default class ConversationScreen extends React.Component {
       socket: io('http://10.2.106.91:3000/'),
       roomId: '',
       appState: AppState.currentState,
+      messageList: [],
     }
     this._handleAppStateChange = this._handleAppStateChange.bind(this);
   }
   componentDidMount() {
-    // this.state.socket.emit('CONNECT')
 
     var facebookIdArr = [this.props.messageTo.user.facebookId, this.props.user.data.facebookId]
     facebookIdArr.sort()
@@ -32,7 +33,14 @@ export default class ConversationScreen extends React.Component {
 
     this.state.socket.emit('CHAT_ENTER', roomName);
     this.setState({roomId: roomName});
+    this.state.socket.on('MESSAGE_SENT', message => {
+      console.log("MESSAGE", message, "message received");
+      let newMessageList = this.state.messageList.slice();
+      newMessageList.push(message);
+      this.setState({messageList: newMessageList})
+    });
     AppState.addEventListener('change', this._handleAppStateChange);
+
   }
   _handleAppStateChange(nextAppState) {
     if ( nextAppState === 'inactive' || nextAppState ==='background') {
@@ -42,16 +50,21 @@ export default class ConversationScreen extends React.Component {
   }
 
   sendMessage() {
-
-    this.state.socket.emit('SEND_MESSAGE', {
+    let messageToSend = {
       author: this.props.user.data.facebookId,
       content: this.state.message,
       roomId: this.state.roomId,
       recipientId: this.props.messageTo.user.facebookId,
-      sentAt: new Date()
-    })
+      sentAt: new Date(),
+      senderUser: this.props.user.data,
+    };
+    this.state.socket.emit('SEND_MESSAGE', messageToSend)
+    let newMessageList = this.state.messageList.slice();
+    newMessageList.push(messageToSend);
+    this.setState({messageList: newMessageList});
     this.setState({message: ''})
   }
+
   changeInput(text) {
     this.setState({message: text});
   }
@@ -59,6 +72,7 @@ export default class ConversationScreen extends React.Component {
   componentWillUnmount() {
     this.state.socket.emit('CHAT_CLOSE', this.state.roomId);
   }
+
   render() {
 
     return (
@@ -68,7 +82,11 @@ export default class ConversationScreen extends React.Component {
 
         </View>
         <ScrollView style={styles.messageContainer}>
-
+          {this.state.messageList.map(message => {
+            return (
+              <MessageBubble message={message} user={this.props.user.data} messageTo={this.props.messageTo.user}/>
+            )
+          })}
 
         </ScrollView>
         <View style={styles.sendBar}>
