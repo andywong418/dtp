@@ -23,7 +23,7 @@ export default class MessageBubble extends React.Component {
     console.log("this.props", this.props.message.senderUser);
     console.log("me", this.props.user);
 
-    if(this.props.message.author === this.props.user.facebookId) {
+    if(this.props.message.author._id === this.props.user._id || this.props.message.author === this.props.user._id) {
       return(
         <View style={styles.userMessage}>
           <Text style={styles.userMessageText}>{this.props.message.content}</Text>
@@ -34,9 +34,9 @@ export default class MessageBubble extends React.Component {
         <View style={{flexDirection: 'row', marginTop: 20,}}>
           <Image
             source={
-              this.props.message.senderUser.photos[0].url
+              this.props.message.senderUser
               ? {uri: this.props.message.senderUser.photos[0].url}
-              : require('../assets/images/icon.png')
+              : {uri: this.props.message.author.photos[0].url}
             }
             style={styles.smallImage}
           />
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     backgroundColor: '#B400FF',
-    padding: 7,
+    padding: 15,
     borderRadius: 7,
     maxWidth: '60%',
     marginTop: 20,

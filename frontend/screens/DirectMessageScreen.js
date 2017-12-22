@@ -11,6 +11,7 @@ import {
   AppState
 } from 'react-native';
 const io = require('socket.io-client');
+import axios from 'axios';
 import MessageBubble from '../components/MessageBubble';
 
 export default class ConversationScreen extends React.Component {
@@ -23,22 +24,29 @@ export default class ConversationScreen extends React.Component {
       appState: AppState.currentState,
       messageList: [],
     }
+
     this._handleAppStateChange = this._handleAppStateChange.bind(this);
   }
   componentDidMount() {
 
-    var facebookIdArr = [this.props.messageTo.user.facebookId, this.props.user.data.facebookId]
-    facebookIdArr.sort()
-    var roomName = facebookIdArr.join('-');
+    var roomIdArr = [this.props.messageTo.user._id, this.props.user.data._id]
+    roomIdArr.sort()
+    var roomName = roomIdArr.join('-');
 
     this.state.socket.emit('CHAT_ENTER', roomName);
     this.setState({roomId: roomName});
+    axios.get(`http://10.2.106.91:3000/api/messages/fetchConversation?roomId=${roomName}`)
+      .then(response => {
+        console.log("RESPONSE", response.data);
+        this.setState({messageList: response.data});
+    });
+
     this.state.socket.on('MESSAGE_SENT', message => {
-      console.log("MESSAGE", message, "message received");
       let newMessageList = this.state.messageList.slice();
       newMessageList.push(message);
       this.setState({messageList: newMessageList})
     });
+
     AppState.addEventListener('change', this._handleAppStateChange);
 
   }
@@ -51,10 +59,10 @@ export default class ConversationScreen extends React.Component {
 
   sendMessage() {
     let messageToSend = {
-      author: this.props.user.data.facebookId,
+      author: this.props.user.data._id,
       content: this.state.message,
       roomId: this.state.roomId,
-      recipientId: this.props.messageTo.user.facebookId,
+      recipientId: this.props.messageTo.user._id,
       sentAt: new Date(),
       senderUser: this.props.user.data,
     };
