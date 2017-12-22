@@ -76,7 +76,7 @@ class Chatroom extends React.Component {
 
 	render() {
 		return (
-			<KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={80} behavior="padding">
+			<KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={60} behavior="padding">
 				<View style={styles.messagesContainer}>
 
 				</View>

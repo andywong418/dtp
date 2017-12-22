@@ -33,6 +33,8 @@ import RootNavigation from '../navigation/RootNavigation';
 import LoginScreen from './LoginScreen.js';
 import DirectMessageScreen from './DirectMessageScreen.js';
 
+// console.disableYellowBox = true;
+
 class Root extends React.Component {
   constructor(props) {
     super(props);

@@ -41,7 +41,6 @@ export default class SwipableList extends React.Component {
       });
     } else {
       let checkIfMatch = await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', { personA: this.props.user.facebookId, personB: user.user.facebookId, response: true })
-      console.log("checkifMatch", checkIfMatch);
       if (checkIfMatch.data == 'It\'s a match!') {
         this.setState({modalMatch: true});
       } else {
@@ -58,12 +57,12 @@ export default class SwipableList extends React.Component {
   }
 
   closeModal = () => {
-    console.log("GOT IN");
     this.setState({ modalMatch: false });
     this.props.meet(this.state.currentUserCard);
   }
 
   sendMessage = () => {
+    console.log('sendMessage: ', this.state.currentUserCard);
     this.props.sendMessage(this.state.currentUserCard);
   }
 

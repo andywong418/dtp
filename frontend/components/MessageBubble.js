@@ -20,9 +20,6 @@ export default class MessageBubble extends React.Component {
   }
 
   render() {
-    console.log("this.props", this.props.message.senderUser);
-    console.log("me", this.props.user);
-
     if(this.props.message.author._id === this.props.user._id || this.props.message.author === this.props.user._id) {
       return(
         <View style={styles.userMessage}>

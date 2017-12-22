@@ -101,7 +101,9 @@ class HomeScreen extends React.Component {
           user={this.props.user.user.data}
           reject={this.props.avoidTopUser}
           meet={this.props.meetTopUser}
-          sendMessage={this.navigateToConvo}
+          sendMessage={this.sendMessage}
+          navigateToConvo={this.props.navigateToConvo}
+          navigateBackToMessages={this._navtoMessages}
         />
       )
     }

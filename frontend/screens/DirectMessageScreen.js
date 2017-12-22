@@ -31,7 +31,7 @@ export default class ConversationScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: `${navigation.state.params.messageTo.user.firstName}`
   });
-  
+
   componentDidMount() {
 
     var roomIdArr = [this.props.navigation.state.params.messageTo.user._id, this.props.navigation.state.params.user.data._id]
@@ -41,10 +41,12 @@ export default class ConversationScreen extends React.Component {
     this.state.socket.emit('CHAT_ENTER', roomName);
     this.setState({roomId: roomName});
     axios.get(`http://10.2.106.85:3000/api/messages/fetchConversation?roomId=${roomName}`)
-      .then(response => {
-        console.log("RESPONSE", response.data);
-        this.setState({messageList: response.data});
-    });
+    .then(response => {
+      this.setState({messageList: response.data});
+    })
+    .catch(e => {
+      console.log('error in DirectMessageScreen componentDidMount: ', e);
+    })
 
     this.state.socket.on('MESSAGE_SENT', message => {
       let newMessageList = this.state.messageList.slice();
@@ -87,15 +89,17 @@ export default class ConversationScreen extends React.Component {
   }
 
   render() {
-
     return (
-      <KeyboardAvoidingView style={{height: '100%', flex: 1}}  keyboardVerticalOffset={80} behavior="padding">
+      <KeyboardAvoidingView style={{height: '100%', flex: 1}}  keyboardVerticalOffset={60} behavior="padding">
         <ScrollView style={styles.messageContainer}>
-          {this.state.messageList.map(message => {
-            return (
-              <MessageBubble message={message} user={this.props.navigation.state.params.user.data} messageTo={this.props.navigation.state.params.messageTo.user}/>
-            )
-          })}
+          {this.state.messageList.map(message => (
+            <MessageBubble
+              key={message._id}
+              message={message}
+              user={this.props.navigation.state.params.user.data}
+              messageTo={this.props.navigation.state.params.messageTo.user}
+            />
+          ))}
 
         </ScrollView>
         <View style={styles.sendBar}>

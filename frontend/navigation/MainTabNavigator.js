@@ -20,7 +20,7 @@ export default TabNavigator(
     Home: {
       screen: HomeScreen,
     },
-    Matches: {
+    Messages: {
       screen: ConversationScreen
     },
     Chatrooms: {
