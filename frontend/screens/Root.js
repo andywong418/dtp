@@ -30,6 +30,7 @@ import {
 
 import RootNavigation from '../navigation/RootNavigation';
 import LoginScreen from './LoginScreen.js';
+console.disableYellowBox = true;
 
 class Root extends React.Component {
   constructor(props) {

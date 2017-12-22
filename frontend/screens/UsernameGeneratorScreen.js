@@ -48,6 +48,9 @@ export default class ChatroomListScreen extends React.Component {
 	render() {
 		return (
 			< View style={styles.container} >
+				<Text style={{ textAlign: 'center' }}>
+					Please generate a username to use this chatroom!
+				</Text>
 				<View style={styles.usernameContainer}>
 					<Text style={styles.username}>
 						{this.state.username}

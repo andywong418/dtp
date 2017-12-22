@@ -12,6 +12,17 @@ router.get('/', function (req, res, next) {
     res.send('respond with a resource');
 });
 
+router.post('/fetchAll', function (req, res, next) {
+    User.find({})
+        .exec((err, users) => {
+            if (err) {
+                res.send("ERROR", err);
+            } else {
+                res.json(users);
+            }
+        })
+});
+
 router.post('/fetchUser', function (req, res, next) {
     User.findOne({ facebookId: req.body.facebookId })
         .populate('mainInterests')

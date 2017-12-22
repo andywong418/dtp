@@ -12,6 +12,7 @@ module.exports = (io) => {
 		});
 
 		socket.on('CHAT_ENTER', (chatID) => {
+			console.log('JOINED', chatID);
 			socket.join(chatID);
 			socket.room = chatID;
 			if (!rooms[socket.room]) {
@@ -38,12 +39,17 @@ module.exports = (io) => {
 }
 
 const removeFromRoom = (socket) => {
-	rooms[socket.room].members--;
-	if (!rooms[socket.room].members) {
-		console.log(rooms);
-		saveMessages(rooms[socket.room].messages, () => {
-			console.log('Room Deleted.');
-		});
+	if (rooms[socket.room]) {
+		if (rooms[socket.room].members > 0) {
+			rooms[socket.room].members--;
+		}
+
+		if (!rooms[socket.room].members) {
+			console.log(rooms);
+			saveMessages(rooms[socket.room].messages, () => {
+				console.log('Room Deleted.');
+			});
+		}
 	}
 };
 

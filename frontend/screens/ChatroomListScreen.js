@@ -6,7 +6,8 @@ import {
 	Image,
 	ListView,
 	FlatList,
-	TouchableOpacity
+	TouchableOpacity,
+	ActivityIndicator
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -40,12 +41,20 @@ class ChatroomListScreen extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text style={styles.city}>{this.props.location.city}</Text>
-				<FlatList
-					data={roomNames}
-					renderItem={({ item }) => <ListItem roomTopic={item} joinRoom={this.joinRoom} />}
-					keyExtractor={(item, index) => index}
-				/>
+				{
+					!this.props.location.city
+						?
+						<ActivityIndicator size="large" color="#B400FF" />
+						:
+						<View>
+							<Text style={styles.city}>{this.props.location.city}</Text>
+							<FlatList
+								data={roomNames}
+								renderItem={({ item }) => <ListItem roomTopic={item} joinRoom={this.joinRoom} />}
+								keyExtractor={(item, index) => index}
+							/>
+						</View>
+				}
 			</View>
 		)
 	}
@@ -56,6 +65,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingTop: 10,
 	},
+	cityContainer: {
+		flex: 1
+	},
 	city: {
 		fontSize: 30,
 		color: '#B400FF',
@@ -63,16 +75,33 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		marginBottom: 10,
 	},
+	topicContainer: {
+		flex: 7
+	}
 })
 
 const mapStateToProps = (state) => ({
 	location: state.location
 });
 
-// const mapDispatchToProps = (dispatch) => ({
-// 	updateUserInfo: (intention, interests, bio) => dispatch(updateUserInfo(intention, interests, bio)),
-// 	callLogout: () => dispatch(callLogout()),
-// });
-
 export default connect(mapStateToProps, null)(ChatroomListScreen);
 
+
+{/* {
+	!this.props.location.city
+		?
+		<ActivityIndicator size="large" color="#B400FF" />
+		:
+		<View>
+			<View style={styles.cityContainer}>
+				<Text style={styles.city}>{this.props.location.city}</Text>
+			</View>
+			<View style={styles.topicContainer}>
+				<FlatList
+					data={roomNames}
+					renderItem={({ item }) => <ListItem roomTopic={item} joinRoom={this.joinRoom} />}
+					keyExtractor={(item, index) => index}
+				/>
+			</View>
+		</View>
+} */}
