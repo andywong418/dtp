@@ -18,7 +18,7 @@ export default class FullWidthImage extends React.Component {
 
   _onLayout(event) {
     const containerWidth = event.nativeEvent.layout.width;
-    console.log("CONTAINER WIDTH", event.nativeEvent);
+    //console.log("CONTAINER WIDTH", event.nativeEvent);
     if (this.props.ratio) {
       this.setState({
         width: containerWidth,
@@ -35,7 +35,7 @@ export default class FullWidthImage extends React.Component {
   }
 
   render() {
-    console.log(this.props.source, this.state.width, this.state.height);
+    //console.log(this.props.source, this.state.width, this.state.height);
     return (
       <View onLayout={this._onLayout.bind(this)}>
         <Image

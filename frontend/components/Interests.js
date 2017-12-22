@@ -12,7 +12,7 @@ export default class Intentions extends React.Component {
   }
 
   render() {
-    console.log('this.props.interests in INTEREST RENDER: ', this.props.interests);
+    //console.log('this.props.interests in INTEREST RENDER: ', this.props.interests);
     return (
       <View style={styles.interestContainer}>
         <Text style={styles.textHeading}>Specify your 3 main interests</Text>

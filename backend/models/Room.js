@@ -2,13 +2,12 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const RoomSchema = new Schema({
+  city: String,
   topic: String,
-  location: String,
-  creator: String,
-  bannedUsers: [{
-    type: Schema.ObjectId,
-    ref: 'User'
-  }]
+  creator: {
+    type: String,
+    default: 'Default'
+  }
 })
 
 module.exports = mongoose.model('Room', RoomSchema);

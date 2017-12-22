@@ -33,7 +33,7 @@ export default class Picture extends React.Component {
     this.state = {
       imageUri: undefined,
     }
-    if(this.props.imageUri) this.state.imageUri = this.props.imageUri;
+    if (this.props.imageUri) this.state.imageUri = this.props.imageUri;
   }
   render() {
     // const stuff = (
@@ -59,8 +59,8 @@ export default class Picture extends React.Component {
         <Image
           source={
             this.state.imageUri
-            ? { uri: this.state.imageUri }
-            : require('../assets/images/icon.png')
+              ? { uri: this.state.imageUri }
+              : require('../assets/images/icon.png')
           }
           style={styles.image}
         />
@@ -69,7 +69,7 @@ export default class Picture extends React.Component {
   }
 
   _handlePress = () => {
-    console.log('picure pressed');
+    //console.log('picure pressed');
 
   }
 }

@@ -59,13 +59,13 @@ class HomeScreen extends React.Component {
   };
 
   navigateToConvo(user) {
-    console.log("THIS PROPS", this.props);
-    this.props.navigation.navigate('Conversation', {user});
+    //console.log("THIS PROPS", this.props);
+    this.props.navigation.navigate('Conversation', { user });
   }
 
   render() {
 
-    if (this.props.user.user  ) {
+    if (this.props.user.user) {
       if (!this.props.user.user.data.profileComplete) {
         // this.props.navigation.navigate('Settings');
         return (
@@ -77,34 +77,34 @@ class HomeScreen extends React.Component {
             />
           </View>
         )
-      } else{
+      } else {
         return (
           <View>
-          {this.props.user.matchedUsers ?
+            {this.props.user.matchedUsers ?
               <View>
-                { this.state.viewMoreInfo ?
-                    null
+                {this.state.viewMoreInfo ?
+                  null
                   :
 
-                    <SwipableList
+                  <SwipableList
                     users={this.props.user.matchedUsers}
                     user={this.props.user.user.data}
                     reject={this.props.avoidTopUser}
                     meet={this.props.meetTopUser}
-                    sendMessage={this.navigateToConvo}/>
+                    sendMessage={this.navigateToConvo} />
 
                 }
               </View>
 
-            :
+              :
               null
-          }
+            }
 
           </View>
         )
 
       }
-    } else{
+    } else {
       return null;
     }
   }
