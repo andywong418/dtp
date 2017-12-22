@@ -13,14 +13,18 @@ import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import LoginScreen from '../screens/LoginScreen';
 import ConversationScreen from '../screens/ConversationScreen';
+import ChatroomListScreen from '../screens/ChatroomListScreen';
 
 export default TabNavigator(
   {
     Home: {
       screen: HomeScreen,
     },
-    Conversation: {
+    Matches: {
       screen: ConversationScreen
+    },
+    Chatrooms: {
+      screen: ChatroomListScreen
     },
     Settings: {
       screen: SettingsScreen,

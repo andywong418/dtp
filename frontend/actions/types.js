@@ -7,3 +7,4 @@ export const UPDATE_USER_INFO = 'UPDATE_USER_INFO';
 export const GET_NEARBY_USERS = 'GET_NEARBY_USERS';
 export const MEET_TOP_USER = 'MEET_TOP_USER';
 export const AVOID_TOP_USER = 'AVOID_TOP_USER';
+export const NAVIGATE_TO_CONVO = 'NAVIGATE_TO_CONVO';

@@ -22,12 +22,12 @@ export default class InterestSelector extends React.Component {
   }
 
   handleCategoryChange = (value) => {
-    this.setState({categorySelected: value})
+    this.setState({ categorySelected: value })
     this.props.changeInterestState('categorySelected', value)
   }
 
   handleSubcategoryChange = (value) => {
-    this.setState({subCategorySelected: value})
+    this.setState({ subCategorySelected: value })
     this.props.changeInterestState('subCategorySelected', value)
   }
 

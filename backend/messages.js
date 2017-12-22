@@ -38,13 +38,16 @@ module.exports = (io) => {
 }
 
 const removeFromRoom = (socket) => {
-	rooms[socket.room].members--;
-	if (!rooms[socket.room].members) {
-		console.log(rooms);
-		saveMessages(rooms[socket.room].messages, () => {
-			console.log('Room Deleted.');
-		});
+	if(socket.room) {
+		rooms[socket.room].members--;
+		if (!rooms[socket.room].members) {
+			console.log(rooms);
+			saveMessages(rooms[socket.room].messages, () => {
+				console.log('Room Deleted.');
+			});
+		}
 	}
+
 };
 
 const saveMessages = (messages, callback) => {

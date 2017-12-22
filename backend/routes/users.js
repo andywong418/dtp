@@ -5,7 +5,7 @@ const haversine = require('haversine');
 const User = require('../models/User');
 const Match = require('../models/Match');
 const Interest = require('../models/Interest');
-const TARGET_DIST = 5;
+const TARGET_DIST = 50000000;
 const async = require('async');
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -54,6 +54,8 @@ router.post('/updateLocation', function (req, res, next) {
 
 router.post('/getNearbyUsers', (req, res) => {
   let {location, facebookId} = req.body;
+
+  location.city = 'San Francisco'; //Comment out later
   User.find({"location.city": location.city}).populate('mainInterests')
   .exec()
   .then(users => {
@@ -71,7 +73,7 @@ router.post('/getNearbyUsers', (req, res) => {
       if (distance > 0 && distance < TARGET_DIST) {
         distance = Math.ceil(distance*1760/100)*100;
         //filters. check for distance, Look for users who have swiped yes or not on you AND you haven't swiped on. Also only return users who are looking for the same goals.
-        Match.findOne({personA: selectedUser.facebookId, personB: facebookId})
+        Match.findOne({$or : [{personA: selectedUser.facebookId, personB: facebookId}, {personA: facebookId, personB: selectedUser.facebookId, matched: true}]})
           .exec()
           .then(match => {
             if(!match || match.response) {

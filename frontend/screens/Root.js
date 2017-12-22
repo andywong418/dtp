@@ -31,6 +31,7 @@ import {
 
 import RootNavigation from '../navigation/RootNavigation';
 import LoginScreen from './LoginScreen.js';
+import DirectMessageScreen from './DirectMessageScreen.js';
 
 class Root extends React.Component {
   constructor(props) {
@@ -39,7 +40,7 @@ class Root extends React.Component {
   }
 
   async componentWillMount() {
-    this.setState({isLoadingComplete: false})
+    this.setState({ isLoadingComplete: false })
     let user, coords = null;
     try {
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -74,7 +75,7 @@ class Root extends React.Component {
     catch (e) {
       console.log("Error in App componentDidMount: \n", e)
     }
-    this.setState({isLoadingComplete: true})
+    this.setState({ isLoadingComplete: true })
   }
 
   parseInterestsFromDB = (interestsArray) => {
@@ -157,6 +158,7 @@ class Root extends React.Component {
     );
   }
 
+
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -214,6 +216,7 @@ class Root extends React.Component {
   _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
   };
+
 }
 
 const styles = StyleSheet.create({
@@ -225,12 +228,17 @@ const styles = StyleSheet.create({
     height: 24,
     backgroundColor: 'rgba(0,0,0,0.2)',
   },
+  messageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
 
 const mapStateToProps = (state) => ({
   login: state.login,
   user: state.user,
-  location: state.location
+  location: state.location,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -28,14 +28,14 @@ export default class IntentionButton extends React.Component {
   }
 
   _handleIntentionChoice = (choice) => {
-    console.log(choice);
-    this.setState({isSelected:!this.state.isSelected,})
+    //console.log(choice);
+    this.setState({ isSelected: !this.state.isSelected, })
   }
 }
 
 const styles = StyleSheet.create({
   // puke-red color: #E06457
-  intentionButton:{
+  intentionButton: {
     flex: 1,
     padding: 10,
     margin: 5,
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     borderColor: '#B400FF',
     backgroundColor: 'white'
   },
-  intentionButtonSelected:{
+  intentionButtonSelected: {
     flex: 1,
     padding: 10,
     margin: 5,

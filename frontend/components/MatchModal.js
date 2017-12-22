@@ -57,7 +57,7 @@ const MatchModal = (props) => {
           />
       </View>
       <View style={{marginTop: 50}}>
-        <TouchableOpacity onPress={() => props.sendMessage(props.currentUserCard)} style={{padding: 15, borderColor: 'white', borderWidth: 1}}><Text style={{color: 'white', fontSize: 18, textAlign: 'center'}}>Send Message</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => {props.sendMessage(props.currentUserCard); props.closeModal()}} style={{padding: 15, borderColor: 'white', borderWidth: 1}}><Text style={{color: 'white', fontSize: 18, textAlign: 'center'}}>Send Message</Text></TouchableOpacity>
         <TouchableOpacity style={{padding: 15, backgroundColor: '#f45368', marginTop: 20}}><Text style={{color: 'white', fontSize: 18, textAlign: 'center' }}>Create Plan</Text></TouchableOpacity>
       </View>
     </View>

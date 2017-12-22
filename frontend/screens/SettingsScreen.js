@@ -173,7 +173,7 @@ class SettingsScreen extends React.Component {
   }
 
   render() {
-    const {user} = this.props.user;
+    const { user } = this.props.user;
     if (!user || !user.data) {
       return (
         <Loading style={{height: '100%'}}/>
@@ -224,7 +224,7 @@ class SettingsScreen extends React.Component {
   }
 
   _setBio = (value) => {
-    this.setState({bio: value})
+    this.setState({ bio: value })
   }
 
   _handleIntentionChoice = (choice) => {

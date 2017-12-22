@@ -42,7 +42,8 @@ import SettingsScreen from './SettingsScreen';
 import SwipableList from '../components/SwipableList';
 import {
   avoidTopUser,
-  meetTopUser
+  meetTopUser,
+  navigateToConvo,
 } from '../actions/index';
 
 class HomeScreen extends React.Component {
@@ -53,16 +54,18 @@ class HomeScreen extends React.Component {
       viewMoreInfo: false,
 
     }
-    this.navigateToConvo = this.navigateToConvo.bind(this);
+    this.sendMessage= this.sendMessage.bind(this);
   }
 
   static navigationOptions = {
     title: 'Home',
   };
 
-  navigateToConvo(user) {
-    console.log("THIS PROPS", this.props);
-    this.props.navigation.navigate('Conversation', {user});
+  sendMessage(userToSend) {
+    let navigateBackToMessages = () => {
+      this.props.navigation.navigate('Conversation');
+    }
+    this.props.navigation.navigate('DirectMessage', {user: this.props.user.user, messageTo: userToSend, navigateBackToMessages})
   }
 
   render() {
@@ -196,7 +199,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   callLogout: () => dispatch(callLogout()),
   meetTopUser: (user) => dispatch(meetTopUser(user)),
-  avoidTopUser: (user) => dispatch(avoidTopUser(user))
+  avoidTopUser: (user) => dispatch(avoidTopUser(user)),
+  navigateToConvo: (user) => dispatch(navigateToConvo(user))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

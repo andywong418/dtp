@@ -30,18 +30,24 @@ export default class SwipableList extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     //setting state of currentusercard.
-    this.setState({currentUserCard: nextProps.users[0]});
+    this.setState({ currentUserCard: nextProps.users[0] });
   }
 
   clickYesOnUser = async (user) => {
     if(this.state.currentUserCard.matchme) {
       var self = this;
-      this.setState({modalMatch: true}, async () => {
-        await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
+      this.setState({ modalMatch: true }, async () => {
+        await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', { personA: this.props.user.facebookId, personB: user.user.facebookId, response: true })
       });
     } else {
-      await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', {personA: this.props.user.facebookId, personB: user.user.facebookId, response: true})
-      this.props.meet(this.state.currentUserCard);
+      let checkIfMatch = await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', { personA: this.props.user.facebookId, personB: user.user.facebookId, response: true })
+      console.log("checkifMatch", checkIfMatch);
+      if (checkIfMatch.data == 'It\'s a match!') {
+        this.setState({modalMatch: true});
+      } else {
+        this.props.meet(this.state.currentUserCard);
+      }
+
     }
 
   }
@@ -52,20 +58,24 @@ export default class SwipableList extends React.Component {
   }
 
   closeModal = () => {
-    this.setState({modalMatch: false});
+    console.log("GOT IN");
+    this.setState({ modalMatch: false });
     this.props.meet(this.state.currentUserCard);
   }
 
   sendMessage = () => {
     this.props.sendMessage(this.state.currentUserCard);
   }
+
+
+
   render() {
     if (!this.state.currentUserCard) {
       return (
-        <View style={{display: 'flex', justifyContent: 'center', alignItems:'center', height: '100%'}}>
-          <View style={{justifyContent: 'center', alignItems:'center'}}>
-            <Icon name='account-box' size ={150} color='grey'/>
-            <Text style={{fontSize: 16, marginTop: 20}}>  No more users in your area - try moving around! </Text>
+        <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Icon name='account-box' size={150} color='grey' />
+            <Text style={{ fontSize: 16, marginTop: 20 }}>  No more users in your area - try moving around! </Text>
           </View>
         </View>
       )

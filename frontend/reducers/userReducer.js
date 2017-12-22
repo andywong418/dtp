@@ -22,7 +22,8 @@ const generateState = () => {
       }
     },
     bio: '',
-    matchedUsers: null
+    matchedUsers: null,
+    sendMessage: false
   }
 }
 
@@ -58,6 +59,9 @@ const userReducer = (state = initialState, action) => {
       newState.matchedUsers = newState.matchedUsers.filter(matchedUser => {
         return matchedUser.user._id !== action.user.user._id;
       });
+      return newState;
+    case types.NAVIGATE_TO_CONVO:
+      newState.sendMessage = action.user;
       return newState;
     case types.LOGOUT:
       return generateState();
