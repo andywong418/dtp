@@ -127,10 +127,15 @@ class SettingsScreen extends React.Component {
           bio: this.state.bio,
         }
       )
+      let fetchedUser = await axios.post(
+        'http://10.2.106.85:3000/api/users/fetchUser',
+        { facebookId: user.id }
+      );
       let coords = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
       let location = await this.updateLocationDB(coords, user.id);
       let matchUsers = await this.getNearbyUsersDB(location, user.id);
       this.props.updateLocation(location)
+      this.props.fetchUserFromDB(fetchedUser);
       this.props.getNearbyUsers(matchUsers);
       this.props.navigation.navigate('Home');
     }
