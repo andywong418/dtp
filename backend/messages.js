@@ -43,7 +43,6 @@ const removeFromRoom = (socket) => {
 		if (rooms[socket.room].members > 0) {
 			rooms[socket.room].members--;
 		}
-
 		if (!rooms[socket.room].members) {
 			console.log(rooms);
 			saveMessages(rooms[socket.room].messages, () => {
@@ -51,6 +50,7 @@ const removeFromRoom = (socket) => {
 			});
 		}
 	}
+
 };
 
 const saveMessages = (messages, callback) => {

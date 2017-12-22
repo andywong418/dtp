@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   AsyncStorage,
+  KeyboardAvoidingView,
   Platform,
   StatusBar,
   StyleSheet,
@@ -30,7 +31,9 @@ import {
 
 import RootNavigation from '../navigation/RootNavigation';
 import LoginScreen from './LoginScreen.js';
-console.disableYellowBox = true;
+import DirectMessageScreen from './DirectMessageScreen.js';
+
+// console.disableYellowBox = true;
 
 class Root extends React.Component {
   constructor(props) {
@@ -66,7 +69,6 @@ class Root extends React.Component {
         this.props.updateLocation(location)
         this.props.fetchUserFromDB(fetchedUser);
         this.props.getNearbyUsers(matchUsers);
-        //console.log('fetchedUser.data in ROOT DB CALL: ', fetchedUser.data);
         this.props.updateUserInfo(fetchedUser.data.intention, this.parseInterestsFromDB(fetchedUser.data.mainInterests), fetchedUser.data.bio)
       } else {
         this.props.callLogout()
@@ -158,6 +160,7 @@ class Root extends React.Component {
     );
   }
 
+
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -170,19 +173,22 @@ class Root extends React.Component {
     }
     else {
       return (
-        <View style={styles.container}>
-          {
-            this.props.login.isLoggedIn
-              ?
-              <View style={styles.container}>
-                {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-                {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-                <RootNavigation />
-              </View>
-              :
-              <LoginScreen />
-          }
-        </View>
+        <KeyboardAvoidingView style={{ flex: 1 }}>
+          <View style={styles.container}>
+            {
+              this.props.login.isLoggedIn
+                ?
+                <View style={styles.container}>
+                  {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+                  {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+                  <RootNavigation />
+                </View>
+                :
+                <LoginScreen />
+            }
+          </View>
+        </KeyboardAvoidingView>
+
       );
     }
   }
@@ -212,6 +218,7 @@ class Root extends React.Component {
   _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
   };
+
 }
 
 const styles = StyleSheet.create({
@@ -223,12 +230,17 @@ const styles = StyleSheet.create({
     height: 24,
     backgroundColor: 'rgba(0,0,0,0.2)',
   },
+  messageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
 
 const mapStateToProps = (state) => ({
   login: state.login,
   user: state.user,
-  location: state.location
+  location: state.location,
 });
 
 const mapDispatchToProps = (dispatch) => ({

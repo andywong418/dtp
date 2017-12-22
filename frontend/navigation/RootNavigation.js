@@ -8,14 +8,20 @@ import {
 } from 'react-navigation';
 
 import MainTabNavigator from './MainTabNavigator';
+
+import DirectMessageScreen from '../screens/DirectMessageScreen';
 import ChatroomScreen from '../screens/ChatroomScreen';
 import UsernameGeneratorScreen from '../screens/UsernameGeneratorScreen';
+
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
 const RootStackNavigator = StackNavigator(
   {
     Main: {
       screen: MainTabNavigator,
+    },
+    DirectMessage: {
+      screen: DirectMessageScreen
     },
     Chatroom: {
       screen: ChatroomScreen,

@@ -20,15 +20,17 @@ export default class PersonalPictureSwiper extends React.Component {
         <Swiper height={300}
           dot={<View style={styles.dot} />}
           activeDot={<View style={styles.activeDot} />}
-          paginationStyle={styles.pagination} loop>
+          paginationStyle={styles.pagination}
+          loop
+        >
           {this.props.photos.map(photo => { return (
               <View
                 style={styles.slide}
                 key={photo.url}
               >
                 <Picture
-                imageUri={photo.url}
-                date={photo.date}
+                  imageUri={photo.url}
+                  date={photo.date}
                 />
               </View>
             )}
@@ -38,7 +40,9 @@ export default class PersonalPictureSwiper extends React.Component {
         <Swiper height={300}
           dot={<View style={styles.dot} />}
           activeDot={<View style={styles.activeDot} />}
-          paginationStyle={styles.pagination} loop>
+          paginationStyle={styles.pagination}
+          loop
+        >
           <View
             style={styles.slide}
             title={<Text numberOfLines={1}>Put your pictures here!</Text>}
@@ -86,9 +90,9 @@ const styles = StyleSheet.create({
     width: 5,
   },
   pagination: {
-    bottom: -23,
-    left: null,
-    right: 10,
+    bottom: -20,
+    // left: null,
+    // right: 10,
   },
   slide: {
     backgroundColor: 'transparent',

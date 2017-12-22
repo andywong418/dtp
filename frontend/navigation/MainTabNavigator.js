@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, KeyboardAvoidingView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {
   TabNavigator,
@@ -20,7 +20,7 @@ export default TabNavigator(
     Home: {
       screen: HomeScreen,
     },
-    Conversation: {
+    Messages: {
       screen: ConversationScreen
     },
     Chatrooms: {

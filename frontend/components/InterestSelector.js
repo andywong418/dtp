@@ -37,21 +37,18 @@ export default class InterestSelector extends React.Component {
       subCategorySelected: newProps.interest.subCategorySelected,
     })
   }
-  componentDidUpdate = () => {
-    //console.log('\n\n\nvvv componentDidUpdate vvv\n\n\n');
-    //console.log('\n\nthis.state in InterestSelector componentDidUpdate: ', this.state);
-    //console.log('\n\n\n^^^ componentDidUpdate ^^^\n\n\n');
-  }
 
   render() {
     let interestName = this.props.interestName;
     interestName = 'I' + interestName.slice(1, 8) + ' ' + interestName.slice(-1);
     return (
       <View style={styles.selectorContainer}>
-        <Text style={styles.interestHeader}>{interestName}</Text>
+        <View style={styles.header}>
+          <Text style={styles.interestHeader}>{interestName}</Text>
+        </View>
         <View style={styles.pickerContainer}>
           <Picker
-            style={styles.category}
+            style={this.props.interest.categorySelected ? styles.pickerLeft : styles.picker}
             itemStyle={styles.itemStyle}
             selectedValue={this.state.categorySelected}
             onValueChange={(itemValue) => this.handleCategoryChange(itemValue)}>
@@ -62,36 +59,37 @@ export default class InterestSelector extends React.Component {
             />)}
           </Picker>
           {this.props.interest.categorySelected
-            ?
-            <Picker
-              style={styles.category}
-              itemStyle={styles.itemStyle}
-              selectedValue={this.state.subCategorySelected}
-              onValueChange={(itemValue) => this.handleSubcategoryChange(itemValue)}>
-              {subCategories[this.props.interest.categorySelected].map(subCategory => <Picker.Item
-                label={subCategory.value}
-                value={subCategory.value}
-                key={subCategory.value}
-              />)}
-            </Picker>
-            :
-            null
+          ?
+          <Picker
+            style={styles.pickerRight}
+            itemStyle={styles.itemStyle}
+            selectedValue={this.state.subCategorySelected}
+            onValueChange={(itemValue) => this.handleSubcategoryChange(itemValue)}>
+            {subCategories[this.props.interest.categorySelected].map(subCategory => <Picker.Item
+              label={subCategory.value}
+              value={subCategory.value}
+              key={subCategory.value}
+            />)}
+          </Picker>
+          :
+          null
           }
         </View>
         {this.props.interest.subCategorySelected
-          ?
-          <TextInput
-            value={this.props.interest.description}
-            autoGrow={true}
-            style={styles.text}
-            editable={true}
-            maxLength={140}
-            multiline={true}
-            numOfLines={4}
-            onChangeText={(text) => this.props.changeInterestState('description', text)}
-          />
-          :
-          null
+        ?
+        <TextInput
+          value={this.props.interest.description}
+          autoGrow={true}
+          style={styles.text}
+          editable={true}
+          maxLength={140}
+          multiline={true}
+          numOfLines={4}
+          placeholder={'Describe your interest'}
+          onChangeText={(text) => this.props.changeInterestState('description', text)}
+        />
+        :
+        null
         }
       </View>
     )
@@ -99,33 +97,101 @@ export default class InterestSelector extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  category: {
+  picker: {
     flex: 1,
-    borderColor: '#c6c6c6',
-    borderWidth: 1,
+    marginBottom: 1,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    // marginLeft: 10,
+    // marginRight: 10,
+  },
+  pickerLeft: {
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    flex: 1,
+    marginBottom: 1,
+    marginRight: 1,
+    backgroundColor: 'white',
+    // marginLeft: 10,
+  },
+  pickerRight: {
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+    flex: 1,
+    marginBottom: 1,
+    marginLeft: 1,
+    backgroundColor: 'white',
+    // marginRight: 10,
   },
   interestHeader: {
-    marginLeft: 10,
+    marginTop: 2,
+    marginBottom:2,
+    marginLeft: 5,
+    color: 'rgba(0,0,0,.7)',
+    // alignSelf: 'center',
+    fontSize: 15,
   },
   itemStyle: {
     fontSize: 15,
+    height: 120,
   },
   pickerContainer: {
     display: 'flex',
     flexDirection: 'row',
+    marginTop: 5,
+    marginLeft: 15,
+    marginRight: 15,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+    shadowOffset: {
+      height: 12,
+      width: 2,
+    },
+    borderRadius: 5
   },
   selectorContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 10,
+    marginTop:15,
+    marginBottom:30,
   },
   text: {
+    borderRadius: 5,
     backgroundColor: 'white',
-    borderColor: '#B400FF',
-    borderRadius: 2,
-    borderWidth: 1,
     height: 60,
-    padding: 5,
-
-  }
+    paddingTop:10,
+    paddingBottom:10,
+    paddingRight:10,
+    paddingLeft:10,
+    marginTop:5,
+    marginLeft: 15,
+    marginRight: 15,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+    shadowOffset: {
+      height: 12,
+      width: 2,
+    },
+    fontSize: 18,
+  },
+  header:{
+    width: 77,
+    paddingTop: 2,
+    paddingBottom: 2,
+    marginLeft: 15,
+    marginRight: 15,
+    borderRadius: 5,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.3)',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+    shadowOffset: {
+      height: 12,
+      width: 2,
+    },
+  },
 });

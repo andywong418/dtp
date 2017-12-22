@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   StyleSheet,
+  KeyboardAvoidingView,
   Text,
   TextInput,
   View,
@@ -17,50 +18,67 @@ export default class PersonalBio extends React.Component {
 
   render() {
     return (
-      <View style={styles.viewFields}>
-        <Text style={styles.textHeading}>Personal Bio</Text>
-        <TextInput
-          value={this.props.value}
-          style={styles.text}
-          editable={true}
-          maxLength={140}
-          multiline={true}
-          numOfLines={3}
-          onChangeText={(text) => this.props.setBio(text)}
-        />
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.textHeading}>Personal Bio</Text>
+        </View>
+        <View style={styles.viewFields}>
+          <TextInput
+            value={this.props.value}
+            style={styles.text}
+            editable={true}
+            maxLength={140}
+            multiline={true}
+            numOfLines={3}
+            onChangeText={(text) => this.props.setBio(text)}
+          />
+        </View>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  icon: {
-    marginLeft: 5,
-    marginTop: 2,
+  container: {
+    paddingBottom:15,
+    marginBottom:15,
   },
-  intentionList: {
-    flexDirection: 'row',
-    padding: 10,
-    paddingTop: 0,
-    alignItems: 'center',
-  },
-  textHeading: {
-    fontWeight: 'bold',
-  },
-  viewFields:{
-    flexDirection: 'column',
-    marginTop: 20,
-    marginBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
+  header:{
+    paddingLeft: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: 'rgba(0,0,0,0.3)',
   },
   text: {
     backgroundColor: 'white',
-    borderColor: '#B400FF',
-    borderRadius: 2,
-    borderWidth: 1,
+    borderRadius: 5,
     height: 150,
-    marginTop: 10,
+    paddingTop:10,
+    paddingBottom:10,
+    paddingRight:10,
+    paddingLeft:10,
     padding: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+    shadowOffset: {
+      height: 12,
+      width: 2,
+    },
+    fontSize: 18,
+  },
+  textHeading: {
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  viewFields: {
+    flexDirection: 'column',
+    marginTop: 15,
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingBottom: 45,
   },
 });
