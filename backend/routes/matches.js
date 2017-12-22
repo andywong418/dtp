@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Match = require('../models/Match');
+const Message = require('../models/Message');
+
 
 router.post('/updateMatchResponse', (req, res) => {
 	let { personA, personB, response } = req.body;
@@ -42,6 +44,15 @@ router.post('/updateMatchResponse', (req, res) => {
 			}
 		}
 	})
-})
+});
+
+router.get('/fetchMatches', (req, res) => {
+	let {facebookId} = req.query.facebookId;
+	Match.find({$or:[{personA: facebookId, matched: true}, {personB: facebookId, matched: true}]})
+	.exec()
+	.then(matches => {
+		res.send(matches);
+	})
+});
 
 module.exports = router;

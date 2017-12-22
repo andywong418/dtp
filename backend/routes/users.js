@@ -55,7 +55,7 @@ router.post('/updateLocation', function (req, res, next) {
 router.post('/getNearbyUsers', (req, res) => {
   let {location, facebookId} = req.body;
 
-  // location.city = 'San Francisco'; //Comment out later
+  location.city = 'San Francisco'; //Comment out later
   User.find({"location.city": location.city}).populate('mainInterests')
   .exec()
   .then(users => {

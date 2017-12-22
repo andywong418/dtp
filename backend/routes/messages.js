@@ -17,6 +17,10 @@ router.get('/fetchConversation', (req, res) => {
 		})
 })
 
+// router.post('/fetchUserMessages', (req, res) => {
+// 	let userId = req.body.userId;
+//
+// })
 // router.get('/fetchList', (req, res) => {
 // 	let roomId = req.query.roomId;
 // 	Message.findOne({ roomId })

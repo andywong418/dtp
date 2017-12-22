@@ -9,13 +9,21 @@ import {
 export default class ConversationScreen extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      messageLists: []
+    }
   }
-
+  static navigationOptions = {
+    title: 'Chats'
+  }
   render() {
     //console.log("this. props", this.props)
     return (
       <View>
-      <Text>MessageList</Text>
+      {this.state.messageLists.map(message => {
+        <View>
+        </View>
+      })}
 
       </View>
     )
