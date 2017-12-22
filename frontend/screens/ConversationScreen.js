@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   StyleSheet,
+  ScrollView,
   Text,
   TouchableOpacity,
   View,
@@ -48,7 +49,7 @@ class ConversationScreen extends React.Component {
 
   render() {
     return (
-      <View>
+      <ScrollView>
         {this.state.users.map(user => (
           <TouchableOpacity
             key={user._id}
@@ -62,7 +63,7 @@ class ConversationScreen extends React.Component {
             <Text style={styles.text}>{user.bio}</Text>
           </TouchableOpacity>
         ))}
-      </View>
+      </ScrollView>
     )
   }
 }
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    width: width*.7,
+    width: width*.7
   }
 })
 
