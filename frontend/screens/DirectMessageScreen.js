@@ -29,7 +29,7 @@ export default class ConversationScreen extends React.Component {
   }
   componentDidMount() {
 
-    var roomIdArr = [this.props.messageTo.user._id, this.props.user.data._id]
+    var roomIdArr = [this.props.navigation.state.params.messageTo.user._id, this.props.navigation.state.params.user.data._id]
     roomIdArr.sort()
     var roomName = roomIdArr.join('-');
 
@@ -59,12 +59,12 @@ export default class ConversationScreen extends React.Component {
 
   sendMessage() {
     let messageToSend = {
-      author: this.props.user.data._id,
+      author: this.props.navigation.state.params.user.data._id,
       content: this.state.message,
       roomId: this.state.roomId,
-      recipientId: this.props.messageTo.user._id,
+      recipientId: this.props.navigation.state.params.messageTo.user._id,
       sentAt: new Date(),
-      senderUser: this.props.user.data,
+      senderUser: this.props.navigation.state.params.user.data,
     };
     this.state.socket.emit('SEND_MESSAGE', messageToSend)
     let newMessageList = this.state.messageList.slice();
@@ -92,7 +92,7 @@ export default class ConversationScreen extends React.Component {
         <ScrollView style={styles.messageContainer}>
           {this.state.messageList.map(message => {
             return (
-              <MessageBubble message={message} user={this.props.user.data} messageTo={this.props.messageTo.user}/>
+              <MessageBubble message={message} user={this.props.navigation.state.params.user.data} messageTo={this.props.navigation.state.params.messageTo.user}/>
             )
           })}
 

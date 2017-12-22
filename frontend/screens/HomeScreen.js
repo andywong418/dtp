@@ -59,9 +59,11 @@ class HomeScreen extends React.Component {
 
   };
 
-  sendMessage(user) {
-
-    this.props.navigateToConvo(user);
+  sendMessage(userToSend) {
+    let navigateBackToMessages = () => {
+      this.props.navigation.navigate('Conversation');
+    }
+    this.props.navigation.navigate('DirectMessage', {user: this.props.user.user, messageTo: userToSend, navigateBackToMessages})
   }
 
   render() {

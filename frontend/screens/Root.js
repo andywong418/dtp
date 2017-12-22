@@ -170,11 +170,6 @@ class Root extends React.Component {
       );
     }
     else {
-      if(this.props.user.sendMessage) {
-        return(
-          <DirectMessageScreen user={this.props.user.user} messageTo={this.props.user.sendMessage} navigateBackToMessages={() => this.props.navigation.navigate('Conversation')}/>
-        )
-      }
       return (
         <View style={styles.container}>
           {

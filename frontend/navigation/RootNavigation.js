@@ -3,6 +3,7 @@ import React from 'react';
 import { StackNavigator } from 'react-navigation';
 
 import MainTabNavigator from './MainTabNavigator';
+import DirectMessageScreen from '../screens/DirectMessageScreen';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
 const RootStackNavigator = StackNavigator(
@@ -10,6 +11,9 @@ const RootStackNavigator = StackNavigator(
     Main: {
       screen: MainTabNavigator,
     },
+    DirectMessage: {
+      screen: DirectMessageScreen
+    }
   },
   {
     navigationOptions: () => ({
