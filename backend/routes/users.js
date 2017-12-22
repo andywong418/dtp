@@ -5,7 +5,7 @@ const haversine = require('haversine');
 const User = require('../models/User');
 const Match = require('../models/Match');
 const Interest = require('../models/Interest');
-const TARGET_DIST = 5;
+const TARGET_DIST = 50000000;
 const async = require('async');
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -54,6 +54,8 @@ router.post('/updateLocation', function (req, res, next) {
 
 router.post('/getNearbyUsers', (req, res) => {
   let {location, facebookId} = req.body;
+
+  // location.city = 'San Francisco'; //Comment out later
   User.find({"location.city": location.city}).populate('mainInterests')
   .exec()
   .then(users => {

@@ -22,12 +22,12 @@ export default class InterestSelector extends React.Component {
   }
 
   handleCategoryChange = (value) => {
-    this.setState({categorySelected: value})
+    this.setState({ categorySelected: value })
     this.props.changeInterestState('categorySelected', value)
   }
 
   handleSubcategoryChange = (value) => {
-    this.setState({subCategorySelected: value})
+    this.setState({ subCategorySelected: value })
     this.props.changeInterestState('subCategorySelected', value)
   }
 
@@ -38,9 +38,9 @@ export default class InterestSelector extends React.Component {
     })
   }
   componentDidUpdate = () => {
-    console.log('\n\n\nvvv componentDidUpdate vvv\n\n\n');
-    console.log('\n\nthis.state in InterestSelector componentDidUpdate: ', this.state);
-    console.log('\n\n\n^^^ componentDidUpdate ^^^\n\n\n');
+    //console.log('\n\n\nvvv componentDidUpdate vvv\n\n\n');
+    //console.log('\n\nthis.state in InterestSelector componentDidUpdate: ', this.state);
+    //console.log('\n\n\n^^^ componentDidUpdate ^^^\n\n\n');
   }
 
   render() {
@@ -62,38 +62,38 @@ export default class InterestSelector extends React.Component {
             />)}
           </Picker>
           {this.props.interest.categorySelected
-          ?
-          <Picker
-            style={styles.category}
-            itemStyle={styles.itemStyle}
-            selectedValue={this.state.subCategorySelected}
-            onValueChange={(itemValue) => this.handleSubcategoryChange(itemValue)}>
-            {subCategories[this.props.interest.categorySelected].map(subCategory => <Picker.Item
-              label={subCategory.value}
-              value={subCategory.value}
-              key={subCategory.value}
-            />)}
-          </Picker>
-          :
-          null
+            ?
+            <Picker
+              style={styles.category}
+              itemStyle={styles.itemStyle}
+              selectedValue={this.state.subCategorySelected}
+              onValueChange={(itemValue) => this.handleSubcategoryChange(itemValue)}>
+              {subCategories[this.props.interest.categorySelected].map(subCategory => <Picker.Item
+                label={subCategory.value}
+                value={subCategory.value}
+                key={subCategory.value}
+              />)}
+            </Picker>
+            :
+            null
           }
         </View>
         {this.props.interest.subCategorySelected
-        ?
-        <TextInput
-          value={this.props.interest.description}
-          autoGrow={true}
-          style={styles.text}
-          editable={true}
-          maxLength={140}
-          multiline={true}
-          numOfLines={4}
-          onChangeText={(text) => this.props.changeInterestState('description', text)}
-        />
-        :
-        null
+          ?
+          <TextInput
+            value={this.props.interest.description}
+            autoGrow={true}
+            style={styles.text}
+            editable={true}
+            maxLength={140}
+            multiline={true}
+            numOfLines={4}
+            onChangeText={(text) => this.props.changeInterestState('description', text)}
+          />
+          :
+          null
         }
-        </View>
+      </View>
     )
   }
 }
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   selectorContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop:10,
+    marginTop: 10,
   },
   text: {
     backgroundColor: 'white',

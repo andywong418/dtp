@@ -4,7 +4,7 @@ const Match = require('../models/Match');
 
 router.post('/updateMatchResponse', (req, res) => {
 	let { personA, personB, response } = req.body;
-	console.log("personA", personA, personB, response);
+	// console.log("personA", personA, personB, response);
 	Match.findOne({ personA: personB, personB: personA, expired: false }, (error, match) => {
 		if (error) {
 			console.log('Error finding match:', error);
@@ -25,7 +25,7 @@ router.post('/updateMatchResponse', (req, res) => {
 						console.log('Error updating match:', error);
 						res.send('Error updating match:', error);
 					} else {
-						console.log('It\'s a match!');
+						// console.log('It\'s a match!');
 						res.send('It\'s a match!');
 					}
 				})

@@ -19,7 +19,7 @@ export default class ConversationScreen extends React.Component {
     super(props);
     this.state ={
       message: '',
-      socket: io('http://10.2.106.91:3000/'),
+      socket: io('http://172.31.245.115:3000/'),
       roomId: '',
       appState: AppState.currentState,
       messageList: [],
@@ -27,6 +27,11 @@ export default class ConversationScreen extends React.Component {
 
     this._handleAppStateChange = this._handleAppStateChange.bind(this);
   }
+
+  static navigationOptions = ({ navigation }) => ({
+    title: `${navigation.state.params.messageTo.user.firstName}`
+  });
+  
   componentDidMount() {
 
     var roomIdArr = [this.props.navigation.state.params.messageTo.user._id, this.props.navigation.state.params.user.data._id]
@@ -35,7 +40,7 @@ export default class ConversationScreen extends React.Component {
 
     this.state.socket.emit('CHAT_ENTER', roomName);
     this.setState({roomId: roomName});
-    axios.get(`http://10.2.106.91:3000/api/messages/fetchConversation?roomId=${roomName}`)
+    axios.get(`http://172.31.245.115:3000/api/messages/fetchConversation?roomId=${roomName}`)
       .then(response => {
         console.log("RESPONSE", response.data);
         this.setState({messageList: response.data});
@@ -84,11 +89,7 @@ export default class ConversationScreen extends React.Component {
   render() {
 
     return (
-      <KeyboardAvoidingView style={{height: '100%', flex: 1}} behavior="padding">
-        <View style={styles.navbar}>
-          <TouchableOpacity style={{width: 140}} onPress={() => this.props.navigateBackToMessages()}><Text style={{color: 'white', fontSize: 20, paddingLeft: 10}}> Back </Text></TouchableOpacity>
-
-        </View>
+      <KeyboardAvoidingView style={{height: '100%', flex: 1}}  keyboardVerticalOffset={80} behavior="padding">
         <ScrollView style={styles.messageContainer}>
           {this.state.messageList.map(message => {
             return (

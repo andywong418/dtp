@@ -63,16 +63,16 @@ class SettingsScreen extends React.Component {
   }
 
   _handleSave = async () => {
-    console.log('\n\nHANDLE SAVE CALLED\n\n');
-    console.log(this.state.intention);
-    console.log(this.state.interests);
-    console.log(this.state.bio);
+    //console.log('\n\nHANDLE SAVE CALLED\n\n');
+    //console.log(this.state.intention);
+    //console.log(this.state.interests);
+    //console.log(this.state.bio);
     this.props.updateUserInfo(this.state.intention, this.state.interests, this.state.bio)
     try {
       let user = await AsyncStorage.getItem('user');
       user = JSON.parse(user);
       await axios.post(
-        'http://10.2.106.91:3000/api/users/updateProfile',
+        'http://172.31.245.115:3000/api/users/updateProfile',
         {
           facebookId: user.id,
           intention: this.state.intention,
@@ -86,10 +86,10 @@ class SettingsScreen extends React.Component {
     }
   }
 
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => {
     return {
       title: 'Settings',
-      headerRight: <SaveSettingsButton handleSave={() => navigation.state.params._handleSave() } />,
+      headerRight: <SaveSettingsButton handleSave={() => navigation.state.params._handleSave()} />,
     }
   }
 
@@ -100,7 +100,7 @@ class SettingsScreen extends React.Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    console.log('nextProps in componentWillReceiveProps: ', nextProps.user.interests);
+    //console.log('nextProps in componentWillReceiveProps: ', nextProps.user.interests);
     this.setState({
       intention: nextProps.user.intention,
       showIntentionHelperText: false,
@@ -124,7 +124,7 @@ class SettingsScreen extends React.Component {
   }
 
   componentDidUpdate = () => {
-    console.log('\n\n\nthis.state.interests in SettingsScreen componentDidUpdate: \n\n\n', this.state.interests);
+    //console.log('\n\n\nthis.state.interests in SettingsScreen componentDidUpdate: \n\n\n', this.state.interests);
   }
 
   componentWillUmount = () => {
@@ -132,10 +132,10 @@ class SettingsScreen extends React.Component {
   }
 
   render() {
-    const {user} = this.props.user;
+    const { user } = this.props.user;
     if (!user || !user.data) {
       return (
-        <Loading/>
+        <Loading />
       )
     }
     return (
@@ -161,7 +161,7 @@ class SettingsScreen extends React.Component {
   }
 
   _setBio = (value) => {
-    this.setState({bio: value})
+    this.setState({ bio: value })
   }
 
   _handleIntentionChoice = (choice) => {
@@ -185,7 +185,7 @@ class SettingsScreen extends React.Component {
   };
 
   _changeInterestState = (interest, interestKey, description) => {
-    console.log("interest HIT ME", interest);
+    //console.log("interest HIT ME", interest);
     let newInterestState = Object.assign({}, this.state.interests);
     newInterestState[interest] = Object.assign({}, newInterestState[interest]);
     newInterestState[interest][interestKey] = description
@@ -198,8 +198,8 @@ class SettingsScreen extends React.Component {
         newInterestState[interest]['description'] = null;
       }
     }
-    this.setState({interests: newInterestState});
-    // console.log(this.state.interests);
+    this.setState({ interests: newInterestState });
+    // //console.log(this.state.interests);
   }
 }
 
