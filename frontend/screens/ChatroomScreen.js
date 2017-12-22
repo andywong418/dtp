@@ -38,7 +38,7 @@ class Chatroom extends React.Component {
 
 	async componentWillMount() {
 		try {
-			let roomIDResponse = await axios.post('http://172.31.245.115:3000/api/chatrooms/roomExists', {
+			let roomIDResponse = await axios.post('http://10.2.106.85:3000/api/chatrooms/roomExists', {
 				city: this.state.city,
 				topic: this.state.topic
 			});
@@ -50,7 +50,7 @@ class Chatroom extends React.Component {
 				if (created) {
 					console.log('Room was just created!');
 				} else {
-					let userExistsResponse = await axios.post('http://172.31.245.115:3000/api/chatrooms/roomUsername', {
+					let userExistsResponse = await axios.post('http://10.2.106.85:3000/api/chatrooms/roomUsername', {
 						roomID,
 						userID: this.state.userID
 					});

@@ -27,13 +27,13 @@ export default class ChatroomListScreen extends React.Component {
 
 
 	async _generateUsername() {
-		let username = await axios.get('http://172.31.245.115:3000/api/chatrooms/generateUsername')
+		let username = await axios.get('http://10.2.106.85:3000/api/chatrooms/generateUsername')
 		this.setState({
 			username: username.data.username
 		})
 	}
 	async _saveUsername() {
-		let saveResponse = await axios.post('http://172.31.245.115:3000/api/chatrooms/saveUsername',
+		let saveResponse = await axios.post('http://10.2.106.85:3000/api/chatrooms/saveUsername',
 			{
 				username: this.state.username,
 				roomID: this.props.navigation.state.params.roomID,

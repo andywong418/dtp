@@ -19,7 +19,7 @@ export default class ConversationScreen extends React.Component {
     super(props);
     this.state ={
       message: '',
-      socket: io('http://172.31.245.115:3000/'),
+      socket: io('http://10.2.106.85:3000/'),
       roomId: '',
       appState: AppState.currentState,
       messageList: [],
@@ -40,7 +40,7 @@ export default class ConversationScreen extends React.Component {
 
     this.state.socket.emit('CHAT_ENTER', roomName);
     this.setState({roomId: roomName});
-    axios.get(`http://172.31.245.115:3000/api/messages/fetchConversation?roomId=${roomName}`)
+    axios.get(`http://10.2.106.85:3000/api/messages/fetchConversation?roomId=${roomName}`)
       .then(response => {
         console.log("RESPONSE", response.data);
         this.setState({messageList: response.data});

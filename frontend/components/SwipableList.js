@@ -36,10 +36,10 @@ export default class SwipableList extends React.Component {
     if(this.state.currentUserCard.matchme) {
       var self = this;
       this.setState({ modalMatch: true }, async () => {
-        await axios.post('http://172.31.245.115:3000/api/matches/updateMatchResponse', { personA: this.props.user.facebookId, personB: user.user.facebookId, response: true })
+        await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', { personA: this.props.user.facebookId, personB: user.user.facebookId, response: true })
       });
     } else {
-      let checkIfMatch = await axios.post('http://172.31.245.115:3000/api/matches/updateMatchResponse', { personA: this.props.user.facebookId, personB: user.user.facebookId, response: true })
+      let checkIfMatch = await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', { personA: this.props.user.facebookId, personB: user.user.facebookId, response: true })
       console.log("checkifMatch", checkIfMatch);
       if (checkIfMatch.data == 'It\'s a match!') {
         this.setState({modalMatch: true});
@@ -52,7 +52,7 @@ export default class SwipableList extends React.Component {
   }
 
   clickNoOnUser = async (user) => {
-    await axios.post('http://172.31.245.115:3000/api/matches/updateMatchResponse', { personA: this.props.user.facebookId, personB: user.user.facebookId, response: false })
+    await axios.post('http://10.2.106.85:3000/api/matches/updateMatchResponse', { personA: this.props.user.facebookId, personB: user.user.facebookId, response: false })
     this.props.reject(this.state.currentUserCard)
   }
 
