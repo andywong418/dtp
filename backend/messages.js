@@ -54,11 +54,11 @@ const removeFromRoom = (socket) => {
 };
 
 const saveMessages = (messages, callback) => {
-	Message.create(messages, (error, success) => {
-		if (error) {
-			console.log('Error saving messages:', error);
-		} else {
-			console.log('All messages saved successfully');
-		}
-	})
+	for (let message of messages) {
+		Message.create(message, (error, success) => {
+			if (error) {
+				console.log('Error saving messages:', error);
+			}
+		})
+	}
 };
