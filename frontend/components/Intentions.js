@@ -15,14 +15,9 @@ export default class Intentions extends React.Component {
 
   render() {
     return (
-      <View>
-        <View style={styles.viewFields}>
-          <Text style={styles.textHeading}>Intention</Text>
-          <Icon
-            name="question-circle"
-            style={styles.icon}
-            size={15}
-          />
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.textHeading}>Goal</Text>
         </View>
         <View style={styles.intentionList}>
           {this.props.intentions.map(intention => {
@@ -42,6 +37,12 @@ export default class Intentions extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingTop:5,
+    paddingBottom:15,
+    marginTop:20,
+    marginBottom:15,
+  },
   icon: {
     marginLeft: 5,
     marginTop: 2,
@@ -54,12 +55,16 @@ const styles = StyleSheet.create({
   },
   textHeading: {
     fontWeight: 'bold',
+    fontSize: 20,
   },
-  viewFields:{
-    flexDirection: 'row',
-    marginTop: 20,
+  header:{
     marginBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: 'rgba(0,0,0,0.3)',
   }
 });

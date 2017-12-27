@@ -71,7 +71,7 @@ class LoginButton extends React.Component {
         }))
         this.props.callLogin(profile.name, profile.id)
         let user = await axios.post(
-          'http://10.2.106.91:3000/api/facebook/retrieveInfo',
+          'http://10.2.106.85:3000/api/facebook/retrieveInfo',
           {
             facebookId: profile.id,
             token,

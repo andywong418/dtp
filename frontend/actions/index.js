@@ -68,3 +68,10 @@ export function avoidTopUser(user) {
     user
   }
 }
+
+export function navigateToConvo(user) {
+  return {
+    type: types.NAVIGATE_TO_CONVO,
+    user
+  };
+}

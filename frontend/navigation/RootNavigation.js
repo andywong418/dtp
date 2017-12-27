@@ -1,8 +1,18 @@
 import { Notifications } from 'expo';
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import {
+  StackNavigator,
+  TabNavigator,
+  TabBarBottom,
+  TabBarTop,
+} from 'react-navigation';
 
 import MainTabNavigator from './MainTabNavigator';
+
+import DirectMessageScreen from '../screens/DirectMessageScreen';
+import ChatroomScreen from '../screens/ChatroomScreen';
+import UsernameGeneratorScreen from '../screens/UsernameGeneratorScreen';
+
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
 const RootStackNavigator = StackNavigator(
@@ -10,13 +20,58 @@ const RootStackNavigator = StackNavigator(
     Main: {
       screen: MainTabNavigator,
     },
+    DirectMessage: {
+      screen: DirectMessageScreen
+    },
+    Chatroom: {
+      screen: ChatroomScreen,
+    },
+    UsernameGenerator: {
+      screen: UsernameGeneratorScreen,
+    },
   },
   {
-    navigationOptions: () => ({
-      headerTitleStyle: {
-        fontWeight: 'normal',
+    navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: '#B400FF',
+      },
+      headerTintColor: 'white',
+      tabBarIcon: ({ focused }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        switch (routeName) {
+          case 'Home':
+            iconName =
+              Platform.OS === 'ios'
+                ? `ios-information-circle${focused ? '' : '-outline'}`
+                : 'md-information-circle';
+            break;
+          case 'Links':
+            iconName =
+              Platform.OS === 'ios'
+                ? `ios-link${focused ? '' : '-outline'}`
+                : 'md-link';
+            break;
+          case 'Settings':
+            iconName =
+              Platform.OS === 'ios'
+                ? `ios-options${focused ? '' : '-outline'}`
+                : 'md-options';
+        }
+        return (
+          <Ionicons
+            name={iconName}
+            size={28}
+            style={{ marginBottom: -3 }}
+            color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+          />
+        );
       },
     }),
+    tabBarComponent: TabBarBottom,
+    tabBarPosition: 'bottom',
+    animationEnabled: true,
+    swipeEnabled: true,
   }
 );
 
@@ -45,6 +100,6 @@ export default class RootNavigator extends React.Component {
   }
 
   _handleNotification = ({ origin, data }) => {
-    console.log(`Push notification ${origin} with data: ${JSON.stringify(data)}`);
+    //console.log(`Push notification ${origin} with data: ${JSON.stringify(data)}`);
   };
 }

@@ -12,6 +12,7 @@ module.exports = (io) => {
 		});
 
 		socket.on('CHAT_ENTER', (chatID) => {
+			console.log('JOINED', chatID);
 			socket.join(chatID);
 			socket.room = chatID;
 			if (!rooms[socket.room]) {
@@ -38,21 +39,26 @@ module.exports = (io) => {
 }
 
 const removeFromRoom = (socket) => {
-	rooms[socket.room].members--;
-	if (!rooms[socket.room].members) {
-		console.log(rooms);
-		saveMessages(rooms[socket.room].messages, () => {
-			console.log('Room Deleted.');
-		});
+	if (rooms[socket.room]) {
+		if (rooms[socket.room].members > 0) {
+			rooms[socket.room].members--;
+		}
+		if (!rooms[socket.room].members) {
+			console.log(rooms);
+			saveMessages(rooms[socket.room].messages, () => {
+				console.log('Room Deleted.');
+			});
+		}
 	}
+
 };
 
 const saveMessages = (messages, callback) => {
-	Message.create(messages, (error, success) => {
-		if (error) {
-			console.log('Error saving messages:', error);
-		} else {
-			console.log('All messages saved successfully');
-		}
-	})
+	for (let message of messages) {
+		Message.create(message, (error, success) => {
+			if (error) {
+				console.log('Error saving messages:', error);
+			}
+		})
+	}
 };

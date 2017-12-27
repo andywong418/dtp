@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   AsyncStorage,
+  KeyboardAvoidingView,
   Platform,
   StatusBar,
   StyleSheet,
@@ -30,6 +31,9 @@ import {
 
 import RootNavigation from '../navigation/RootNavigation';
 import LoginScreen from './LoginScreen.js';
+import DirectMessageScreen from './DirectMessageScreen.js';
+
+// console.disableYellowBox = true;
 
 class Root extends React.Component {
   constructor(props) {
@@ -38,7 +42,7 @@ class Root extends React.Component {
   }
 
   async componentWillMount() {
-    this.setState({isLoadingComplete: false})
+    this.setState({ isLoadingComplete: false })
     let user, coords = null;
     try {
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -57,7 +61,7 @@ class Root extends React.Component {
       if (user && user.name && user.id) {
         this.props.callLogin(user.name, user.id);
         let fetchedUser = await axios.post(
-          'http://10.2.106.91:3000/api/users/fetchUser',
+          'http://10.2.106.85:3000/api/users/fetchUser',
           { facebookId: user.id }
         );
         let location = await this.updateLocationDB(coords, fetchedUser.data.facebookId);
@@ -65,7 +69,6 @@ class Root extends React.Component {
         this.props.updateLocation(location)
         this.props.fetchUserFromDB(fetchedUser);
         this.props.getNearbyUsers(matchUsers);
-        console.log('fetchedUser.data in ROOT DB CALL: ', fetchedUser.data);
         this.props.updateUserInfo(fetchedUser.data.intention, this.parseInterestsFromDB(fetchedUser.data.mainInterests), fetchedUser.data.bio)
       } else {
         this.props.callLogout()
@@ -74,7 +77,7 @@ class Root extends React.Component {
     catch (e) {
       console.log("Error in App componentDidMount: \n", e)
     }
-    this.setState({isLoadingComplete: true})
+    this.setState({ isLoadingComplete: true })
   }
 
   parseInterestsFromDB = (interestsArray) => {
@@ -101,7 +104,7 @@ class Root extends React.Component {
     let lat = location.coords.latitude;
     let lng = location.coords.longitude;
     let response = await axios.post(
-      'http://10.2.106.91:3000/api/users/updateLocation',
+      'http://10.2.106.85:3000/api/users/updateLocation',
       {
         facebookId: id,
         lat,
@@ -118,7 +121,7 @@ class Root extends React.Component {
 
   getNearbyUsersDB = async (location, facebookId) => {
     let response = await axios.post(
-      'http://10.2.106.91:3000/api/users/getNearbyUsers',
+      'http://10.2.106.85:3000/api/users/getNearbyUsers',
       {
         facebookId,
         location
@@ -157,6 +160,7 @@ class Root extends React.Component {
     );
   }
 
+
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -169,19 +173,22 @@ class Root extends React.Component {
     }
     else {
       return (
-        <View style={styles.container}>
-          {
-            this.props.login.isLoggedIn
-              ?
-              <View style={styles.container}>
-                {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-                {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-                <RootNavigation />
-              </View>
-              :
-              <LoginScreen />
-          }
-        </View>
+        <KeyboardAvoidingView style={{ flex: 1 }}>
+          <View style={styles.container}>
+            {
+              this.props.login.isLoggedIn
+                ?
+                <View style={styles.container}>
+                  {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+                  {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+                  <RootNavigation />
+                </View>
+                :
+                <LoginScreen />
+            }
+          </View>
+        </KeyboardAvoidingView>
+
       );
     }
   }
@@ -211,6 +218,7 @@ class Root extends React.Component {
   _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
   };
+
 }
 
 const styles = StyleSheet.create({
@@ -222,12 +230,17 @@ const styles = StyleSheet.create({
     height: 24,
     backgroundColor: 'rgba(0,0,0,0.2)',
   },
+  messageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
 
 const mapStateToProps = (state) => ({
   login: state.login,
   user: state.user,
-  location: state.location
+  location: state.location,
 });
 
 const mapDispatchToProps = (dispatch) => ({
